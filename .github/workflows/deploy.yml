@@ -1,35 +1,35 @@
-name: Deploy Vite app to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main   # 每次推到 main 就會自動部署
+    branches: [main]   # 只要推送到 main 分支就會觸發部署
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: false   # 🚫 關掉 submodule 抓取
+      # 1. 抓取 repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      # 2. 使用 Node.js 20（Vite 需要）
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
+      # 3. 安裝依賴
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      # 4. 打包前端
+      - name: Build project
         run: npm run build
 
-      - name: Deploy
+      # 5. 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-
-
