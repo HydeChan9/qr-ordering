@@ -17,15 +17,31 @@ function CustomerApp() {
     if (cart.length === 0) return;
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customer: "Guest",
-          items: cart.map((i) => i.name),
-          total,
-        }),
-      });
+      const checkout = async () => {
+  if (cart.length === 0) return;
+  setLoading(true);
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer: "Guest",
+        items: cart.map((i) => i.name),
+        total,
+      }),
+    });
+    const data = await res.json();
+    alert(`✅ 訂單已送出！ID: ${data.id}`);
+    setCart([]);
+  } catch (err) {
+    console.error("❌ Checkout error:", err);
+    alert("送出訂單失敗");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
       const data = await res.json();
       alert(`✅ 訂單已送出！ID: ${data.id}`);
       setCart([]); // 清空購物車
