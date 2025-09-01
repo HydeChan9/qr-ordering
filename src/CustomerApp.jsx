@@ -13,15 +13,16 @@ function CustomerApp() {
   const addToCart = (item) => setCart((prev) => [...prev, item]);
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const checkout = async () => {
-    if (cart.length === 0) return;
-    setLoading(true);
-    try {
-      const checkout = async () => {
+  const API_BASE =
+  process.env.NODE_ENV === "production"
+    ? "https://qr-ordering-server-production.up.railway.app"
+    : "http://localhost:4000";
+
+const checkout = async () => {
   if (cart.length === 0) return;
   setLoading(true);
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
+    const res = await fetch(`${API_BASE}/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -32,7 +33,7 @@ function CustomerApp() {
     });
     const data = await res.json();
     alert(`✅ 訂單已送出！ID: ${data.id}`);
-    setCart([]);
+    setCart([]); // 清空購物車
   } catch (err) {
     console.error("❌ Checkout error:", err);
     alert("送出訂單失敗");
@@ -40,18 +41,6 @@ function CustomerApp() {
     setLoading(false);
   }
 };
-
-
-      const data = await res.json();
-      alert(`✅ 訂單已送出！ID: ${data.id}`);
-      setCart([]); // 清空購物車
-    } catch (err) {
-      console.error("❌ Checkout error:", err);
-      alert("送出訂單失敗");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="p-6 max-w-lg mx-auto">

@@ -1,56 +1,70 @@
 import { useEffect, useState } from "react";
 
+const API_BASE =
+  process.env.NODE_ENV === "production"
+    ? "https://qr-ordering-server-production.up.railway.app"
+    : "http://localhost:4000";
+
 function AdminApp() {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/orders`);
+      const data = await res.json();
+      setOrders(data);
+    } catch (err) {
+      console.error("❌ Fetch orders error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/orders");
-        const data = await res.json();
-        setOrders(data);
-      } catch (err) {
-        console.error("❌ Fetch orders error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchOrders();
   }, []);
 
-  if (loading) return <p className="p-6">Loading orders...</p>;
-
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-      <h2 className="text-xl font-semibold mb-4">Orders</h2>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6 text-center">Admin Dashboard</h1>
+
+      <button
+        onClick={fetchOrders}
+        disabled={loading}
+        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300"
+      >
+        {loading ? "Refreshing..." : "Refresh Orders"}
+      </button>
 
       {orders.length === 0 ? (
         <p className="text-gray-500">No orders yet</p>
       ) : (
-        <table className="w-full border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 border">ID</th>
-              <th className="p-2 border">Customer</th>
-              <th className="p-2 border">Items</th>
-              <th className="p-2 border">Total</th>
-              <th className="p-2 border">Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td className="p-2 border">{order.id}</td>
-                <td className="p-2 border">{order.customer}</td>
-                <td className="p-2 border">{order.items}</td>
-                <td className="p-2 border">${order.total}</td>
-                <td className="p-2 border">{order.created_at}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul className="space-y-4">
+          {orders.map((o) => (
+            <li
+              key={o.id}
+              className="p-4 border rounded bg-white shadow flex justify-between"
+            >
+              <div>
+                <p>
+                  <span className="font-semibold">Customer:</span> {o.customer}
+                </p>
+                <p>
+                  <span className="font-semibold">Items:</span>{" "}
+                  {Array.isArray(o.items)
+                    ? o.items.join(", ")
+                    : JSON.parse(o.items).join(", ")}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="font-bold text-green-600">${o.total}</p>
+                <p className="text-sm text-gray-500">{o.created_at}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

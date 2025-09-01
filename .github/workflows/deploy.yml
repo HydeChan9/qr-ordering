@@ -2,33 +2,32 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]   # 只要推送到 main 分支就會觸發部署
+    branches:
+      - main   # 👈 只要 push 到 main 就會自動部署
+
+permissions:
+  contents: write   # 👈 必須要有寫入權限，才能推到 gh-pages branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 抓取 repo
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # 2. 使用 Node.js 20（Vite 需要）
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20   # ✅ 強制用 Node.js 20
 
-      # 3. 安裝依賴
       - name: Install dependencies
         run: npm ci
 
-      # 4. 打包前端
-      - name: Build project
+      - name: Build
         run: npm run build
 
-      # 5. 部署到 GitHub Pages
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
