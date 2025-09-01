@@ -1,7 +1,10 @@
-// postcss.config.js
 export default {
-  plugins: {
-    "@tailwindcss/postcss": {}, // ✅ 不要再寫 tailwindcss
-    autoprefixer: {},
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
   },
+  plugins: [],
 };
