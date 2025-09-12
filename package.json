@@ -10,6 +10,11 @@
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
+  "scripts": {
+  "dev": "vite",
+  "server": "node server.js"
+},
+
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",

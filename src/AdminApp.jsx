@@ -27,7 +27,7 @@ function AdminApp() {
   }, []);
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="min-h-screen p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">Admin Dashboard</h1>
 
       <button
@@ -45,7 +45,7 @@ function AdminApp() {
           {orders.map((o) => (
             <li
               key={o.id}
-              className="p-4 border rounded bg-white shadow flex justify-between"
+              className="p-4 border rounded bg-black shadow flex justify-between"
             >
               <div>
                 <p>
@@ -53,9 +53,7 @@ function AdminApp() {
                 </p>
                 <p>
                   <span className="font-semibold">Items:</span>{" "}
-                  {Array.isArray(o.items)
-                    ? o.items.join(", ")
-                    : JSON.parse(o.items).join(", ")}
+                  {o.items.map((i) => `${i.name} × ${i.quantity}`).join(", ")}
                 </p>
               </div>
               <div className="text-right">
