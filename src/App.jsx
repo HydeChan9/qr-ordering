@@ -7,20 +7,36 @@ import HeadOfficeApp from "./HeadOfficeApp";
 function App() {
   const [mode, setMode] = useState("customer"); // customer / admin / headoffice
   const [orders, setOrders] = useState([]);
+  const [merchantId, setMerchantId] = useState(1);
 
-  // 從 localStorage 載入模式
+  // 讀取模式
   useEffect(() => {
     const savedMode = localStorage.getItem("appMode");
     if (savedMode) setMode(savedMode);
   }, []);
 
-  // 切換模式 & 存入 localStorage
+  // 讀取 merchantId（URL -> localStorage -> 預設 1）
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl =
+      Number(params.get("m")) ||
+      Number(params.get("merchantId"));
+
+    if (Number.isFinite(fromUrl) && fromUrl > 0) {
+      setMerchantId(fromUrl);
+      localStorage.setItem("merchantId", String(fromUrl));
+    } else {
+      const saved = Number(localStorage.getItem("merchantId"));
+      setMerchantId(Number.isFinite(saved) && saved > 0 ? saved : 1);
+    }
+  }, []);
+
   const handleModeChange = (newMode) => {
     setMode(newMode);
     localStorage.setItem("appMode", newMode);
   };
 
-  // 模擬 checkout
+  // （僅前端模擬用）本地累加 orders，不影響後端
   const handleCheckout = (cart, total) => {
     const newOrder = {
       id: orders.length + 1,
@@ -34,10 +50,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden">
-      {/* 頂部品牌導航條 */}
+      {/* 頂部品牌導航條 + 顯示當前商戶ID（除錯方便） */}
       <nav className="z-20 bg-black/80 backdrop-blur border-b border-blue-800 shadow-lg">
         <div className="flex items-center justify-between max-w-6xl mx-auto px-6 py-4">
-          {/* Logo + 標語 */}
           <div className="flex items-center space-x-3">
             <div className="w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white shadow-md shadow-blue-400/50">
               hi
@@ -45,9 +60,11 @@ function App() {
             <span className="text-xl font-bold tracking-wide text-blue-300">
               Novapay Hub
             </span>
+            <span className="ml-3 text-xs px-2 py-0.5 rounded bg-slate-800 text-blue-200">
+              Merchant #{merchantId}
+            </span>
           </div>
 
-          {/* Tab 導航 */}
           <div className="flex space-x-6">
             {[
               { key: "customer", label: "Customer" },
@@ -73,7 +90,6 @@ function App() {
         </div>
       </nav>
 
-      {/* 畫面切換 + 過場動畫 */}
       <div className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
           {mode === "customer" && (
@@ -85,7 +101,8 @@ function App() {
               transition={{ duration: 0.4 }}
               className="w-full max-w-4xl"
             >
-              <CustomerApp onCheckout={handleCheckout} />
+              {/* ✅ 把 merchantId 傳下去 */}
+              <CustomerApp merchantId={merchantId} onCheckout={handleCheckout} />
             </motion.div>
           )}
           {mode === "admin" && (
@@ -97,7 +114,8 @@ function App() {
               transition={{ duration: 0.4 }}
               className="w-full max-w-4xl"
             >
-              <AdminApp orders={orders} />
+              {/* 若你的 Admin API 也需要商戶篩選，可一併傳下去使用 */}
+              <AdminApp merchantId={merchantId} orders={orders} />
             </motion.div>
           )}
           {mode === "headoffice" && (
