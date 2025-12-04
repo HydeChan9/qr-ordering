@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import CustomerApp from "./CustomerApp";
 import AdminApp from "./AdminApp";
 import HeadOfficeApp from "./HeadOfficeApp";
+import HeadOfficeAppplus from "./HeadOfficeAppplus";
+
 
 function App() {
   const [mode, setMode] = useState("customer"); // customer / admin / headoffice
@@ -67,6 +69,7 @@ function App() {
 
           <div className="flex space-x-6">
             {[
+              { key: "phonefixplus", label: "Fixplus" },
               { key: "customer", label: "Customer" },
               { key: "admin", label: "Admin" },
               { key: "headoffice", label: "Head Office" },
@@ -92,6 +95,18 @@ function App() {
 
       <div className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
+          {mode === "phonefixplus" && (
+            <motion.div
+              key="phonefixplus"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="w-full max-w-5xl"
+            >
+              <HeadOfficeAppplus />
+            </motion.div>
+          )}
           {mode === "customer" && (
             <motion.div
               key="customer"
