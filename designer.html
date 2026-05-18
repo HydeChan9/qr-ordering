@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Keycap Designer | ForgeKeys AU</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html"><span class="brand-mark">FK</span><span>ForgeKeys AU</span></a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="designer.html" aria-current="page">Keycap Designer</a>
+        <a href="configurator.html">Build Planner</a>
+        <a href="services.html">Custom Work</a>
+        <a href="products.html">Future Drops</a>
+        <a href="checkout.html">Payment</a>
+        <a href="support.html">Contact</a>
+      </nav>
+      <a class="quote-link" href="support.html#quote">Start a Custom Order</a>
+    </header>
+
+    <main class="page designer-page">
+      <section class="page-title">
+        <p class="eyebrow">Interactive custom design tool</p>
+        <h1>Design one keycap or map artwork across a full layout.</h1>
+        <p>Upload several images, choose single key, 75%, or 80%/TKL mode, then apply artwork to selected keys or distribute it across the board.</p>
+      </section>
+
+      <section class="workflow-steps" aria-label="Designer workflow">
+        <div>
+          <span>01</span>
+          <strong>Choose a layout</strong>
+          <p>Select one key, a compact board, TKL, full-size, Alice, or numpad.</p>
+        </div>
+        <div>
+          <span>02</span>
+          <strong>Upload artwork</strong>
+          <p>Add several images, then switch between them before applying.</p>
+        </div>
+        <div>
+          <span>03</span>
+          <strong>Customise keys</strong>
+          <p>Click any keycap to edit its image, colour, legend, and position.</p>
+        </div>
+        <div>
+          <span>04</span>
+          <strong>Send for review</strong>
+          <p>Download a proof or prepare an enquiry for ForgeKeys AU.</p>
+        </div>
+      </section>
+
+      <section class="designer-layout">
+        <aside class="filter-panel designer-controls">
+          <h2>Design controls</h2>
+          <label>Layout
+            <select id="layoutMode">
+              <option value="single">Single keycap</option>
+              <option value="40">40% compact</option>
+              <option value="60">60% keyboard</option>
+              <option value="65">65% keyboard</option>
+              <option value="75">75% keyboard</option>
+              <option value="80">80% / TKL keyboard</option>
+              <option value="96">96% compact full-size</option>
+              <option value="100">100% full-size</option>
+              <option value="alice">Alice / ergonomic</option>
+              <option value="numpad">Numpad / macro pad</option>
+            </select>
+          </label>
+          <label>Upload images, max 3 MB each
+            <input id="imageUpload" type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif">
+          </label>
+          <p id="uploadStatus" class="helper-text">Images are clipped inside each keycap. Upload one full theme artwork for a gallery-style board, or several small assets for individual keys.</p>
+          <details class="usage-guide">
+            <summary>How to create a gallery-style keycap set</summary>
+            <ol>
+              <li>Choose a layout such as 75%, 80% / TKL, or Alice.</li>
+              <li>Upload one photo for the main mood, or several transparent PNG assets for details.</li>
+              <li>Choose a Photo mode and press "Apply Photo Mode".</li>
+              <li>For butterfly, logo, or novelty keys, click a single key, choose an Artwork placement, then press "Use Selected Image on This Key".</li>
+              <li>Only open Fine tune if the image needs a small manual adjustment.</li>
+            </ol>
+            <label>Demo style
+              <select id="demoStyle">
+                <option value="novelty">Closest: butterfly novelty accents</option>
+                <option value="panorama">Soft full-board artwork wash</option>
+                <option value="spacebar">Butterfly spacebar feature</option>
+              </select>
+            </label>
+            <button class="button secondary full-width-button" id="loadButterflyDemo" type="button">Try Selected Demo</button>
+          </details>
+          <div id="assetList" class="asset-list" aria-label="Uploaded artwork assets"></div>
+          <div class="asset-toolbar">
+            <button class="button secondary" id="prevAsset" type="button">Previous Image</button>
+            <button class="button secondary" id="nextAsset" type="button">Next Image</button>
+          </div>
+          <p id="selectedAssetStatus" class="selection-chip">Selected image: none</p>
+          <input id="applyMode" type="hidden" value="panorama">
+          <input id="profile" type="hidden" value="Cherry profile">
+          <input id="material" type="hidden" value="PBT">
+          <input id="printMethod" type="hidden" value="Factory to advise">
+          <input id="finish" type="hidden" value="Matte">
+          <input id="legendText" type="hidden" value="">
+          <input id="textColor" type="hidden" value="#25282a">
+          <input id="imageScale" type="hidden" value="100">
+          <input id="imageX" type="hidden" value="0">
+          <input id="imageY" type="hidden" value="0">
+          <input id="imageRotate" type="hidden" value="0">
+          <label>Photo mode
+            <select id="photoMode">
+              <option value="full-board">Full keyboard photo</option>
+              <option value="spacebar">Spacebar feature photo</option>
+              <option value="selected-key">Selected key crop</option>
+              <option value="soft-accent">Soft background + accent keys</option>
+            </select>
+          </label>
+          <button class="button primary full-width-button" id="applyPhotoMode" type="button">Apply Photo Mode</button>
+          <p class="helper-text">Use full keyboard for mood images, spacebar for faces or main subjects, and selected key for logos, pets, icons, or small details.</p>
+          <label>Base keycap colour <input id="baseColor" type="color" value="#f3eee6"></label>
+          <div class="per-key-panel">
+            <h3>Selected key</h3>
+            <p id="selectedKeyInfo" class="helper-text">Click a key on the preview to edit it individually.</p>
+            <button class="button primary full-width-button" id="applyAssetToKey" type="button">Use Selected Image on This Key</button>
+            <label>Key legend <input id="keyLegend" type="text" maxlength="16" placeholder="Custom legend"></label>
+            <label>Key colour <input id="keyColor" type="color" value="#f3eee6"></label>
+            <label>Artwork placement
+              <select id="keyPlacement">
+                <option value="center">Centered icon</option>
+                <option value="full">Full keycap print</option>
+                <option value="top-left">Top-left badge</option>
+                <option value="bottom-right">Bottom-right badge</option>
+                <option value="spacebar">Spacebar feature</option>
+              </select>
+            </label>
+            <details class="fine-tune">
+              <summary>Fine tune image position</summary>
+              <label>Image scale <input id="keyImageScale" type="range" min="20" max="220" value="100"></label>
+              <label>Move left / right <input id="keyImageX" type="range" min="-80" max="80" value="0"></label>
+              <label>Move up / down <input id="keyImageY" type="range" min="-80" max="80" value="0"></label>
+              <label>Rotate image <input id="keyImageRotate" type="range" min="-90" max="90" value="0"></label>
+            </details>
+            <div class="designer-actions">
+              <button class="button secondary" id="applyPlacement" type="button">Apply Placement</button>
+              <button class="button secondary" id="applyKeyStyle" type="button">Apply to Key</button>
+              <button class="button secondary" id="clearKeyStyle" type="button">Clear Key</button>
+            </div>
+          </div>
+          <details class="production-guidelines">
+            <summary>Factory artwork requirements</summary>
+            <ul>
+              <li>Preview uploads: JPG, PNG, WebP, GIF, under 3 MB each.</li>
+              <li>Production source: transparent PNG, SVG, PDF, AI, or EPS where available.</li>
+              <li>Artwork target: 300 DPI at final print size, not enlarged from screenshots.</li>
+              <li>Keep important details inside the safe print area and allow bleed for edge-to-edge artwork.</li>
+              <li>Add Pantone or colour references when exact colour matching matters.</li>
+            </ul>
+          </details>
+          <div class="submission-fields">
+            <h3>Enquiry details</h3>
+            <label>Name <input id="customerName" type="text" placeholder="Your name"></label>
+            <label>Email <input id="customerEmail" type="email" placeholder="name@example.com"></label>
+            <label>Keyboard model <input id="keyboardModel" type="text" placeholder="e.g. Keychron Q8 / Neo Ergo / custom Alice"></label>
+            <label>Notes <textarea id="customerNotes" placeholder="Deadline, colour matching, material preference, factory notes..."></textarea></label>
+          </div>
+          <div class="designer-actions">
+            <button class="button secondary" id="resetDesign" type="button">Reset</button>
+            <button class="button primary" id="downloadProof" type="button">Download Proof</button>
+          </div>
+        </aside>
+
+        <section class="canvas-panel">
+          <div class="sticky-preview">
+            <div class="preview-dragbar" id="previewDragHandle">
+              <span>Drag preview</span>
+              <div class="preview-zoom" aria-label="Preview zoom controls">
+                <button type="button" id="previewZoomOut" aria-label="Zoom preview out">-</button>
+                <span id="previewZoomLabel">100%</span>
+                <button type="button" id="previewZoomIn" aria-label="Zoom preview in">+</button>
+              </div>
+            </div>
+            <canvas id="keycapCanvas" width="1280" height="720" aria-label="Custom keycap layout preview"></canvas>
+          </div>
+          <div class="preview-notes">
+            <h2>Design request package</h2>
+            <p id="selectionStatus">Single keycap mode. Upload artwork or enter a legend to start.</p>
+            <div class="factory-actions">
+              <button class="button primary" id="submitRequest" type="button">Prepare Enquiry</button>
+              <button class="button secondary" id="copySpec" type="button">Copy Customer Summary</button>
+            </div>
+            <details class="summary-details">
+              <summary>View customer summary</summary>
+              <textarea id="designSummary" readonly></textarea>
+            </details>
+            <div class="locked-note">
+              <strong>Next step: studio review.</strong>
+              <p>Submit your original image files and design summary to ForgeKeys AU so we can check artwork quality, layout fit, material choice, and factory requirements before quoting.</p>
+            </div>
+            <p class="helper-text">This preview helps prepare your enquiry. Final production files are prepared by ForgeKeys AU after artwork review and factory template checks.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="site-config.js"></script>
+    <script src="designer.js"></script>
+  </body>
+</html>
