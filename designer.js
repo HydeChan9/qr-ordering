@@ -1,4 +1,6 @@
-const maxUploadBytes = 3 * 1024 * 1024;
+const appConfig = window.FORGEKEYS_CONFIG || {};
+const maxUploadBytes = appConfig.maxUploadBytes || 3 * 1024 * 1024;
+const acceptedMimeTypes = appConfig.acceptedMimeTypes || ["image/jpeg", "image/png", "image/webp"];
 const canvas = document.getElementById("keycapCanvas");
 const ctx = canvas.getContext("2d");
 const upload = document.getElementById("imageUpload");
@@ -65,6 +67,31 @@ const productionDefaults = {
   colourMatching: "Factory to match HEX as close as possible; Pantone or physical references recommended for final order",
   deliverables: "Watermarked proof PNG, customer summary, original source images, and factory template mapping prepared by ForgeKeys AU"
 };
+
+function safeFileName(name) {
+  return (name || "upload")
+    .replace(/[^a-z0-9._-]+/gi, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 90) || "upload";
+}
+
+function dataUrlToBlob(dataUrl) {
+  const [header, data] = dataUrl.split(",");
+  const mime = header.match(/data:([^;]+)/)?.[1] || "application/octet-stream";
+  const binary = atob(data);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return new Blob([bytes], { type: mime });
+}
+
+function canvasBlob(type = "image/png") {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), type);
+  });
+}
 
 const demoArtwork = [
   {
@@ -702,6 +729,89 @@ function productionSpec() {
   };
 }
 
+function submissionSpec() {
+  const spec = productionSpec();
+  return {
+    ...spec,
+    assets: state.assets.map((asset, index) => ({
+      assetIndex: index,
+      fileName: asset.name,
+      sourceType: asset.demo ? "demo asset" : "customer upload",
+      uploadedToStorage: true
+    }))
+  };
+}
+
+async function uploadToSupabaseStorage(config, path, body, contentType) {
+  const baseUrl = config.supabaseUrl?.replace(/\/$/, "");
+  const bucket = config.supabaseBucket || "design-submissions";
+  const url = `${baseUrl}/storage/v1/object/${bucket}/${path}`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      apikey: config.supabaseAnonKey,
+      Authorization: `Bearer ${config.supabaseAnonKey}`,
+      "Content-Type": contentType,
+      "x-upsert": "false"
+    },
+    body
+  });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Supabase upload failed ${response.status}: ${message}`);
+  }
+  return path;
+}
+
+async function uploadSubmissionToSupabase(config, submissionId, summary, customer) {
+  if (!config.supabaseUrl || !config.supabaseAnonKey || !config.supabaseBucket) {
+    throw new Error("Supabase config is missing. Add supabaseUrl, supabaseAnonKey, and supabaseBucket in site-config.js.");
+  }
+
+  const folder = `${config.supabaseFolder || "submissions"}/${submissionId}`;
+  const uploadedAssets = [];
+  const customerAssets = state.assets
+    .map((asset, assetIndex) => ({ asset, assetIndex }))
+    .filter(({ asset }) => !asset.demo);
+
+  statusText.textContent = "Uploading original artwork files...";
+  for (const [uploadIndex, { asset, assetIndex }] of customerAssets.entries()) {
+    const fileName = `${String(uploadIndex + 1).padStart(2, "0")}-${safeFileName(asset.name)}`;
+    const body = asset.file || dataUrlToBlob(asset.src);
+    const contentType = asset.file?.type || body.type || "application/octet-stream";
+    const path = `${folder}/originals/${fileName}`;
+    await uploadToSupabaseStorage(config, path, body, contentType);
+    uploadedAssets.push({
+      assetIndex,
+      fileName: asset.name,
+      storagePath: path,
+      sourceType: "customer upload"
+    });
+  }
+
+  statusText.textContent = "Uploading proof image...";
+  drawCanvas();
+  drawProofWatermark();
+  const proof = await canvasBlob("image/png");
+  drawCanvas();
+  if (proof) {
+    await uploadToSupabaseStorage(config, `${folder}/proof/forgekeys-proof.png`, proof, "image/png");
+  }
+
+  const payload = {
+    submissionId,
+    submittedAt: new Date().toISOString(),
+    customer,
+    summary,
+    pageUrl: window.location.href,
+    uploadedAssets,
+    spec: submissionSpec()
+  };
+  const json = JSON.stringify(payload, null, 2);
+  await uploadToSupabaseStorage(config, `${folder}/submission.json`, new Blob([json], { type: "application/json" }), "application/json");
+  return { folder, uploadedAssets };
+}
+
 function layoutTitle() {
   if (controls.layoutMode.value === "40") return "40% compact custom keycap layout";
   if (controls.layoutMode.value === "60") return "60% custom keycap layout";
@@ -1193,10 +1303,11 @@ function downloadProofPng() {
 }
 
 async function prepareSubmission() {
-  const spec = productionSpec();
+  const spec = submissionSpec();
   const assetNames = state.assets.map((asset) => asset.name).join(", ") || "no uploaded assets yet";
   const config = window.FORGEKEYS_CONFIG || {};
   const hasEndpoint = config.submissionMode === "endpoint" && config.submissionEndpoint;
+  const hasSupabase = config.submissionMode === "supabase";
   const customerEmail = controls.customerEmail.value.trim();
   if (!controls.customerName.value.trim() || !customerEmail) {
     statusText.textContent = "Please add your name and email before preparing an enquiry.";
@@ -1217,27 +1328,55 @@ async function prepareSubmission() {
     `Notes: ${controls.customerNotes.value.trim() || "none"}`,
     `Original image files to submit: ${assetNames}`,
     `Layout records prepared for studio review: ${spec.keys.length} keys`,
+    hasSupabase
+      ? "Supabase Storage submission configured."
+      : "",
     hasEndpoint
       ? "Secure submission endpoint configured."
-      : "Draft mode active. Configure submissionEndpoint in site-config.js to upload files from GitHub Pages.",
+      : hasSupabase
+        ? "Files will upload to Supabase Storage."
+        : "Draft mode active. Configure Supabase Storage or a secure endpoint to receive files.",
     "ForgeKeys AU will confirm print method, material, factory template, and quote before production."
   ].join("\n");
   designSummary.value = summary;
 
+  const customer = {
+    name: controls.customerName.value.trim(),
+    email: customerEmail,
+    keyboardModel: controls.keyboardModel.value.trim(),
+    notes: controls.customerNotes.value.trim()
+  };
+
+  if (hasSupabase) {
+    try {
+      const result = await uploadSubmissionToSupabase(config, submissionId, summary, customer);
+      statusText.textContent = `Enquiry submitted. Storage folder: ${result.folder}`;
+      designSummary.value = [
+        summary,
+        "",
+        "UPLOAD STATUS",
+        `Supabase folder: ${result.folder}`,
+        `Uploaded assets: ${result.uploadedAssets.length}`,
+        "ForgeKeys AU can now review the original artwork, proof image, and submission JSON in Supabase Storage."
+      ].join("\n");
+      return;
+    } catch (error) {
+      console.error(error);
+      statusText.textContent = "Supabase upload failed. Check site-config.js, bucket policy, and Storage settings.";
+      statusText.classList.add("error-text");
+      return;
+    }
+  }
+
   if (!hasEndpoint) {
-    statusText.textContent = "Draft enquiry prepared. Add a secure endpoint in site-config.js when you are ready to receive files.";
+    statusText.textContent = "Draft enquiry prepared. Add Supabase Storage config in site-config.js when you are ready to receive files.";
     return;
   }
 
   try {
     const payload = {
       submissionId,
-      customer: {
-        name: controls.customerName.value.trim(),
-        email: customerEmail,
-        keyboardModel: controls.keyboardModel.value.trim(),
-        notes: controls.customerNotes.value.trim()
-      },
+      customer,
       summary,
       spec,
       assets: state.assets.map((asset) => ({
@@ -1285,13 +1424,13 @@ upload.addEventListener("change", () => {
   if (!files.length) return;
 
   const rejected = files.filter((file) => file.size > maxUploadBytes);
-  const nonImages = files.filter((file) => !file.type.startsWith("image/"));
-  const acceptedFiles = files.filter((file) => file.size <= maxUploadBytes && file.type.startsWith("image/"));
+  const unsupported = files.filter((file) => !acceptedMimeTypes.includes(file.type));
+  const acceptedFiles = files.filter((file) => file.size <= maxUploadBytes && acceptedMimeTypes.includes(file.type));
   if (rejected.length) {
-    statusText.textContent = `${rejected.length} file(s) rejected. Each image must be under 3 MB.`;
+    statusText.textContent = `${rejected.length} file(s) rejected. Each image must be under ${Math.round(maxUploadBytes / 1024 / 1024)} MB.`;
     statusText.classList.add("error-text");
-  } else if (nonImages.length) {
-    statusText.textContent = `${nonImages.length} file(s) rejected. Please upload JPG, PNG, WebP, or another browser-supported image.`;
+  } else if (unsupported.length) {
+    statusText.textContent = `${unsupported.length} file(s) rejected. Please upload JPG, PNG, or WebP only.`;
     statusText.classList.add("error-text");
   } else {
     statusText.textContent = `${acceptedFiles.length} image file(s) loading. Choose an asset and apply it to the layout.`;
@@ -1303,7 +1442,7 @@ upload.addEventListener("change", () => {
     reader.onload = () => {
       const image = new Image();
       image.onload = () => {
-        state.assets.push({ name: file.name, image, src: reader.result });
+        state.assets.push({ name: file.name, image, src: reader.result, file });
         state.selectedAsset = state.assets.length - 1;
         renderAssetList();
         statusText.textContent = `${file.name} loaded. Artwork will stay clipped to the selected keyboard layout.`;
