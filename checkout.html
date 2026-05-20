@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Payment Options | ForgeKeys AU</title>
+    <title>Pay an Approved Quote | ForgeKeys AU</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -11,11 +11,11 @@
       <a class="brand" href="index.html"><span class="brand-mark">FK</span><span>ForgeKeys AU</span></a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="index.html">Home</a>
-        <a href="designer.html">Keycap Designer</a>
         <a href="configurator.html">Build Planner</a>
+        <a href="preview.html">Custom Designer</a>
         <a href="services.html">Custom Work</a>
-        <a href="products.html">Future Drops</a>
-        <a href="checkout.html" aria-current="page">Payment</a>
+        <a href="products.html">Build References</a>
+        <a href="checkout.html" aria-current="page">Pay Quote</a>
         <a href="support.html">Contact</a>
       </nav>
       <a class="quote-link" href="support.html#quote">Start a Custom Order</a>
@@ -23,31 +23,34 @@
 
     <main class="page checkout-layout">
       <section class="page-title">
-        <p class="eyebrow">Payment prototype</p>
-        <h1>Deposit now, confirm production after proof approval.</h1>
-        <p>Use this page to generate a deposit reference for manual custom orders. Card checkout can be connected later when pricing and fulfilment are final.</p>
+        <p class="eyebrow">Approved quote payment</p>
+        <h1>Only pay after ForgeKeys AU confirms your quote.</h1>
+        <p>Custom keycaps and styled keyboards are quoted manually. If you do not have a quote or submission ID yet, send your artwork first. Once the proof and price are approved, use your ForgeKeys quote ID as the payment reference.</p>
       </section>
 
       <section class="payment-builder">
         <div>
-          <h2>Generate payment details</h2>
-          <p>Customers can choose an order type, deposit amount, and name. The page generates a clear PayID or bank-transfer reference.</p>
+          <h2>Build your quote payment note</h2>
+          <p>Use this only after we confirm your quote. The reference links your payment to your design files, proof image, and production notes.</p>
         </div>
         <form class="payment-form">
-          <label>Customer name <input id="payerName" type="text" value="Custom Order"></label>
-          <label>Order type
-            <select id="orderType">
-              <option>Single custom keycap</option>
-              <option>75% custom keycap layout</option>
-              <option>80% / TKL custom keycap layout</option>
-              <option>Build styling and tuning</option>
+          <label>Customer name <input id="payerName" type="text" placeholder="Your name"></label>
+          <label>Quote / submission ID <input id="submissionId" type="text" placeholder="FK-1779166909363"></label>
+          <label>Payment stage
+            <select id="paymentStage">
+              <option>Design deposit</option>
+              <option>Production deposit</option>
+              <option>Final balance</option>
+              <option>Build reference reservation</option>
             </select>
           </label>
-          <label>Deposit amount <input id="depositAmount" type="number" min="10" step="5" value="30"></label>
+          <label>Quoted total <input id="quotedTotal" type="number" min="0" step="5" placeholder="Optional"></label>
+          <label>Amount on quote <input id="depositAmount" type="number" min="10" step="5" value="50"></label>
           <label>Payment method
             <select id="paymentMethod">
               <option>PayID</option>
               <option>Bank transfer</option>
+              <option>Card invoice link</option>
             </select>
           </label>
         </form>
@@ -56,12 +59,12 @@
       <section class="payment-grid">
         <article class="payment-card">
           <span class="pill">Recommended in Australia</span>
-          <h2>PayID deposit</h2>
-          <p>Use this for manual orders, custom keycaps, and proof-based production.</p>
+          <h2>PayID or Osko</h2>
+          <p>Best for deposits and final balances after your quote is approved.</p>
           <dl>
-            <div><dt>PayID</dt><dd>payments@forgekeys.au</dd></div>
-            <div><dt>Reference</dt><dd>Your name + order brief</dd></div>
-            <div><dt>Deposit</dt><dd>A$30 prototype placeholder</dd></div>
+            <div><dt>PayID</dt><dd data-payment-payid>Provided on approved quote</dd></div>
+            <div><dt>Reference</dt><dd>Quote ID + customer name</dd></div>
+            <div><dt>Timing</dt><dd>Production starts after payment clears and proof is approved.</dd></div>
           </dl>
         </article>
         <article class="payment-card">
@@ -69,26 +72,27 @@
           <h2>Bank transfer</h2>
           <p>Useful for larger custom orders, business customers, or final balance payments.</p>
           <dl>
-            <div><dt>Account name</dt><dd>ForgeKeys AU</dd></div>
-            <div><dt>BSB</dt><dd>000-000</dd></div>
-            <div><dt>Account</dt><dd>0000 0000</dd></div>
+            <div><dt>Account name</dt><dd data-payment-account-name>Provided on approved quote</dd></div>
+            <div><dt>BSB</dt><dd data-payment-bsb>Provided on approved quote</dd></div>
+            <div><dt>Account</dt><dd data-payment-account-number>Provided on approved quote</dd></div>
           </dl>
         </article>
         <article class="payment-card muted-card">
-          <span class="pill">Later</span>
-          <h2>Card checkout</h2>
-          <p>Reserved for Stripe, Square, Shopify Payments, or WooCommerce once product pricing is final.</p>
-          <button class="button secondary" type="button" disabled>Coming soon</button>
+          <span class="pill">Optional</span>
+          <h2>Card invoice</h2>
+          <p>Ask for a secure card link if you prefer Visa, Mastercard, Apple Pay, or Google Pay.</p>
+          <a class="button secondary" data-card-invoice-link href="support.html#quote">Request card invoice</a>
         </article>
       </section>
 
       <section class="payment-output">
-        <h2>Customer payment note</h2>
+        <h2>Quote payment note</h2>
         <textarea id="paymentNote" readonly></textarea>
         <button class="button primary" id="copyPaymentNote" type="button">Copy Payment Note</button>
         <p id="copyStatus" class="helper-text">Use this note in email, SMS, Instagram DM, or order confirmation.</p>
       </section>
     </main>
+    <script src="site-config.js"></script>
     <script src="checkout.js"></script>
   </body>
 </html>

@@ -6,5 +6,11 @@ window.FORGEKEYS_CONFIG = {
   supabaseBucket: "design-submissions",
   supabaseFolder: "submissions",
   maxUploadBytes: 3 * 1024 * 1024,
-  acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"]
+  acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
+  paymentBusinessName: "ForgeKeys AU",
+  paymentPayId: "",
+  paymentBankAccountName: "",
+  paymentBankBsb: "",
+  paymentBankAccountNumber: "",
+  paymentCardInvoiceUrl: ""
 };

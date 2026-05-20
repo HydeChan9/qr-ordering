@@ -13,9 +13,10 @@
         <a href="index.html">Home</a>
         <a href="designer.html" aria-current="page">Keycap Designer</a>
         <a href="configurator.html">Build Planner</a>
+        <a href="preview.html">3D Preview</a>
         <a href="services.html">Custom Work</a>
-        <a href="products.html">Future Drops</a>
-        <a href="checkout.html">Payment</a>
+        <a href="products.html">Build References</a>
+        <a href="checkout.html">Pay Quote</a>
         <a href="support.html">Contact</a>
       </nav>
       <a class="quote-link" href="support.html#quote">Start a Custom Order</a>
@@ -46,8 +47,8 @@
         </div>
         <div>
           <span>04</span>
-          <strong>Send for review</strong>
-          <p>Download a proof or prepare an enquiry for ForgeKeys AU.</p>
+          <strong>Submit the request</strong>
+          <p>Send your artwork, contact details, and design proof to ForgeKeys AU for review.</p>
         </div>
       </section>
 
@@ -159,20 +160,24 @@
           <div class="submission-fields">
             <h3>Enquiry details</h3>
             <label>Name <input id="customerName" type="text" placeholder="Your name"></label>
-            <label>Email <input id="customerEmail" type="email" placeholder="name@example.com"></label>
+            <label>Email <input id="customerEmail" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required></label>
+            <label>Confirm email <input id="customerEmailConfirm" type="email" inputmode="email" autocomplete="email" placeholder="Retype email" required></label>
             <label>Keyboard model <input id="keyboardModel" type="text" placeholder="e.g. Keychron Q8 / Neo Ergo / custom Alice"></label>
             <label>Notes <textarea id="customerNotes" placeholder="Deadline, colour matching, material preference, factory notes..."></textarea></label>
+            <p class="helper-text">Submit Design Request sends your uploaded artwork, watermarked proof, and request details to ForgeKeys AU. Download Proof is only for your own reference.</p>
           </div>
-          <div class="designer-actions">
+          <div class="designer-actions order-actions">
+            <button class="button primary" id="submitRequest" type="button">Submit Design Request</button>
+            <button class="button secondary" id="downloadProof" type="button">Download Proof</button>
             <button class="button secondary" id="resetDesign" type="button">Reset</button>
-            <button class="button primary" id="downloadProof" type="button">Download Proof</button>
           </div>
+          <p id="orderStatus" class="helper-text order-status">No request submitted yet.</p>
         </aside>
 
         <section class="canvas-panel">
           <div class="sticky-preview">
             <div class="preview-dragbar" id="previewDragHandle">
-              <span>Drag preview</span>
+              <span>Live preview</span>
               <div class="preview-zoom" aria-label="Preview zoom controls">
                 <button type="button" id="previewZoomOut" aria-label="Zoom preview out">-</button>
                 <span id="previewZoomLabel">100%</span>
@@ -185,7 +190,6 @@
             <h2>Design request package</h2>
             <p id="selectionStatus">Single keycap mode. Upload artwork or enter a legend to start.</p>
             <div class="factory-actions">
-              <button class="button primary" id="submitRequest" type="button">Prepare Enquiry</button>
               <button class="button secondary" id="copySpec" type="button">Copy Customer Summary</button>
             </div>
             <details class="summary-details">

@@ -10,6 +10,8 @@ const statusText = document.getElementById("uploadStatus");
 const selectionStatus = document.getElementById("selectionStatus");
 const designSummary = document.getElementById("designSummary");
 const selectedKeyInfo = document.getElementById("selectedKeyInfo");
+const orderStatus = document.getElementById("orderStatus");
+const submitButton = document.getElementById("submitRequest");
 const stickyPreview = document.querySelector(".sticky-preview");
 const previewDragHandle = document.getElementById("previewDragHandle");
 const previewZoomIn = document.getElementById("previewZoomIn");
@@ -41,6 +43,7 @@ const controls = {
   keyPlacement: document.getElementById("keyPlacement"),
   customerName: document.getElementById("customerName"),
   customerEmail: document.getElementById("customerEmail"),
+  customerEmailConfirm: document.getElementById("customerEmailConfirm"),
   keyboardModel: document.getElementById("keyboardModel"),
   customerNotes: document.getElementById("customerNotes")
 };
@@ -91,6 +94,50 @@ function canvasBlob(type = "image/png") {
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), type);
   });
+}
+
+function setOrderStatus(message, isError = false) {
+  statusText.textContent = message;
+  statusText.classList.toggle("error-text", isError);
+  if (orderStatus) {
+    orderStatus.textContent = message;
+    orderStatus.classList.toggle("error-text", isError);
+  }
+}
+
+function setSubmitBusy(isBusy) {
+  if (!submitButton) return;
+  submitButton.disabled = isBusy;
+  submitButton.textContent = isBusy ? "Submitting..." : "Submit Design Request";
+}
+
+const emailDomainCorrections = {
+  "gmail.con": "gmail.com",
+  "gmai.com": "gmail.com",
+  "gmial.com": "gmail.com",
+  "gnail.com": "gmail.com",
+  "hotmial.com": "hotmail.com",
+  "hotmail.con": "hotmail.com",
+  "outlook.con": "outlook.com",
+  "icloud.con": "icloud.com",
+  "yahoo.con": "yahoo.com",
+  "qq.con": "qq.com",
+  "163.con": "163.com"
+};
+
+function normalizeEmail(email) {
+  return email.trim().toLowerCase();
+}
+
+function emailLooksValid(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email);
+}
+
+function emailCorrection(email) {
+  const [local, domain] = normalizeEmail(email).split("@");
+  if (!local || !domain) return "";
+  const correctedDomain = emailDomainCorrections[domain];
+  return correctedDomain ? `${local}@${correctedDomain}` : "";
 }
 
 const demoArtwork = [
@@ -794,8 +841,11 @@ async function uploadSubmissionToSupabase(config, submissionId, summary, custome
   drawProofWatermark();
   const proof = await canvasBlob("image/png");
   drawCanvas();
+  const proofPath = `${folder}/00-open-design-proof.png`;
+  const legacyProofPath = `${folder}/proof/forgekeys-proof.png`;
   if (proof) {
-    await uploadToSupabaseStorage(config, `${folder}/proof/forgekeys-proof.png`, proof, "image/png");
+    await uploadToSupabaseStorage(config, proofPath, proof, "image/png");
+    await uploadToSupabaseStorage(config, legacyProofPath, proof, "image/png");
   }
 
   const payload = {
@@ -804,12 +854,42 @@ async function uploadSubmissionToSupabase(config, submissionId, summary, custome
     customer,
     summary,
     pageUrl: window.location.href,
+    adminQuickView: {
+      openFirst: proofPath,
+      originalsFolder: `${folder}/originals/`,
+      orderJson: `${folder}/01-order-details.json`,
+      legacyProof: legacyProofPath,
+      note: "Open 00-open-design-proof.png first to see the customer's visual design. Use originals/ for factory artwork review."
+    },
     uploadedAssets,
     spec: submissionSpec()
   };
   const json = JSON.stringify(payload, null, 2);
+  const readMe = [
+    "FORGEKEYS AU DESIGN REQUEST",
+    "",
+    "Open first:",
+    "00-open-design-proof.png",
+    "",
+    "Customer:",
+    `${customer.name} <${customer.email}>`,
+    "",
+    "Keyboard model:",
+    customer.keyboardModel || "not provided",
+    "",
+    "Original artwork folder:",
+    "originals/",
+    "",
+    "Order data:",
+    "01-order-details.json",
+    "",
+    "Notes:",
+    customer.notes || "none"
+  ].join("\n");
+  await uploadToSupabaseStorage(config, `${folder}/00-read-me-first.txt`, new Blob([readMe], { type: "text/plain" }), "text/plain");
+  await uploadToSupabaseStorage(config, `${folder}/01-order-details.json`, new Blob([json], { type: "application/json" }), "application/json");
   await uploadToSupabaseStorage(config, `${folder}/submission.json`, new Blob([json], { type: "application/json" }), "application/json");
-  return { folder, uploadedAssets };
+  return { folder, proofPath, uploadedAssets };
 }
 
 function layoutTitle() {
@@ -1073,64 +1153,16 @@ async function loadButterflyDemo() {
 
 function setupPreviewDrag() {
   if (!stickyPreview || !previewDragHandle) return;
-  let dragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
-
-  const setFloatingState = () => {
-    if (stickyPreview.classList.contains("pinned") || window.innerWidth <= 980) return;
-    const controlsTop = document.querySelector(".designer-layout")?.getBoundingClientRect().top || 0;
-    stickyPreview.classList.toggle("floating", controlsTop < 88);
-  };
-
-  previewDragHandle.addEventListener("pointerdown", (event) => {
-    if (window.innerWidth <= 980) return;
-    const rect = stickyPreview.getBoundingClientRect();
-    dragging = true;
-    offsetX = event.clientX - rect.left;
-    offsetY = event.clientY - rect.top;
-    stickyPreview.classList.add("dragging", "pinned");
-    stickyPreview.classList.remove("floating");
-    stickyPreview.style.left = `${rect.left}px`;
-    stickyPreview.style.top = `${rect.top}px`;
-    stickyPreview.style.right = "auto";
-    previewDragHandle.setPointerCapture(event.pointerId);
-  });
-
-  previewDragHandle.addEventListener("pointermove", (event) => {
-    if (!dragging) return;
-    const maxLeft = window.innerWidth - stickyPreview.offsetWidth - 12;
-    const maxTop = window.innerHeight - stickyPreview.offsetHeight - 12;
-    const left = Math.min(Math.max(12, event.clientX - offsetX), Math.max(12, maxLeft));
-    const top = Math.min(Math.max(12, event.clientY - offsetY), Math.max(12, maxTop));
-    stickyPreview.style.left = `${left}px`;
-    stickyPreview.style.top = `${top}px`;
-  });
-
-  previewDragHandle.addEventListener("pointerup", (event) => {
-    dragging = false;
-    stickyPreview.classList.remove("dragging");
-    previewDragHandle.releasePointerCapture(event.pointerId);
-  });
-
-  window.addEventListener("scroll", setFloatingState, { passive: true });
-  window.addEventListener("resize", () => {
-    if (window.innerWidth <= 980) {
-      stickyPreview.classList.remove("floating", "dragging", "pinned");
-      stickyPreview.style.left = "";
-      stickyPreview.style.top = "";
-      stickyPreview.style.right = "";
-    }
-    setFloatingState();
-  });
-  setFloatingState();
+  stickyPreview.classList.remove("floating", "dragging", "pinned");
+  stickyPreview.style.left = "";
+  stickyPreview.style.top = "";
+  stickyPreview.style.right = "";
 }
 
 function setPreviewZoom(nextZoom) {
   if (!stickyPreview) return;
-  state.previewZoom = Math.min(1.4, Math.max(0.7, nextZoom));
-  stickyPreview.style.transform = `scale(${state.previewZoom})`;
-  stickyPreview.style.transformOrigin = "top right";
+  state.previewZoom = Math.min(1.25, Math.max(0.75, nextZoom));
+  canvas.style.width = `${Math.round(state.previewZoom * 100)}%`;
   if (previewZoomLabel) {
     previewZoomLabel.textContent = `${Math.round(state.previewZoom * 100)}%`;
   }
@@ -1298,6 +1330,7 @@ function downloadProofPng() {
     if (blob) {
       downloadFile(`forgekeys-${controls.layoutMode.value}-proof.png`, "image/png", blob);
       drawCanvas();
+      setOrderStatus("Proof downloaded. Use Submit Design Request to send the artwork and request details to ForgeKeys AU.");
     }
   }, "image/png");
 }
@@ -1308,15 +1341,33 @@ async function prepareSubmission() {
   const config = window.FORGEKEYS_CONFIG || {};
   const hasEndpoint = config.submissionMode === "endpoint" && config.submissionEndpoint;
   const hasSupabase = config.submissionMode === "supabase";
-  const customerEmail = controls.customerEmail.value.trim();
-  if (!controls.customerName.value.trim() || !customerEmail) {
-    statusText.textContent = "Please add your name and email before preparing an enquiry.";
-    statusText.classList.add("error-text");
+  const customerEmail = normalizeEmail(controls.customerEmail.value);
+  const customerEmailConfirm = normalizeEmail(controls.customerEmailConfirm.value);
+  if (!controls.customerName.value.trim()) {
+    setOrderStatus("Please add your name before submitting the design request.", true);
+    return;
+  }
+  if (!customerEmail || !emailLooksValid(customerEmail)) {
+    setOrderStatus("Please enter a valid email address before submitting the design request.", true);
+    return;
+  }
+  const suggestedEmail = emailCorrection(customerEmail);
+  if (suggestedEmail) {
+    setOrderStatus(`Please check the email address. Did you mean ${suggestedEmail}?`, true);
+    return;
+  }
+  if (!customerEmailConfirm || customerEmailConfirm !== customerEmail) {
+    setOrderStatus("Please retype the same email address in Confirm email.", true);
+    return;
+  }
+  const customerAssetCount = state.assets.filter((asset) => !asset.demo).length;
+  if (hasSupabase && customerAssetCount === 0) {
+    setOrderStatus("Please upload at least one artwork or photo before submitting the design request.", true);
     return;
   }
   const submissionId = `FK-${Date.now()}`;
-  statusText.textContent = "Preparing enquiry...";
-  statusText.classList.remove("error-text");
+  setSubmitBusy(true);
+  setOrderStatus("Preparing your design request...");
   const summary = [
     designSummary.value,
     "",
@@ -1349,27 +1400,31 @@ async function prepareSubmission() {
 
   if (hasSupabase) {
     try {
+      setOrderStatus("Uploading artwork, proof, and request details to ForgeKeys AU...");
       const result = await uploadSubmissionToSupabase(config, submissionId, summary, customer);
-      statusText.textContent = `Enquiry submitted. Storage folder: ${result.folder}`;
+      setOrderStatus(`Request submitted. Open ${result.proofPath} in Supabase to view the design.`);
       designSummary.value = [
         summary,
         "",
         "UPLOAD STATUS",
         `Supabase folder: ${result.folder}`,
+        `Open proof first: ${result.proofPath}`,
         `Uploaded assets: ${result.uploadedAssets.length}`,
-        "ForgeKeys AU can now review the original artwork, proof image, and submission JSON in Supabase Storage."
+        "ForgeKeys AU can now open 00-open-design-proof.png first, then review originals/ and 01-order-details.json."
       ].join("\n");
+      setSubmitBusy(false);
       return;
     } catch (error) {
       console.error(error);
-      statusText.textContent = "Supabase upload failed. Check site-config.js, bucket policy, and Storage settings.";
-      statusText.classList.add("error-text");
+      setOrderStatus("Upload failed. Please check Supabase Storage bucket policy and try again.", true);
+      setSubmitBusy(false);
       return;
     }
   }
 
   if (!hasEndpoint) {
-    statusText.textContent = "Draft enquiry prepared. Add Supabase Storage config in site-config.js when you are ready to receive files.";
+    setOrderStatus("Draft request prepared. Add Supabase Storage config in site-config.js when you are ready to receive files.");
+    setSubmitBusy(false);
     return;
   }
 
@@ -1390,10 +1445,11 @@ async function prepareSubmission() {
       body: JSON.stringify(payload)
     });
     if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
-    statusText.textContent = "Enquiry submitted. ForgeKeys AU will review your design and reply with next steps.";
+    setOrderStatus("Request submitted. ForgeKeys AU will review the design and reply with next steps.");
   } catch (error) {
-    statusText.textContent = "Submission endpoint failed. Your summary is still prepared; please send the original files manually.";
-    statusText.classList.add("error-text");
+    setOrderStatus("Submission endpoint failed. Your summary is still prepared; please send the original files manually.", true);
+  } finally {
+    setSubmitBusy(false);
   }
 }
 
@@ -1519,8 +1575,18 @@ document.getElementById("resetDesign").addEventListener("click", () => {
   controls.imageY.value = "0";
   controls.imageRotate.value = "0";
   controls.keyPlacement.value = "center";
+  controls.customerName.value = "";
+  controls.customerEmail.value = "";
+  controls.customerEmailConfirm.value = "";
+  controls.keyboardModel.value = "";
+  controls.customerNotes.value = "";
   statusText.textContent = "Images are clipped inside each keycap. Upload photos or artwork, then choose a simple photo mode.";
   statusText.classList.remove("error-text");
+  if (orderStatus) {
+    orderStatus.textContent = "No request submitted yet.";
+    orderStatus.classList.remove("error-text");
+  }
+  setSubmitBusy(false);
   renderAssetList();
   drawCanvas();
 });
