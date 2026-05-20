@@ -216,9 +216,11 @@
       image.src = url;
     });
 
-  const setStatus = (message) => {
+  const setStatus = (message, tone = "info") => {
     const status = document.querySelector("[data-fk-status]");
-    if (status) status.textContent = message;
+    if (!status) return;
+    status.textContent = message;
+    status.dataset.tone = tone;
   };
 
   const renderAssets = () => {
@@ -261,13 +263,14 @@
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
         "Content-Type": contentType || "application/octet-stream",
-        "x-upsert": "true",
       },
       body,
     });
     if (!response.ok) {
       const message = await response.text();
-      throw new Error(message || `Upload failed: ${response.status}`);
+      const error = new Error(message || `Upload failed: ${response.status}`);
+      error.status = response.status;
+      throw error;
     }
     return { path };
   };
@@ -335,20 +338,20 @@
     const email = normalizeEmail(emailField.value);
     const correction = emailCorrection(email);
     if (!name) {
-      setStatus("Please add your name before submitting.");
+      setStatus("Please add your name before submitting.", "error");
       return;
     }
     if (!emailLooksValid(email)) {
-      setStatus("Please enter a valid email address.");
+      setStatus("Please enter a valid email address.", "error");
       return;
     }
     if (correction) {
-      setStatus(`Did you mean ${correction}? Please correct the email before submitting.`);
+      setStatus(`Did you mean ${correction}? Please correct the email before submitting.`, "error");
       emailField.focus();
       return;
     }
     if (!state.baseAsset && state.accents.length === 0) {
-      setStatus("Please upload at least one artwork image before submitting.");
+      setStatus("Please upload at least one artwork image before submitting.", "error");
       return;
     }
 
@@ -356,7 +359,7 @@
     const folder = `${config.supabaseFolder || "submissions"}/${submissionId}`;
     const design = collectDesignData(panel, submissionId);
     setSubmitBusy(panel, true);
-    setStatus("Submitting design files...");
+    setStatus("Submitting design files...", "info");
     try {
       if (state.baseAsset?.file) {
         await uploadToSupabaseStorage(`${folder}/main-artwork-${safeFileName(state.baseAsset.name)}`, state.baseAsset.file, state.baseAsset.type);
@@ -384,9 +387,14 @@
         ], { type: "text/plain" }),
         "text/plain"
       );
-      setStatus(`Enquiry submitted. Storage folder: ${folder}`);
+      setStatus(`Request submitted. Reference ${submissionId}. We will reply by email with the next step.`, "success");
     } catch (error) {
-      setStatus(`Upload failed. Check Supabase Storage policy. ${error.message}`);
+      console.error("ForgeKeys upload failed", error);
+      if (error.status === 403) {
+        setStatus("Upload is blocked by the site storage settings. Please contact ForgeKeys and quote this page.", "error");
+      } else {
+        setStatus("Upload failed. Please check your connection and try again.", "error");
+      }
     } finally {
       setSubmitBusy(panel, false);
     }
@@ -493,7 +501,7 @@
     });
     panel.querySelector("[data-fk-bounds]").addEventListener("change", (event) => {
       state.bounds = boundsMap[event.target.value] || boundsMap["75"];
-      setStatus(`Artwork crop changed to ${event.target.options[event.target.selectedIndex].textContent}.`);
+      setStatus(`Artwork crop changed to ${event.target.options[event.target.selectedIndex].textContent}.`, "info");
       refreshTextures();
     });
     panel.querySelector("[data-fk-base]").addEventListener("change", async (event) => {
@@ -502,10 +510,10 @@
         state.baseImage = asset.image;
         state.baseFile = asset.file;
         state.baseAsset = asset;
-        setStatus(`Main artwork loaded: ${asset.name}`);
+        setStatus(`Main artwork loaded: ${asset.name}`, "success");
         refreshTextures();
       } catch (error) {
-        setStatus(error.message);
+        setStatus(error.message, "error");
       }
     });
     panel.querySelector("[data-fk-accents]").addEventListener("change", async (event) => {
@@ -515,9 +523,9 @@
         state.accents.push(...loaded);
         state.selectedAccent = state.selectedAccent || state.accents[0] || null;
         renderAssets();
-        setStatus(`${loaded.length} accent image${loaded.length === 1 ? "" : "s"} loaded.`);
+        setStatus(`${loaded.length} accent image${loaded.length === 1 ? "" : "s"} loaded.`, "success");
       } catch (error) {
-        setStatus(error.message);
+        setStatus(error.message, "error");
       }
     });
     panel.querySelector("[data-fk-accent-select]").addEventListener("change", (event) => {
@@ -526,7 +534,7 @@
     });
     panel.querySelector("[data-fk-apply]").addEventListener("click", () => {
       if (!state.selectedAccent) {
-        setStatus("Upload and select an accent image first.");
+        setStatus("Upload and select an accent image first.", "error");
         return;
       }
       const code = panel.querySelector("[data-fk-key]").value;
@@ -539,13 +547,13 @@
         x: Number(panel.querySelector("[data-fk-x]").value),
         y: Number(panel.querySelector("[data-fk-y]").value),
       };
-      setStatus(`Placed ${state.selectedAccent.name} on ${code}.`);
+      setStatus(`Placed ${state.selectedAccent.name} on ${code}.`, "success");
       refreshTextures();
     });
     panel.querySelector("[data-fk-clear-key]").addEventListener("click", () => {
       const code = panel.querySelector("[data-fk-key]").value;
       delete state.placements[code];
-      setStatus(`Cleared artwork from ${code}.`);
+      setStatus(`Cleared artwork from ${code}.`, "info");
       refreshTextures();
     });
     panel.querySelector("[data-fk-clear-all]").addEventListener("click", () => {
@@ -553,7 +561,7 @@
       state.baseFile = null;
       state.baseAsset = null;
       state.placements = {};
-      setStatus("Cleared all preview artwork.");
+      setStatus("Cleared all preview artwork.", "info");
       refreshTextures();
     });
     panel.querySelector("[data-fk-submit]").addEventListener("click", () => submitRequest(panel));

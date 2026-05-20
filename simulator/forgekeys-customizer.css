@@ -165,9 +165,25 @@
 
 .fk-status {
   margin: 0;
+  border: 1px solid rgba(240, 208, 157, 0.28);
+  border-radius: 8px;
+  padding: 10px;
   color: #f0d09d;
+  background: rgba(240, 208, 157, 0.08);
   font-size: 12px;
   line-height: 1.45;
+}
+
+.fk-status[data-tone="success"] {
+  border-color: rgba(139, 217, 166, 0.34);
+  color: #b8eccb;
+  background: rgba(76, 159, 106, 0.16);
+}
+
+.fk-status[data-tone="error"] {
+  border-color: rgba(255, 128, 128, 0.34);
+  color: #ffb7b7;
+  background: rgba(169, 58, 58, 0.16);
 }
 
 @media (max-width: 760px) {
@@ -176,5 +192,42 @@
     right: 12px;
     bottom: 12px;
     width: auto;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .App {
+    display: block !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
+
+  .App > div {
+    position: absolute !important;
+  }
+
+  #sidebar {
+    width: 20em !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+
+  .App #canvas-wrapper {
+    order: 0 !important;
+    width: calc(100% - 20em) !important;
+    height: 100% !important;
+    min-height: 620px !important;
+    margin-left: 20em !important;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #sidebar {
+    width: 15em !important;
+  }
+
+  .App #canvas-wrapper {
+    width: calc(100% - 15em) !important;
+    margin-left: 15em !important;
   }
 }
