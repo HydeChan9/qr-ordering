@@ -1412,6 +1412,14 @@ th {
   margin-top: 18px;
 }
 
+#quoteMessage {
+  min-height: 190px;
+  color: var(--ink);
+  background: #f5f0e8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+}
+
 details {
   padding: 16px 0;
   border-bottom: 1px solid var(--line);

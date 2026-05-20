@@ -5,7 +5,7 @@
   z-index: 40;
   width: min(360px, calc(100vw - 36px));
   max-height: calc(100vh - 36px);
-  overflow: auto;
+  overflow: hidden;
   color: #f6f2ea;
   background: rgba(22, 23, 25, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -49,6 +49,8 @@
 .fk-toggle {
   border: 0;
   border-radius: 8px;
+  min-width: 58px;
+  min-height: 40px;
   padding: 8px 10px;
   color: #161719;
   background: #f6f2ea;
@@ -60,7 +62,10 @@
 .fk-panel-body {
   display: grid;
   gap: 14px;
+  max-height: calc(100vh - 104px);
+  overflow: auto;
   padding: 14px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .fk-field {
@@ -188,10 +193,54 @@
 
 @media (max-width: 760px) {
   .fk-customizer {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
     width: auto;
+    max-height: min(54dvh, 430px);
+    border-radius: 12px;
+  }
+
+  .fk-customizer.is-collapsed {
+    left: auto;
+    width: min(260px, calc(100vw - 20px));
+  }
+
+  .fk-panel-head {
+    padding: 10px 12px;
+  }
+
+  .fk-panel-title strong {
+    font-size: 13px;
+  }
+
+  .fk-panel-title span {
+    display: none;
+  }
+
+  .fk-toggle {
+    min-width: 76px;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .fk-panel-body {
+    max-height: calc(min(54dvh, 430px) - 65px);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .fk-field input,
+  .fk-field select,
+  .fk-field textarea,
+  .fk-button {
+    min-height: 44px;
+  }
+
+  .fk-row,
+  .fk-actions {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -223,11 +272,23 @@
 
 @media screen and (max-width: 640px) {
   #sidebar {
-    width: 15em !important;
+    width: 13em !important;
   }
 
   .App #canvas-wrapper {
-    width: calc(100% - 15em) !important;
-    margin-left: 15em !important;
+    width: calc(100% - 13em) !important;
+    min-height: 520px !important;
+    margin-left: 13em !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #sidebar {
+    width: 11.5em !important;
+  }
+
+  .App #canvas-wrapper {
+    width: calc(100% - 11.5em) !important;
+    margin-left: 11.5em !important;
   }
 }

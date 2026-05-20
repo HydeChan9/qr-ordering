@@ -26,21 +26,26 @@
         <p class="eyebrow">Quote request</p>
         <h1>Tell us what you want to customise.</h1>
         <form>
-          <label>Name <input type="text" placeholder="Your name"></label>
-          <label>Email <input type="email" placeholder="name@example.com"></label>
-          <label>City <input type="text" placeholder="Sydney / Melbourne / Brisbane / Perth"></label>
+          <label>Name <input id="quoteName" type="text" placeholder="Your name"></label>
+          <label>Email <input id="quoteEmail" type="email" placeholder="name@example.com"></label>
+          <label>City <input id="quoteCity" type="text" placeholder="Sydney / Melbourne / Brisbane / Perth"></label>
           <label>What are you customising?
-            <select>
+            <select id="quoteType">
               <option>Custom keycaps</option>
               <option>Full keyboard styling</option>
               <option>Switches and tuning</option>
               <option>Future keyboard interest</option>
+              <option>Build reference request</option>
             </select>
           </label>
-          <label>Brief <textarea placeholder="Keyboard model, layout, theme, colours, image ideas, budget, and deadline..."></textarea></label>
+          <label>Selected reference <input id="quoteProduct" type="text" placeholder="Optional build reference"></label>
+          <label>Brief <textarea id="quoteBrief" placeholder="Keyboard model, layout, theme, colours, image ideas, budget, and deadline..."></textarea></label>
+          <textarea id="quoteMessage" readonly aria-label="Prepared quote request message"></textarea>
+          <button class="button primary" id="copyQuoteMessage" type="button">Copy Request Details</button>
+          <a class="button secondary" id="emailQuoteRequest" href="#">Email Quote Request</a>
           <a class="button primary" href="preview.html">Open Custom Designer</a>
           <a class="button secondary" href="checkout.html">Pay Approved Quote</a>
-          <p class="helper-text">Use the Custom Designer to upload artwork and submit files. This contact form is a planning prompt for your brief, not the final upload step.</p>
+          <p id="quoteStatus" class="helper-text">Use the Custom Designer to upload artwork and submit files. This contact form prepares the selected reference and brief so you can send it to ForgeKeys AU.</p>
         </form>
       </section>
 
@@ -69,5 +74,7 @@
         </details>
       </section>
     </main>
+    <script src="site-config.js"></script>
+    <script src="support.js"></script>
   </body>
 </html>

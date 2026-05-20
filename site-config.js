@@ -12,5 +12,6 @@ window.FORGEKEYS_CONFIG = {
   paymentBankAccountName: "",
   paymentBankBsb: "",
   paymentBankAccountNumber: "",
-  paymentCardInvoiceUrl: ""
+  paymentCardInvoiceUrl: "",
+  contactEmail: ""
 };

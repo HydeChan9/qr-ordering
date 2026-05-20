@@ -275,18 +275,32 @@
     return { path };
   };
 
-  const canvasBlob = () =>
-    new Promise((resolve, reject) => {
+  const waitForPaint = () =>
+    new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    });
+
+  const canvasBlob = async () => {
+    await waitForPaint();
+    return new Promise((resolve, reject) => {
       const canvas = document.querySelector("#canvas-wrapper canvas");
       if (!canvas) {
         reject(new Error("Preview canvas is not ready yet."));
         return;
       }
-      canvas.toBlob((blob) => {
+      const output = document.createElement("canvas");
+      output.width = canvas.width;
+      output.height = canvas.height;
+      const ctx = output.getContext("2d");
+      ctx.fillStyle = "#202024";
+      ctx.fillRect(0, 0, output.width, output.height);
+      ctx.drawImage(canvas, 0, 0);
+      output.toBlob((blob) => {
         if (blob) resolve(blob);
         else reject(new Error("Could not create preview image."));
       }, "image/png");
     });
+  };
 
   const collectDesignData = (panel, submissionId) => {
     const placements = Object.entries(state.placements).map(([key, placement]) => ({
@@ -410,7 +424,7 @@
           <strong>ForgeKeys Texture Test</strong>
           <span>Full board image + per-key accents</span>
         </div>
-        <button class="fk-toggle" type="button" data-fk-toggle>Min</button>
+        <button class="fk-toggle" type="button" data-fk-toggle>Hide</button>
       </div>
       <div class="fk-panel-body">
         <label class="fk-field">Main artwork
@@ -491,9 +505,14 @@
     `;
     document.body.appendChild(panel);
 
+    if (window.matchMedia("(max-width: 760px)").matches) {
+      panel.classList.add("is-collapsed");
+      panel.querySelector("[data-fk-toggle]").textContent = "Edit";
+    }
+
     panel.querySelector("[data-fk-toggle]").addEventListener("click", (event) => {
       panel.classList.toggle("is-collapsed");
-      event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Min";
+      event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Hide";
     });
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
