@@ -30,36 +30,15 @@
 
       <section class="payment-builder">
         <div>
-          <h2>Approved quote details</h2>
-          <p>Use this page only after ForgeKeys AU confirms your quote by email. The quote ID links your payment to your design files, proof image, and production notes.</p>
+          <h2>Before you pay</h2>
+          <p>Payment details are provided only after your quote, proof, parts availability, and production scope are confirmed. Please do not send payment for an unapproved design or build reference.</p>
         </div>
-        <form class="payment-form">
-          <label>Customer name <input id="payerName" type="text" autocomplete="name" placeholder="Your name"></label>
-          <label>Quote / submission ID <input id="submissionId" type="text" placeholder="FK-1779166909363"></label>
-          <label>Payment stage
-            <select id="paymentStage">
-              <option>Design deposit</option>
-              <option>Production deposit</option>
-              <option>Final balance</option>
-              <option>Build reference reservation</option>
-            </select>
-          </label>
-          <label>Quoted total <input id="quotedTotal" type="number" min="0" step="5" placeholder="Optional"></label>
-          <label>Amount on quote <input id="depositAmount" type="number" min="10" step="5" value="50"></label>
-          <label>Payment method
-            <select id="paymentMethod">
-              <option>PayID</option>
-              <option>Bank transfer</option>
-              <option>Card invoice link</option>
-            </select>
-          </label>
-        </form>
-      </section>
-
-      <section class="payment-output">
-        <h2>Payment reference</h2>
-        <p id="paymentReference">Enter the quote ID and your name to prepare the correct payment reference.</p>
-        <p id="copyStatus" class="helper-text">Use the exact reference shown on your approved quote. If anything looks different from the email quote, contact ForgeKeys AU before paying.</p>
+        <ol class="payment-steps">
+          <li>Submit your artwork, build reference, or custom brief.</li>
+          <li>Wait for ForgeKeys AU to confirm the quote, timeline, and payment stage by email or message.</li>
+          <li>Use the exact quote ID and amount shown on the approved quote.</li>
+          <li>Production starts after payment clears and the final visual proof is approved.</li>
+        </ol>
       </section>
 
       <section class="payment-grid">
@@ -93,6 +72,6 @@
 
     </main>
     <script src="site-config.js"></script>
-    <script src="checkout.js"></script>
+    <script src="checkout.js?v=pay-info1"></script>
   </body>
 </html>

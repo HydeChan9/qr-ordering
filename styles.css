@@ -761,10 +761,14 @@ th {
   line-height: 1.6;
 }
 
-.payment-form {
+.payment-steps {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 14px;
+  gap: 12px;
+  margin: 0;
+  padding-left: 22px;
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 700;
 }
 
 .payment-card {
@@ -803,23 +807,6 @@ th {
 
 .muted-card h2 {
   color: var(--ink);
-}
-
-.payment-output {
-  display: grid;
-  gap: 12px;
-  margin-top: 24px;
-  padding: 26px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-#paymentReference {
-  margin: 0;
-  color: var(--ink);
-  font-size: clamp(20px, 3vw, 32px);
-  font-weight: 900;
 }
 
 .button:disabled {
@@ -1512,10 +1499,6 @@ summary {
 
   .preview-dragbar {
     display: none;
-  }
-
-  .payment-form {
-    grid-template-columns: 1fr;
   }
 
   .simulator-shell,

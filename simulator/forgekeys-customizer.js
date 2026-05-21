@@ -318,6 +318,7 @@
       source: "ForgeKeys 3D Custom Designer",
       layoutCrop: panel.querySelector("[data-fk-bounds]").selectedOptions[0]?.textContent || "",
       baseArtworkMode: state.baseMode,
+      requestMode: state.baseAsset || state.accents.length ? "artwork-submission" : "brief-only",
       baseArtwork: state.baseAsset
         ? { name: state.baseAsset.name, size: state.baseAsset.size, type: state.baseAsset.type }
         : null,
@@ -364,11 +365,6 @@
       emailField.focus();
       return;
     }
-    if (!state.baseAsset && state.accents.length === 0) {
-      setStatus("Please upload at least one artwork image before submitting.", "error");
-      return;
-    }
-
     const submissionId = `FK-${Date.now()}`;
     const folder = `${config.supabaseFolder || "submissions"}/${submissionId}`;
     const design = collectDesignData(panel, submissionId);
@@ -393,8 +389,10 @@
           [
             `ForgeKeys AU custom designer submission: ${submissionId}`,
             "",
-            "Open preview.png first to see the customer's visual direction.",
-            "Original uploaded artwork files are included as main-artwork-* and accents/*.",
+            state.baseAsset || state.accents.length
+              ? "Open preview.png first to see the customer's visual direction."
+              : "No artwork was uploaded. Treat this as a brief-only enquiry and reply with recommended next steps.",
+            "If artwork was uploaded, original files are included as main-artwork-* and accents/*.",
             "Use design.json for key placement, scale, rotation, and customer contact details.",
             "Do not send to factory without checking final production template, safe area, bleed, material, print method, and source image resolution.",
           ].join("\n"),
