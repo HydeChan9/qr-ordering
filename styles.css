@@ -582,6 +582,12 @@ textarea {
   font: inherit;
 }
 
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+}
+
 textarea {
   min-height: 140px;
   resize: vertical;
@@ -809,11 +815,11 @@ th {
   border-radius: 8px;
 }
 
-#paymentNote {
-  min-height: 180px;
-  background: #f5f0e8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 13px;
+#paymentReference {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 900;
 }
 
 .button:disabled {
@@ -1410,14 +1416,6 @@ th {
 
 .quote-form form {
   margin-top: 18px;
-}
-
-#quoteMessage {
-  min-height: 190px;
-  color: var(--ink);
-  background: #f5f0e8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 13px;
 }
 
 details {

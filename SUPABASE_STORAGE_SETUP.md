@@ -51,6 +51,17 @@ Inside it:
 - `01-order-details.json`: same order data, easier to spot in the dashboard
 - `00-read-me-first.txt`: quick production notes
 
+Build reference quote requests from `products.html` / `support.html` create folders like:
+
+```text
+submissions/FQ-1779166909363/
+```
+
+Inside it:
+
+- `01-quote-request-*.json`: selected product reference, customer contact, and brief
+- `00-read-me-first.txt`: quick note for the quote request
+
 ## Frontend upload limits
 
 The current browser-side limits are in `site-config.js`:

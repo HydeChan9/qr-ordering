@@ -5,8 +5,7 @@ const fields = {
   quotedTotal: document.getElementById("quotedTotal"),
   depositAmount: document.getElementById("depositAmount"),
   paymentMethod: document.getElementById("paymentMethod"),
-  note: document.getElementById("paymentNote"),
-  copy: document.getElementById("copyPaymentNote"),
+  reference: document.getElementById("paymentReference"),
   status: document.getElementById("copyStatus")
 };
 
@@ -47,59 +46,37 @@ function updatePaymentCards() {
   }
 }
 
-function updatePaymentNote() {
+function getStoredQuote() {
+  try {
+    return JSON.parse(sessionStorage.getItem("forgekeysLastQuote") || "null");
+  } catch {
+    return null;
+  }
+}
+
+function applyStoredQuote() {
+  const storedQuote = getStoredQuote();
+  if (!storedQuote) return;
+  if (!fields.submissionId.value) fields.submissionId.value = storedQuote.quoteId || "";
+  if (!fields.payerName.value) fields.payerName.value = storedQuote.name || "";
+}
+
+function updatePaymentReference() {
   const amount = Math.max(10, Number(fields.depositAmount.value || 50));
   const quoteId = cleanReference(fields.submissionId.value || "QUOTE-PENDING");
   const customerName = fields.payerName.value.trim() || "Customer";
   const reference = cleanReference(`${quoteId} ${customerName}`);
-  const cardDestination = config.paymentCardInvoiceUrl
-    ? `Secure card invoice: ${config.paymentCardInvoiceUrl}`
-    : "Secure card invoice: request a payment link after quote approval";
-  const destinations = {
-    PayID: `PayID: ${configured(config.paymentPayId)}`,
-    "Bank transfer": [
-      `Bank transfer: ${configured(config.paymentBankAccountName || config.paymentBusinessName)}`,
-      `BSB: ${configured(config.paymentBankBsb)}`,
-      `Account: ${configured(config.paymentBankAccountNumber)}`
-    ].join(" / "),
-    "Card invoice link": cardDestination
-  };
-
-  fields.note.value = [
-    "FORGEKEYS AU APPROVED QUOTE PAYMENT",
-    `Customer: ${customerName}`,
-    `Quote / submission ID: ${quoteId}`,
-    `Payment stage: ${fields.paymentStage.value}`,
-    `Quoted total: ${money(fields.quotedTotal.value)}`,
-    `Amount due now: A$${amount.toFixed(2)}`,
-    `Payment method: ${fields.paymentMethod.value}`,
-    destinations[fields.paymentMethod.value],
-    `Reference: ${reference}`,
-    "",
-    "Important:",
-    "- Please use the exact reference so we can match your payment to the design files.",
-    "- Production starts only after payment clears and the final visual proof is approved.",
-    "- Do not send new artwork through payment notes; upload it through the designer or email it with the quote ID."
-  ].join("\n");
+  fields.reference.textContent = `Reference: ${reference} · ${fields.paymentStage.value} · Amount due now: A$${amount.toFixed(2)}`;
+  fields.status.textContent = `Quoted total: ${money(fields.quotedTotal.value)}. Production starts only after payment clears and the final visual proof is approved.`;
 }
 
 Object.values(fields).forEach((field) => {
   if (field && ["INPUT", "SELECT"].includes(field.tagName)) {
-    field.addEventListener("input", updatePaymentNote);
-    field.addEventListener("change", updatePaymentNote);
-  }
-});
-
-fields.copy.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(fields.note.value);
-    fields.status.textContent = "Payment note copied.";
-  } catch {
-    fields.note.select();
-    document.execCommand("copy");
-    fields.status.textContent = "Payment note selected and copied where supported.";
+    field.addEventListener("input", updatePaymentReference);
+    field.addEventListener("change", updatePaymentReference);
   }
 });
 
 updatePaymentCards();
-updatePaymentNote();
+applyStoredQuote();
+updatePaymentReference();

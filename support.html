@@ -25,10 +25,10 @@
       <section id="quote" class="quote-form">
         <p class="eyebrow">Quote request</p>
         <h1>Tell us what you want to customise.</h1>
-        <form>
-          <label>Name <input id="quoteName" type="text" placeholder="Your name"></label>
-          <label>Email <input id="quoteEmail" type="email" placeholder="name@example.com"></label>
-          <label>City <input id="quoteCity" type="text" placeholder="Sydney / Melbourne / Brisbane / Perth"></label>
+        <form id="quoteForm" novalidate>
+          <label>Name <input id="quoteName" type="text" autocomplete="name" required placeholder="Your name"></label>
+          <label>Email <input id="quoteEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
+          <label>City <input id="quoteCity" type="text" autocomplete="address-level2" placeholder="Sydney / Melbourne / Brisbane / Perth"></label>
           <label>What are you customising?
             <select id="quoteType">
               <option>Custom keycaps</option>
@@ -39,13 +39,11 @@
             </select>
           </label>
           <label>Selected reference <input id="quoteProduct" type="text" placeholder="Optional build reference"></label>
-          <label>Brief <textarea id="quoteBrief" placeholder="Keyboard model, layout, theme, colours, image ideas, budget, and deadline..."></textarea></label>
-          <textarea id="quoteMessage" readonly aria-label="Prepared quote request message"></textarea>
-          <button class="button primary" id="copyQuoteMessage" type="button">Copy Request Details</button>
-          <a class="button secondary" id="emailQuoteRequest" href="#">Email Quote Request</a>
+          <label>Brief <textarea id="quoteBrief" required placeholder="Keyboard model, layout, theme, colours, image ideas, budget, and deadline..."></textarea></label>
+          <button class="button primary" id="submitQuoteRequest" type="button">Submit Quote Request</button>
           <a class="button primary" href="preview.html">Open Custom Designer</a>
           <a class="button secondary" href="checkout.html">Pay Approved Quote</a>
-          <p id="quoteStatus" class="helper-text">Use the Custom Designer to upload artwork and submit files. This contact form prepares the selected reference and brief so you can send it to ForgeKeys AU.</p>
+          <p id="quoteStatus" class="helper-text">Submit this form and ForgeKeys AU will receive the request in the order database. We will reply by email with recommended parts, availability, price, and next steps.</p>
         </form>
       </section>
 
@@ -58,7 +56,15 @@
         </details>
         <details>
           <summary>Are you selling your own keyboards now?</summary>
-          <p>Not yet. The site is structured for future own-brand drops, but the first commercial focus is custom keycaps and customisation services.</p>
+          <p>Not yet. The site is structured for future own-brand or authorised partner drops, but the first commercial focus is custom keycaps, build planning, assembly, tuning, and customisation services.</p>
+        </details>
+        <details>
+          <summary>Are the shown keyboards and keycaps official collaborations?</summary>
+          <p>Only if a listing clearly says so. Otherwise, keyboard kits, keycaps, switches, and accessories shown may be third-party products, customer-provided parts, or previous build references used for custom consultation.</p>
+        </details>
+        <details>
+          <summary>What if a third-party part has a fault?</summary>
+          <p>ForgeKeys AU can help check the issue and guide the supplier warranty route where available. Third-party warranty, replacement, return shipping, and repair timing depend on the original seller or manufacturer policy and are confirmed before the order proceeds.</p>
         </details>
         <details>
           <summary>How does payment work?</summary>

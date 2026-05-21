@@ -30,11 +30,11 @@
 
       <section class="payment-builder">
         <div>
-          <h2>Build your quote payment note</h2>
-          <p>Use this only after we confirm your quote. The reference links your payment to your design files, proof image, and production notes.</p>
+          <h2>Approved quote details</h2>
+          <p>Use this page only after ForgeKeys AU confirms your quote by email. The quote ID links your payment to your design files, proof image, and production notes.</p>
         </div>
         <form class="payment-form">
-          <label>Customer name <input id="payerName" type="text" placeholder="Your name"></label>
+          <label>Customer name <input id="payerName" type="text" autocomplete="name" placeholder="Your name"></label>
           <label>Quote / submission ID <input id="submissionId" type="text" placeholder="FK-1779166909363"></label>
           <label>Payment stage
             <select id="paymentStage">
@@ -54,6 +54,12 @@
             </select>
           </label>
         </form>
+      </section>
+
+      <section class="payment-output">
+        <h2>Payment reference</h2>
+        <p id="paymentReference">Enter the quote ID and your name to prepare the correct payment reference.</p>
+        <p id="copyStatus" class="helper-text">Use the exact reference shown on your approved quote. If anything looks different from the email quote, contact ForgeKeys AU before paying.</p>
       </section>
 
       <section class="payment-grid">
@@ -85,12 +91,6 @@
         </article>
       </section>
 
-      <section class="payment-output">
-        <h2>Quote payment note</h2>
-        <textarea id="paymentNote" readonly></textarea>
-        <button class="button primary" id="copyPaymentNote" type="button">Copy Payment Note</button>
-        <p id="copyStatus" class="helper-text">Use this note in email, SMS, Instagram DM, or order confirmation.</p>
-      </section>
     </main>
     <script src="site-config.js"></script>
     <script src="checkout.js"></script>
