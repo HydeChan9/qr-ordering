@@ -199,14 +199,30 @@
     return emailDomainCorrections[domain] ? `${local}@${emailDomainCorrections[domain]}` : "";
   };
 
+  const uploadLimitLabel = `${Math.round(maxUploadBytes / 1024 / 1024)} MB`;
+
+  const validateImageFile = (file) => {
+    if (!file || !acceptedMimeTypes.includes(file.type)) {
+      throw new Error("Please upload a JPG, PNG, or WebP image.");
+    }
+    if (file.size > maxUploadBytes) {
+      throw new Error(`${file.name} is over ${uploadLimitLabel}. Please choose a smaller image before adding it.`);
+    }
+  };
+
+  const validateImageFiles = (files) => {
+    if (!files.length) {
+      throw new Error("Please choose at least one image.");
+    }
+    files.forEach(validateImageFile);
+  };
+
   const loadImageFile = (file) =>
     new Promise((resolve, reject) => {
-      if (!file || !acceptedMimeTypes.includes(file.type)) {
-        reject(new Error("Please upload an image file."));
-        return;
-      }
-      if (file.size > maxUploadBytes) {
-        reject(new Error(`Image is over ${Math.round(maxUploadBytes / 1024 / 1024)} MB. Use a smaller preview file.`));
+      try {
+        validateImageFile(file);
+      } catch (error) {
+        reject(error);
         return;
       }
       const image = new Image();
@@ -280,26 +296,99 @@
       requestAnimationFrame(() => requestAnimationFrame(resolve));
     });
 
-  const canvasBlob = async () => {
+  const previewHasKeyboardPixels = (ctx, width, height) => {
+    const sampleW = Math.max(1, Math.floor(width / 8));
+    const sampleH = Math.max(1, Math.floor(height / 8));
+    const x = Math.floor((width - sampleW) / 2);
+    const y = Math.floor((height - sampleH) / 2);
+    const data = ctx.getImageData(x, y, sampleW, sampleH).data;
+    let brightPixels = 0;
+    let variedPixels = 0;
+    for (let index = 0; index < data.length; index += 16) {
+      const r = data[index];
+      const g = data[index + 1];
+      const b = data[index + 2];
+      const a = data[index + 3];
+      if (a < 12) continue;
+      const brightness = r + g + b;
+      if (brightness > 115) brightPixels += 1;
+      if (Math.max(r, g, b) - Math.min(r, g, b) > 8) variedPixels += 1;
+    }
+    return brightPixels > 18 || variedPixels > 18;
+  };
+
+  const sceneManager = () => window.ForgeKeysSceneManager || null;
+
+  const currentSceneView = () => {
+    const manager = sceneManager();
+    if (!manager?.camera || !manager?.controls) return null;
+    return {
+      camera: {
+        x: manager.camera.position.x,
+        y: manager.camera.position.y,
+        z: manager.camera.position.z,
+      },
+      target: {
+        x: manager.controls.target.x,
+        y: manager.controls.target.y,
+        z: manager.controls.target.z,
+      },
+    };
+  };
+
+  const applySceneView = async (view) => {
+    const manager = sceneManager();
+    if (!manager?.camera || !manager?.controls || !view) return false;
+    manager.camera.position.set(view.camera.x, view.camera.y, view.camera.z);
+    manager.controls.target.set(view.target.x, view.target.y, view.target.z);
+    manager.controls.update();
     await waitForPaint();
-    return new Promise((resolve, reject) => {
+    return true;
+  };
+
+  const standardSceneView = () => ({
+    camera: { x: 0, y: 15, z: 15 },
+    target: { x: 0, y: 0, z: 0 },
+  });
+
+  const canvasBlob = async () => {
+    let output = null;
+    let ctx = null;
+    for (let attempt = 0; attempt < 24; attempt += 1) {
+      await waitForPaint();
       const canvas = document.querySelector("#canvas-wrapper canvas");
-      if (!canvas) {
-        reject(new Error("Preview canvas is not ready yet."));
-        return;
-      }
-      const output = document.createElement("canvas");
+      if (!canvas || !canvas.width || !canvas.height) continue;
+      output = document.createElement("canvas");
       output.width = canvas.width;
       output.height = canvas.height;
-      const ctx = output.getContext("2d");
+      ctx = output.getContext("2d", { willReadFrequently: true });
       ctx.fillStyle = "#202024";
       ctx.fillRect(0, 0, output.width, output.height);
       ctx.drawImage(canvas, 0, 0);
+      if (previewHasKeyboardPixels(ctx, output.width, output.height)) break;
+      output = null;
+    }
+    if (!output || !ctx) {
+      throw new Error("The keyboard preview is still loading. Wait a moment, then submit again.");
+    }
+    return new Promise((resolve, reject) => {
       output.toBlob((blob) => {
         if (blob) resolve(blob);
         else reject(new Error("Could not create preview image."));
       }, "image/png");
     });
+  };
+
+  const standardCanvasBlob = async () => {
+    const originalView = currentSceneView();
+    const hasScene = await applySceneView(standardSceneView());
+    try {
+      return await canvasBlob();
+    } finally {
+      if (hasScene && originalView) {
+        await applySceneView(originalView);
+      }
+    }
   };
 
   const collectDesignData = (panel, submissionId) => {
@@ -378,8 +467,11 @@
         const asset = state.accents[index];
         await uploadToSupabaseStorage(`${folder}/accents/${String(index + 1).padStart(2, "0")}-${safeFileName(asset.name)}`, asset.file, asset.type);
       }
-      const previewBlob = await canvasBlob();
-      await uploadToSupabaseStorage(`${folder}/preview.png`, previewBlob, "image/png");
+      const customerPreviewBlob = await canvasBlob();
+      await uploadToSupabaseStorage(`${folder}/preview-customer-view.png`, customerPreviewBlob, "image/png");
+      const standardPreviewBlob = await standardCanvasBlob();
+      await uploadToSupabaseStorage(`${folder}/preview-standard.png`, standardPreviewBlob, "image/png");
+      await uploadToSupabaseStorage(`${folder}/preview.png`, standardPreviewBlob, "image/png");
       const json = JSON.stringify(design, null, 2);
       await uploadToSupabaseStorage(`${folder}/design.json`, new Blob([json], { type: "application/json" }), "application/json");
       await uploadToSupabaseStorage(`${folder}/01-order-details.json`, new Blob([json], { type: "application/json" }), "application/json");
@@ -390,7 +482,7 @@
             `ForgeKeys AU custom designer submission: ${submissionId}`,
             "",
             state.baseAsset || state.accents.length
-              ? "Open preview.png first to see the customer's visual direction."
+              ? "Open preview-standard.png first to see the customer's design direction in a consistent camera view. preview-customer-view.png shows the angle the customer had on screen."
               : "No artwork was uploaded. Treat this as a brief-only enquiry and reply with recommended next steps.",
             "If artwork was uploaded, original files are included as main-artwork-* and accents/*.",
             "Use design.json for key placement, scale, rotation, and customer contact details.",
@@ -425,7 +517,7 @@
         <button class="fk-toggle" type="button" data-fk-toggle>Hide</button>
       </div>
       <div class="fk-panel-body">
-        <label class="fk-field">Main artwork
+        <label class="fk-field">Main artwork <span>Max 3 MB</span>
           <input type="file" accept="image/png,image/jpeg,image/webp" data-fk-base>
         </label>
         <label class="fk-field">Apply main artwork to
@@ -447,7 +539,7 @@
             <option value="96">96%</option>
           </select>
         </label>
-        <label class="fk-field">Accent images
+        <label class="fk-field">Accent images <span>Max 3 MB each</span>
           <input type="file" multiple accept="image/png,image/jpeg,image/webp" data-fk-accents>
         </label>
         <div class="fk-assets" data-fk-assets></div>
@@ -503,14 +595,47 @@
     `;
     document.body.appendChild(panel);
 
+    const mobileActions = document.createElement("nav");
+    mobileActions.className = "fk-mobile-actions";
+    mobileActions.setAttribute("aria-label", "Mobile customizer sections");
+    mobileActions.innerHTML = `
+      <button class="fk-mobile-action is-active" type="button" data-fk-mobile-mode="preview">Preview</button>
+      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="edit">Design</button>
+      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="layout">Layout</button>
+    `;
+    document.body.appendChild(mobileActions);
+
+    const setMobileMode = (mode) => {
+      document.body.dataset.fkMobileMode = mode;
+      mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.fkMobileMode === mode);
+      });
+      if (mode === "edit") {
+        panel.classList.remove("is-collapsed");
+        panel.querySelector("[data-fk-toggle]").textContent = "Hide";
+      } else {
+        panel.classList.add("is-collapsed");
+        panel.querySelector("[data-fk-toggle]").textContent = "Edit";
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+
+    mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
+      button.addEventListener("click", () => setMobileMode(button.dataset.fkMobileMode));
+    });
+
     if (window.matchMedia("(max-width: 760px)").matches) {
       panel.classList.add("is-collapsed");
       panel.querySelector("[data-fk-toggle]").textContent = "Edit";
+      setMobileMode("preview");
     }
 
     panel.querySelector("[data-fk-toggle]").addEventListener("click", (event) => {
       panel.classList.toggle("is-collapsed");
       event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Hide";
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        setMobileMode(panel.classList.contains("is-collapsed") ? "preview" : "edit");
+      }
     });
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
@@ -523,25 +648,30 @@
     });
     panel.querySelector("[data-fk-base]").addEventListener("change", async (event) => {
       try {
-        const asset = await loadImageFile(event.target.files[0]);
+        const files = Array.from(event.target.files || []);
+        validateImageFiles(files);
+        const asset = await loadImageFile(files[0]);
         state.baseImage = asset.image;
         state.baseFile = asset.file;
         state.baseAsset = asset;
         setStatus(`Main artwork loaded: ${asset.name}`, "success");
         refreshTextures();
       } catch (error) {
+        event.target.value = "";
         setStatus(error.message, "error");
       }
     });
     panel.querySelector("[data-fk-accents]").addEventListener("change", async (event) => {
       try {
         const files = Array.from(event.target.files || []);
+        validateImageFiles(files);
         const loaded = await Promise.all(files.map(loadImageFile));
         state.accents.push(...loaded);
         state.selectedAccent = state.selectedAccent || state.accents[0] || null;
         renderAssets();
         setStatus(`${loaded.length} accent image${loaded.length === 1 ? "" : "s"} loaded.`, "success");
       } catch (error) {
+        event.target.value = "";
         setStatus(error.message, "error");
       }
     });

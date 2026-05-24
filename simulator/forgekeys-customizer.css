@@ -15,6 +15,10 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.fk-mobile-actions {
+  display: none;
+}
+
 .fk-customizer.is-collapsed {
   width: auto;
 }
@@ -195,15 +199,14 @@
   .fk-customizer {
     left: 10px;
     right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
+    bottom: calc(66px + env(safe-area-inset-bottom));
     width: auto;
-    max-height: min(54dvh, 430px);
+    max-height: min(52dvh, 460px);
     border-radius: 12px;
   }
 
   .fk-customizer.is-collapsed {
-    left: auto;
-    width: min(260px, calc(100vw - 20px));
+    display: none;
   }
 
   .fk-panel-head {
@@ -226,7 +229,7 @@
   }
 
   .fk-panel-body {
-    max-height: calc(min(54dvh, 430px) - 65px);
+    max-height: calc(min(52dvh, 460px) - 65px);
     gap: 12px;
     padding: 12px;
   }
@@ -242,53 +245,95 @@
   .fk-actions {
     grid-template-columns: 1fr;
   }
+
+  .fk-mobile-actions {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 80;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    padding: 8px;
+    background: rgba(22, 23, 25, 0.94);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(14px);
+  }
+
+  .fk-mobile-action {
+    border: 0;
+    border-radius: 9px;
+    min-height: 44px;
+    color: #f6f2ea;
+    background: #303339;
+    font: 800 12px Inter, ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer;
+  }
+
+  .fk-mobile-action.is-active {
+    color: #161719;
+    background: #f6f2ea;
+  }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 760px) {
   .App {
     display: block !important;
-    height: 100vh !important;
+    height: 100dvh !important;
     overflow: hidden !important;
   }
 
   .App > div {
-    position: absolute !important;
+    position: relative !important;
   }
 
   #sidebar {
-    width: 20em !important;
-    height: 100% !important;
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+    z-index: 55 !important;
+    display: none !important;
+    width: auto !important;
+    max-width: none !important;
+    height: min(42dvh, 390px) !important;
     overflow-y: auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    background: rgba(22, 23, 25, 0.96) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38) !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .App #canvas-wrapper {
-    order: 0 !important;
-    width: calc(100% - 20em) !important;
-    height: 100% !important;
-    min-height: 620px !important;
-    margin-left: 20em !important;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  #sidebar {
-    width: 13em !important;
+    position: fixed !important;
+    inset: 0 0 auto 0 !important;
+    z-index: 1 !important;
+    width: 100vw !important;
+    height: calc(100dvh - 72px - env(safe-area-inset-bottom)) !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    background: #202024 !important;
   }
 
-  .App #canvas-wrapper {
-    width: calc(100% - 13em) !important;
-    min-height: 520px !important;
-    margin-left: 13em !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  #sidebar {
-    width: 11.5em !important;
+  body[data-fk-mobile-mode="layout"] #sidebar {
+    display: block !important;
   }
 
-  .App #canvas-wrapper {
-    width: calc(100% - 11.5em) !important;
-    margin-left: 11.5em !important;
+  body[data-fk-mobile-mode="layout"] .App #canvas-wrapper,
+  body[data-fk-mobile-mode="edit"] .App #canvas-wrapper {
+    height: 50dvh !important;
+  }
+
+  body[data-fk-mobile-mode="layout"] .fk-customizer,
+  body[data-fk-mobile-mode="preview"] .fk-customizer {
+    display: none !important;
+  }
+
+  body[data-fk-mobile-mode="edit"] #sidebar {
+    display: none !important;
   }
 }
