@@ -1,6 +1,6 @@
 {
-    "short_name": "Keysim",
-    "name": "Keyboard Simulator",
+    "short_name": "ForgeKeys",
+    "name": "ForgeKeys AU 3D Custom Keycap Designer",
     "icons": [
         {
             "src": "favicon.png",
@@ -18,14 +18,14 @@
             "sizes": "512x512"
         },
         {
-            "src": "maskable_icon.png",
-            "sizes": "256x256",
+            "src": "logo512.png",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
         }
     ],
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#614dff",
+    "theme_color": "#202024",
     "background_color": "#202024"
 }

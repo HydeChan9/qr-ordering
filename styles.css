@@ -71,6 +71,20 @@ a {
   letter-spacing: 0;
 }
 
+.brand-mark.logo-mark {
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.brand-mark.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .nav {
   display: flex;
   gap: 6px;
@@ -492,6 +506,114 @@ h3 {
   gap: 28px;
   background: #e9e1d4;
   border-block: 1px solid var(--line);
+}
+
+.seo-landing .page-title {
+  display: grid;
+  min-height: 520px;
+  align-content: end;
+  overflow: hidden;
+  position: relative;
+  margin: calc(clamp(40px, 6vw, 78px) * -1) calc(clamp(20px, 5vw, 64px) * -1) clamp(34px, 5vw, 56px);
+  padding: clamp(80px, 12vw, 150px) clamp(20px, 5vw, 64px) clamp(44px, 7vw, 86px);
+  color: white;
+  background: var(--charcoal);
+}
+
+.seo-landing .page-title::before,
+.seo-landing .page-title::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.seo-landing .page-title::before {
+  background: var(--landing-image, url("assets/soft-desk-keyboard-build.jpg")) center / cover;
+  filter: saturate(0.92) contrast(1.02);
+}
+
+.seo-landing .page-title::after {
+  background:
+    linear-gradient(180deg, rgba(23, 23, 23, 0.12), rgba(23, 23, 23, 0.78)),
+    linear-gradient(90deg, rgba(23, 23, 23, 0.78), rgba(23, 23, 23, 0.16));
+}
+
+.seo-landing .page-title > * {
+  position: relative;
+  z-index: 1;
+}
+
+.seo-landing .page-title p {
+  color: #f3eee7;
+}
+
+.seo-landing .page-title .eyebrow {
+  color: #f1d5bd;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.landing-panel,
+.landing-checklist,
+.landing-faq details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.landing-panel,
+.landing-checklist {
+  padding: 24px;
+}
+
+.landing-panel img {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+.landing-checklist ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.landing-faq {
+  display: grid;
+  gap: 12px;
+}
+
+.landing-faq details {
+  padding: 18px 20px;
+}
+
+.landing-search-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.landing-search-links a {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--blue);
+  background: var(--paper);
+  font-weight: 800;
 }
 
 .media-grid {
@@ -1529,6 +1651,7 @@ summary {
 
   .hero,
   .split-band,
+  .landing-grid,
   .config-layout,
   .price-table,
   .two-column,
@@ -1662,6 +1785,14 @@ summary {
   .hero-image-panel,
   .hero-image-panel img {
     min-height: 280px;
+  }
+
+  .seo-landing .page-title {
+    min-height: 560px;
+  }
+
+  .landing-panel img {
+    height: 260px;
   }
 
   .test-surface,
