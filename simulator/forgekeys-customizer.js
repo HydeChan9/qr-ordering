@@ -13,6 +13,7 @@
     ["KC_F10", "F10"],
     ["KC_F11", "F11"],
     ["KC_F12", "F12"],
+    ["KC_BSPC", "Backspace"],
     ["KC_TAB", "Tab"],
     ["KC_Q", "Q"],
     ["KC_W", "W"],
@@ -59,12 +60,15 @@
     baseImage: null,
     baseFile: null,
     baseAsset: null,
-    baseMode: "full",
+    baseMode: "spacebar",
     accents: [],
     selectedAccent: null,
     placements: {},
     bounds: { width: 16, height: 6 },
-    keepLegends: true,
+    keepLegends: false,
+    artworkType: "photo",
+    stylePreset: "feature",
+    baseOpacity: 0.82,
   };
 
   const config = window.FORGEKEYS_CONFIG || {};
@@ -79,6 +83,33 @@
     "96": { width: 19, height: 6 },
     "100": { width: 22.5, height: 6 },
   };
+
+  const sampleArtworks = [
+    {
+      label: "Hero big keys",
+      url: "../assets/customizer-samples/feature-spacebar-luxe-line.svg?v=bigkeys1",
+      type: "illustration",
+      preset: "feature",
+      opacity: 0.92,
+      description: "Homepage-style large keys",
+    },
+    {
+      label: "Gold accents",
+      url: "../assets/customizer-samples/accent-ribbon.svg?v=bigkeys1",
+      type: "illustration",
+      preset: "accent",
+      opacity: 0.94,
+      description: "Small motif direction",
+    },
+    {
+      label: "Gallery tone",
+      url: "../assets/customizer-samples/copper-studio.svg?v=bigkeys1",
+      type: "pattern",
+      preset: "soft",
+      opacity: 0.56,
+      description: "Soft colour direction",
+    },
+  ];
 
   const fitCover = (imageW, imageH, boxW, boxH) => {
     const scale = Math.max(boxW / imageW, boxH / imageH);
@@ -110,6 +141,19 @@
     if (state.baseMode === "mods" && !isMod) return;
     if (state.baseMode === "spacebar" && opts.code !== "KC_SPC") return;
 
+    if (state.baseMode === "spacebar") {
+      drawCover(ctx, state.baseImage, 0, 0, canvas.width, canvas.height, state.baseOpacity);
+      if (state.stylePreset === "soft" || state.stylePreset === "feature") {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = state.stylePreset === "feature" ? 0.2 : 0.14;
+        ctx.fillStyle = "#f7f2ea";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+      return;
+    }
+
     const boardW = state.bounds.width * 128;
     const boardH = state.bounds.height * 128;
     const crop = fitCover(state.baseImage.naturalWidth, state.baseImage.naturalHeight, boardW, boardH);
@@ -123,8 +167,20 @@
     const sh = (h / boardH) * crop.sh;
 
     ctx.save();
-    ctx.globalAlpha = 0.88;
+    ctx.globalAlpha = state.baseOpacity;
     ctx.drawImage(state.baseImage, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    if (state.stylePreset === "soft" || state.stylePreset === "feature") {
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = state.stylePreset === "feature" ? 0.2 : 0.14;
+      ctx.fillStyle = "#f7f2ea";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    if (state.stylePreset === "desk") {
+      ctx.globalCompositeOperation = "multiply";
+      ctx.globalAlpha = 0.12;
+      ctx.fillStyle = "#315f7d";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     ctx.restore();
   };
 
@@ -161,7 +217,7 @@
     draw(ctx, canvas, opts) {
       drawBaseArtwork(ctx, canvas, opts);
       drawAccent(ctx, canvas, opts);
-      if (!state.keepLegends) {
+      if (!state.keepLegends && !document.body.classList.contains("fk-advanced-open")) {
         opts.legend = "";
       }
     },
@@ -232,11 +288,154 @@
       image.src = url;
     });
 
+  const makeFileFromBlob = (blob, name) => {
+    try {
+      return new File([blob], name, { type: blob.type || "image/jpeg" });
+    } catch (error) {
+      blob.name = name;
+      return blob;
+    }
+  };
+
+  const rasterizeSvgSample = (blob, name) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      const url = URL.createObjectURL(blob);
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth || 1800;
+        canvas.height = image.naturalHeight || 900;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#f6f2ea";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(
+          (jpegBlob) => {
+            if (!jpegBlob) {
+              reject(new Error("Could not prepare sample artwork."));
+              return;
+            }
+            const fileName = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.jpg`;
+            resolve(loadImageFile(makeFileFromBlob(jpegBlob, fileName)));
+          },
+          "image/jpeg",
+          0.9
+        );
+      };
+      image.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not read sample artwork."));
+      };
+      image.src = url;
+    });
+
+  const loadSampleArtwork = async (sample) => {
+    const response = await fetch(sample.url);
+    if (!response.ok) throw new Error("Could not load sample artwork.");
+    const blob = await response.blob();
+    if (blob.type === "image/svg+xml" || sample.url.toLowerCase().endsWith(".svg")) {
+      return rasterizeSvgSample(blob, sample.label);
+    }
+    const extension = (blob.type.split("/")[1] || "jpg").replace("jpeg", "jpg");
+    const file = makeFileFromBlob(blob, `${sample.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.${extension}`);
+    return loadImageFile(file);
+  };
+
   const setStatus = (message, tone = "info") => {
     const status = document.querySelector("[data-fk-status]");
     if (!status) return;
     status.textContent = message;
     status.dataset.tone = tone;
+  };
+
+  const setGuide = (message) => {
+    const guide = document.querySelector("[data-fk-guide]");
+    if (guide) guide.textContent = message;
+  };
+
+  const presetCopy = {
+    feature: "Best first preview: make the large keys feel like a finished custom set.",
+    accent: "Best for logos and icons: use a few hero keys.",
+    soft: "Best for patterns and photos: subtle colour and texture.",
+    desk: "Best for desk photos: match colours without cutting the photo apart.",
+    full: "Advanced only: all-over print can look busy on small keys.",
+  };
+
+  const clearAutoPlacements = () => {
+    Object.keys(state.placements).forEach((code) => {
+      if (state.placements[code]?.auto) {
+        delete state.placements[code];
+      }
+    });
+  };
+
+  const placeBaseArtwork = (code, options) => {
+    if (!state.baseImage) return;
+    state.placements[code] = {
+      image: state.baseImage,
+      name: state.baseAsset?.name || "Main artwork",
+      mode: options.mode || "center",
+      scale: options.scale || 76,
+      rotation: options.rotation || 0,
+      x: options.x || 0,
+      y: options.y || 0,
+      auto: true,
+    };
+  };
+
+  const applyAutoPlacements = (preset) => {
+    if (!state.baseImage) return;
+    if (preset === "feature") {
+      placeBaseArtwork("KC_BSPC", { mode: "full", scale: 100, x: 0, y: 0 });
+      placeBaseArtwork("KC_TAB", { mode: "full", scale: 100, x: 0, y: 0 });
+      placeBaseArtwork("KC_CAPS", { mode: "full", scale: 100, x: 0, y: 0 });
+      placeBaseArtwork("KC_ENT", { mode: "full", scale: 100, x: 0, y: 0 });
+      placeBaseArtwork("KC_LSFT", { mode: "full", scale: 100, x: 0, y: 0 });
+      placeBaseArtwork("KC_RSFT", { mode: "full", scale: 100, x: 0, y: 0 });
+    }
+    if (preset === "accent") {
+      placeBaseArtwork("KC_ESC", { mode: "center", scale: 92, x: 0, y: 0 });
+      placeBaseArtwork("KC_ENT", { mode: "center", scale: 88, x: 0, y: 0 });
+      placeBaseArtwork("KC_SPC", { mode: "spacebar", scale: 118, x: 0, y: 0 });
+    }
+  };
+
+  const applyDesignPreset = (panel, preset, options = {}) => {
+    state.stylePreset = preset;
+    const modeSelect = panel.querySelector("[data-fk-base-mode]");
+    const typeSelect = panel.querySelector("[data-fk-artwork-type]");
+    const presetSelect = panel.querySelector("[data-fk-style-preset]");
+
+    if (typeSelect && options.type) {
+      state.artworkType = options.type;
+      typeSelect.value = options.type;
+    }
+    if (presetSelect) presetSelect.value = preset;
+
+    clearAutoPlacements();
+
+    if (preset === "feature") {
+      state.baseMode = "spacebar";
+      state.baseOpacity = 0.92;
+      applyAutoPlacements("feature");
+    } else if (preset === "accent") {
+      state.baseMode = "none";
+      state.baseOpacity = 0.9;
+      applyAutoPlacements("accent");
+    } else if (preset === "soft") {
+      state.baseMode = "mods";
+      state.baseOpacity = 0.46;
+    } else if (preset === "desk") {
+      state.baseMode = "mods";
+      state.baseOpacity = 0.38;
+    } else if (preset === "full") {
+      state.baseMode = "full";
+      state.baseOpacity = 0.62;
+    }
+    if (modeSelect) modeSelect.value = state.baseMode;
+    setGuide(presetCopy[preset] || presetCopy.feature);
+    refreshTextures();
   };
 
   const renderAssets = () => {
@@ -362,7 +561,8 @@
       output.width = canvas.width;
       output.height = canvas.height;
       ctx = output.getContext("2d", { willReadFrequently: true });
-      ctx.fillStyle = "#202024";
+      const wrapper = document.querySelector("#canvas-wrapper");
+      ctx.fillStyle = wrapper ? getComputedStyle(wrapper).backgroundColor : "#d1c8ba";
       ctx.fillRect(0, 0, output.width, output.height);
       ctx.drawImage(canvas, 0, 0);
       if (previewHasKeyboardPixels(ctx, output.width, output.height)) break;
@@ -407,6 +607,8 @@
       source: "ForgeKeys 3D Custom Designer",
       layoutCrop: panel.querySelector("[data-fk-bounds]").selectedOptions[0]?.textContent || "",
       baseArtworkMode: state.baseMode,
+      artworkType: state.artworkType,
+      stylePreset: state.stylePreset,
       requestMode: state.baseAsset || state.accents.length ? "artwork-submission" : "brief-only",
       baseArtwork: state.baseAsset
         ? { name: state.baseAsset.name, size: state.baseAsset.size, type: state.baseAsset.type }
@@ -433,7 +635,7 @@
     const button = panel.querySelector("[data-fk-submit]");
     if (!button) return;
     button.disabled = busy;
-    button.textContent = busy ? "Submitting..." : "Submit custom request";
+    button.textContent = busy ? "Sending..." : "Send request";
   };
 
   const submitRequest = async (panel) => {
@@ -504,6 +706,41 @@
     }
   };
 
+  const buildStagePrompt = (panel) => {
+    const prompt = document.createElement("aside");
+    prompt.className = "fk-stage-prompt";
+    prompt.setAttribute("aria-label", "ForgeKeys custom quote reminder");
+    prompt.innerHTML = `
+      <span>Custom keycap quote</span>
+      <strong>Upload artwork. We shape the keycap direction.</strong>
+      <p>Quick preview first, refined proof before production.</p>
+      <button class="fk-stage-button" type="button" data-fk-stage-upload>Start quote</button>
+    `;
+    document.body.appendChild(prompt);
+    prompt.querySelector("[data-fk-stage-upload]").addEventListener("click", () => {
+      panel.classList.remove("is-collapsed");
+      const toggle = panel.querySelector("[data-fk-toggle]");
+      if (toggle) toggle.textContent = "Hide";
+      syncBodyPanelState(panel);
+      const body = panel.querySelector(".fk-panel-body");
+      const fileInput = panel.querySelector("[data-fk-base]");
+      if (body && fileInput) {
+        body.scrollTo({ top: fileInput.closest(".fk-section")?.offsetTop || 0, behavior: "smooth" });
+        fileInput.focus({ preventScroll: true });
+        setStatus("Upload your artwork in the Artwork section.", "info");
+      }
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        document.body.dataset.fkMobileMode = "edit";
+      }
+    });
+    return prompt;
+  };
+
+  const syncBodyPanelState = (panel) => {
+    document.body.classList.toggle("fk-panel-collapsed", panel.classList.contains("is-collapsed"));
+    window.dispatchEvent(new Event("resize"));
+  };
+
   const buildPanel = () => {
     const panel = document.createElement("section");
     panel.className = "fk-customizer";
@@ -511,25 +748,59 @@
     panel.innerHTML = `
       <div class="fk-panel-head">
         <div class="fk-panel-title">
-          <strong>ForgeKeys Texture Test</strong>
-          <span>Full board image + per-key accents</span>
+          <span class="fk-brand-badge">ForgeKeys AU</span>
+          <strong>Custom Keycap Quote</strong>
+          <span>Upload. Direction. Quote.</span>
         </div>
         <button class="fk-toggle" type="button" data-fk-toggle>Hide</button>
       </div>
       <div class="fk-panel-body">
-        <label class="fk-field">Main artwork <span>Max 3 MB</span>
+        <div class="fk-step-row" aria-label="Customizer steps">
+          <span>1 Upload</span>
+          <span>2 Direction</span>
+          <span>3 Quote</span>
+        </div>
+        <details class="fk-details fk-details-compact">
+          <summary>Choose direction</summary>
+          <label class="fk-field">Artwork type
+            <select data-fk-artwork-type>
+              <option value="photo">Photo / portrait / pet</option>
+              <option value="logo">Logo / brand mark</option>
+              <option value="illustration">Illustration / artwork</option>
+              <option value="pattern">Pattern / texture</option>
+              <option value="desk">Desk setup photo</option>
+            </select>
+          </label>
+          <label class="fk-field">Preview style
+            <select data-fk-style-preset>
+              <option value="feature">Feature key</option>
+              <option value="accent">Accent key set</option>
+              <option value="soft">Soft colour theme</option>
+              <option value="desk">Desk colour match</option>
+              <option value="full">Full print concept</option>
+            </select>
+          </label>
+          <p class="fk-guide" data-fk-guide>${presetCopy.feature}</p>
+        </details>
+        <div class="fk-samples" aria-label="Sample artwork">
+          <span>Design directions</span>
+          ${sampleArtworks.map((sample, index) => `
+            <button class="fk-sample" type="button" data-fk-sample="${index}">
+              <span class="fk-sample-thumb" style="background-image: url('${sample.url}')"></span>
+              <span>${sample.label}</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="fk-section">
+          <span class="fk-kicker">Artwork</span>
+        <label class="fk-field">Main artwork <span>JPG / PNG / WebP, max 3 MB</span>
           <input type="file" accept="image/png,image/jpeg,image/webp" data-fk-base>
         </label>
-        <label class="fk-field">Apply main artwork to
-          <select data-fk-base-mode>
-            <option value="full">Full keyboard</option>
-            <option value="alphas">Letters only</option>
-            <option value="mods">Modifiers only</option>
-            <option value="spacebar">Spacebar only</option>
-            <option value="none">Do not use main artwork</option>
-          </select>
+        <label class="fk-field">Extra references <span>Optional logos, colours, desk photos.</span>
+          <input type="file" multiple accept="image/png,image/jpeg,image/webp" data-fk-accents>
         </label>
-        <label class="fk-field">Artwork layout crop
+        <div class="fk-assets" data-fk-assets></div>
+        <label class="fk-field">Layout
           <select data-fk-bounds>
             <option value="75">75% / 75% + Knob</option>
             <option value="80">80% / TKL</option>
@@ -539,10 +810,18 @@
             <option value="96">96%</option>
           </select>
         </label>
-        <label class="fk-field">Accent images <span>Max 3 MB each</span>
-          <input type="file" multiple accept="image/png,image/jpeg,image/webp" data-fk-accents>
+        </div>
+        <details class="fk-details">
+          <summary>Fine tune one key</summary>
+        <label class="fk-field">Apply main artwork
+          <select data-fk-base-mode>
+            <option value="spacebar">Spacebar only</option>
+            <option value="mods">Modifiers only</option>
+            <option value="alphas">Letters only</option>
+            <option value="full">Full keyboard</option>
+            <option value="none">Do not use main artwork</option>
+          </select>
         </label>
-        <div class="fk-assets" data-fk-assets></div>
         <div class="fk-row">
           <label class="fk-field">Key
             <select data-fk-key>
@@ -569,11 +848,21 @@
           <label class="fk-field">Move Y <input type="range" min="-45" max="45" value="0" data-fk-y></label>
         </div>
         <div class="fk-actions">
-          <button class="fk-button" type="button" data-fk-apply>Place on key</button>
+          <button class="fk-button" type="button" data-fk-apply>Apply to selected key</button>
           <button class="fk-button secondary" type="button" data-fk-clear-key>Clear key</button>
-          <button class="fk-button secondary full" type="button" data-fk-clear-all>Clear all artwork</button>
+          <button class="fk-button secondary full" type="button" data-fk-clear-all>Reset design</button>
         </div>
-        <p class="fk-help">First choose a layout from the left panel. Use one main image for the board, then add small assets to individual keys.</p>
+        </details>
+        <div class="fk-advanced-card">
+          <strong>Fine tune layout</strong>
+          <span>Original layout, case, and colourway controls.</span>
+          <button class="fk-button secondary full" type="button" data-fk-advanced-toggle>Open layout controls</button>
+        </div>
+        <div class="fk-quote-card">
+        <div class="fk-quote-head">
+          <strong>Send artwork for quote</strong>
+          <span>We refine the design before production. No payment now.</span>
+        </div>
         <label class="fk-field">Name
           <input type="text" data-fk-name placeholder="Customer name">
         </label>
@@ -583,17 +872,33 @@
         <label class="fk-field">Instagram / social handle
           <input type="text" data-fk-instagram placeholder="@username">
         </label>
-        <label class="fk-field">Keyboard model or layout notes
+        <label class="fk-field">Layout notes
           <input type="text" data-fk-keyboard placeholder="75%, TKL, Alice, keyboard model...">
         </label>
-        <label class="fk-field">Request notes
-          <textarea data-fk-notes placeholder="Tell us the theme, budget, deadline, legends, material, or factory notes."></textarea>
+        <label class="fk-field">Notes
+          <textarea data-fk-notes placeholder="Theme, budget, deadline, legends, material..."></textarea>
         </label>
-        <button class="fk-button full" type="button" data-fk-submit>Submit custom request</button>
-        <p class="fk-status" data-fk-status>Upload a main artwork or accent image to start.</p>
+        <button class="fk-button full" type="button" data-fk-submit>Send request</button>
+        </div>
+        <p class="fk-status" data-fk-status>Upload artwork or choose a direction sample.</p>
       </div>
     `;
     document.body.appendChild(panel);
+    buildStagePrompt(panel);
+
+    const syncPanelCollapsed = () => {
+      syncBodyPanelState(panel);
+    };
+
+    const setAdvancedOpen = (open) => {
+      document.body.classList.toggle("fk-advanced-open", open);
+      const advancedToggle = panel.querySelector("[data-fk-advanced-toggle]");
+      if (advancedToggle) {
+        advancedToggle.textContent = open ? "Hide layout controls" : "Open layout controls";
+      }
+      refreshTextures();
+      window.dispatchEvent(new Event("resize"));
+    };
 
     const mobileActions = document.createElement("nav");
     mobileActions.className = "fk-mobile-actions";
@@ -601,7 +906,7 @@
     mobileActions.innerHTML = `
       <button class="fk-mobile-action is-active" type="button" data-fk-mobile-mode="preview">Preview</button>
       <button class="fk-mobile-action" type="button" data-fk-mobile-mode="edit">Design</button>
-      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="layout">Layout</button>
+      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="layout">Advanced</button>
     `;
     document.body.appendChild(mobileActions);
 
@@ -617,7 +922,7 @@
         panel.classList.add("is-collapsed");
         panel.querySelector("[data-fk-toggle]").textContent = "Edit";
       }
-      window.dispatchEvent(new Event("resize"));
+      syncPanelCollapsed();
     };
 
     mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
@@ -633,17 +938,65 @@
     panel.querySelector("[data-fk-toggle]").addEventListener("click", (event) => {
       panel.classList.toggle("is-collapsed");
       event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Hide";
+      syncPanelCollapsed();
       if (window.matchMedia("(max-width: 760px)").matches) {
         setMobileMode(panel.classList.contains("is-collapsed") ? "preview" : "edit");
       }
+    });
+    panel.querySelector("[data-fk-advanced-toggle]").addEventListener("click", () => {
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        setMobileMode(document.body.dataset.fkMobileMode === "layout" ? "edit" : "layout");
+        return;
+      }
+      setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
     });
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
       refreshTextures();
     });
+    panel.querySelector("[data-fk-artwork-type]").addEventListener("change", (event) => {
+      state.artworkType = event.target.value;
+      const recommended = {
+        illustration: "accent",
+        pattern: "soft",
+        photo: "feature",
+        logo: "accent",
+        desk: "desk",
+      }[state.artworkType] || "feature";
+      applyDesignPreset(panel, recommended, { type: state.artworkType });
+      setStatus(`Direction: ${panel.querySelector("[data-fk-style-preset]").selectedOptions[0]?.textContent || "Custom"}.`, "info");
+    });
+    panel.querySelector("[data-fk-style-preset]").addEventListener("change", (event) => {
+      applyDesignPreset(panel, event.target.value);
+      setStatus(`Direction: ${event.target.selectedOptions[0]?.textContent || "Custom"}.`, "info");
+    });
+    panel.querySelectorAll("[data-fk-sample]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const sample = sampleArtworks[Number(button.dataset.fkSample)];
+        if (!sample) return;
+        try {
+          setStatus("Loading sample artwork...", "info");
+          const asset = await loadSampleArtwork(sample);
+          state.baseImage = asset.image;
+          state.baseFile = asset.file;
+          state.baseAsset = asset;
+          applyDesignPreset(panel, sample.preset, { type: sample.type });
+          if (sample.opacity) {
+            state.baseOpacity = sample.opacity;
+          }
+          panel.querySelectorAll("[data-fk-sample]").forEach((sampleButton) => {
+            sampleButton.classList.toggle("is-active", sampleButton === button);
+          });
+          setStatus(`Direction loaded: ${sample.label}.`, "success");
+          refreshTextures();
+        } catch (error) {
+          setStatus(error.message, "error");
+        }
+      });
+    });
     panel.querySelector("[data-fk-bounds]").addEventListener("change", (event) => {
       state.bounds = boundsMap[event.target.value] || boundsMap["75"];
-      setStatus(`Artwork crop changed to ${event.target.options[event.target.selectedIndex].textContent}.`, "info");
+      setStatus(`Layout: ${event.target.options[event.target.selectedIndex].textContent}.`, "info");
       refreshTextures();
     });
     panel.querySelector("[data-fk-base]").addEventListener("change", async (event) => {
@@ -654,7 +1007,15 @@
         state.baseImage = asset.image;
         state.baseFile = asset.file;
         state.baseAsset = asset;
-        setStatus(`Main artwork loaded: ${asset.name}`, "success");
+        const recommended = {
+          illustration: "accent",
+          pattern: "soft",
+          photo: "feature",
+          logo: "accent",
+          desk: "desk",
+        }[state.artworkType] || "feature";
+        applyDesignPreset(panel, recommended, { type: state.artworkType });
+        setStatus(`Loaded: ${asset.name}. Previewing ${panel.querySelector("[data-fk-style-preset]").selectedOptions[0]?.textContent || "a direction"}.`, "success");
         refreshTextures();
       } catch (error) {
         event.target.value = "";
@@ -669,7 +1030,7 @@
         state.accents.push(...loaded);
         state.selectedAccent = state.selectedAccent || state.accents[0] || null;
         renderAssets();
-        setStatus(`${loaded.length} accent image${loaded.length === 1 ? "" : "s"} loaded.`, "success");
+        setStatus(`${loaded.length} reference image${loaded.length === 1 ? "" : "s"} loaded.`, "success");
       } catch (error) {
         event.target.value = "";
         setStatus(error.message, "error");
@@ -708,10 +1069,29 @@
       state.baseFile = null;
       state.baseAsset = null;
       state.placements = {};
-      setStatus("Cleared all preview artwork.", "info");
+      applyDesignPreset(panel, "feature", { type: "photo" });
+      setStatus("Reset. Upload artwork or choose a direction sample.", "info");
       refreshTextures();
     });
     panel.querySelector("[data-fk-submit]").addEventListener("click", () => submitRequest(panel));
+
+    let cameraAttempts = 0;
+    const fitCustomerPreview = () => {
+      cameraAttempts += 1;
+      const manager = sceneManager();
+      if (manager?.camera && manager?.controls) {
+        manager.camera.position.set(0, 15, 15);
+        manager.controls.target.set(0, 0, 0);
+        manager.controls.update();
+        window.dispatchEvent(new Event("resize"));
+        return;
+      }
+      if (cameraAttempts < 40) {
+        window.setTimeout(fitCustomerPreview, 250);
+      }
+    };
+    fitCustomerPreview();
+    refreshTextures();
   };
 
   if (document.readyState === "loading") {

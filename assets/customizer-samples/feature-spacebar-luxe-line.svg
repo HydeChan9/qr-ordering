@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="280" viewBox="0 0 1600 280" role="img" aria-label="Luxury butterfly spacebar artwork for ForgeKeys custom keycap preview">
+  <defs>
+    <linearGradient id="porcelain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8ef"/>
+      <stop offset=".5" stop-color="#ead6c4"/>
+      <stop offset="1" stop-color="#f8efe5"/>
+    </linearGradient>
+    <linearGradient id="lacquer" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e65045"/>
+      <stop offset=".52" stop-color="#8d1f2b"/>
+      <stop offset="1" stop-color="#2b1118"/>
+    </linearGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff1c8"/>
+      <stop offset=".5" stop-color="#c89552"/>
+      <stop offset="1" stop-color="#745033"/>
+    </linearGradient>
+    <filter id="softShadow">
+      <feDropShadow dx="0" dy="10" stdDeviation="11" flood-color="#211413" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="280" rx="30" fill="url(#porcelain)"/>
+  <path d="M0 45c204-58 402-49 595 27 164 65 316 55 457-32 171-106 353-119 548-38v74c-191-82-369-72-533 31-157 98-326 111-506 38C378 70 191 64 0 126Z" fill="url(#lacquer)" opacity=".18"/>
+  <path d="M0 218c238-70 455-74 652-12 179 56 345 43 498-41 154-85 304-102 450-52v71c-151-51-301-35-451 48-169 93-353 105-552 35-176-62-375-50-597 36Z" fill="url(#lacquer)" opacity=".2"/>
+  <path d="M92 160c178-41 347-35 506 18 143 48 278 38 404-29 155-82 324-92 506-30" fill="none" stroke="url(#brass)" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+  <path d="M114 129c175-43 344-35 506 23 138 49 268 39 390-30 157-89 321-105 493-47" fill="none" stroke="#fff4e8" stroke-width="4" stroke-linecap="round" opacity=".84"/>
+  <g filter="url(#softShadow)">
+    <g transform="translate(664 44)">
+      <path d="M136 82C84-2 7-11-28 35c-39 51 9 128 120 151 26-24 43-59 44-104Z" fill="url(#lacquer)"/>
+      <path d="M164 82C216-2 293-11 328 35c39 51-9 128-120 151-26-24-43-59-44-104Z" fill="url(#lacquer)"/>
+      <path d="M133 112C78 97 35 65 4 18" fill="none" stroke="#fff3e5" stroke-width="8" stroke-linecap="round" opacity=".48"/>
+      <path d="M167 112c55-15 98-47 129-94" fill="none" stroke="#fff3e5" stroke-width="8" stroke-linecap="round" opacity=".48"/>
+      <path d="M149 67c-15 41-15 84 0 130" fill="none" stroke="#24191b" stroke-width="13" stroke-linecap="round"/>
+      <path d="M149 69c-36-21-70-28-103-20" fill="none" stroke="#24191b" stroke-width="5" stroke-linecap="round" opacity=".72"/>
+      <path d="M150 69c36-21 70-28 103-20" fill="none" stroke="#24191b" stroke-width="5" stroke-linecap="round" opacity=".72"/>
+    </g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+      <path d="M280 186c38-61 88-88 150-81 48 6 82 32 101 79" stroke="#2a2421" stroke-width="8"/>
+      <path d="M360 158c-28-39-24-81 11-125 49 13 73 44 71 94" stroke="#c89552" stroke-width="6"/>
+      <path d="M1112 185c37-58 86-84 145-78 48 5 82 30 101 75" stroke="#2a2421" stroke-width="8"/>
+      <path d="M1192 157c-29-40-26-82 9-125 49 13 74 45 72 94" stroke="#c89552" stroke-width="6"/>
+    </g>
+  </g>
+  <g fill="#2b2724" opacity=".22">
+    <circle cx="152" cy="78" r="6"/>
+    <circle cx="560" cy="230" r="5"/>
+    <circle cx="1044" cy="54" r="5"/>
+    <circle cx="1440" cy="218" r="6"/>
+  </g>
+</svg>

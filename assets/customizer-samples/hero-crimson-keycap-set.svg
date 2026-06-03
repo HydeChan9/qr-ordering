@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Hero crimson keycap artwork inspired by ForgeKeys homepage">
+  <defs>
+    <linearGradient id="redTop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#cf2e38"/>
+      <stop offset=".45" stop-color="#a51f2e"/>
+      <stop offset="1" stop-color="#62151e"/>
+    </linearGradient>
+    <linearGradient id="redDeep" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e74a4a"/>
+      <stop offset=".55" stop-color="#8e1d2a"/>
+      <stop offset="1" stop-color="#2b1118"/>
+    </linearGradient>
+    <linearGradient id="porcelain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8f0"/>
+      <stop offset=".58" stop-color="#f3e0d5"/>
+      <stop offset="1" stop-color="#f8f2eb"/>
+    </linearGradient>
+    <filter id="softShadow">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#2a1014" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1800" height="900" fill="url(#porcelain)"/>
+  <rect width="1800" height="255" fill="url(#redTop)"/>
+  <rect y="690" width="1800" height="210" fill="url(#redDeep)"/>
+  <path d="M0 270c210-40 418-32 625 25 216 60 418 51 606-28 196-82 386-92 569-30v120c-180-64-363-58-548 22-210 91-430 99-660 22C400 337 202 330 0 380Z" fill="#fff8f0" opacity=".9"/>
+  <path d="M0 636c250-76 475-78 675-7 186 66 356 52 510-42 190-117 395-128 615-32v167c-210-100-415-83-614 51-154 103-333 121-536 53-190-64-407-43-650 62Z" fill="#fff8f0" opacity=".86"/>
+  <g filter="url(#softShadow)">
+    <g opacity=".88" fill="none" stroke="#6d1620" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M130 612c150-76 300-96 452-58 118 29 230 20 337-29"/>
+      <path d="M292 548c36 52 88 91 156 117"/>
+      <path d="M480 552c-18 56-18 111 1 166"/>
+      <path d="M704 536c42 64 102 106 180 126"/>
+      <path d="M990 502c112-76 244-91 397-44 93 29 180 31 263 5"/>
+      <path d="M1228 470c-31 64-31 127 0 188"/>
+      <path d="M1450 458c38 48 84 82 138 104"/>
+    </g>
+    <g fill="#b22130" opacity=".82">
+      <path d="M376 472c36-52 91-61 119-20 23 34 3 86-55 122-60-26-87-65-64-102Z"/>
+      <path d="M910 442c35-54 94-62 121-18 23 38-5 89-64 122-58-27-83-68-57-104Z"/>
+      <path d="M1320 360c33-50 85-55 111-18 24 36 0 82-55 114-55-24-78-61-56-96Z"/>
+    </g>
+    <g fill="#f7e9dc" opacity=".9">
+      <path d="M188 300c52-96 156-120 234-54 70 58 65 162-6 232-100-8-182-61-228-178Z"/>
+      <path d="M1490 278c84-72 190-60 236 28 43 82-16 172-116 209-80-40-124-119-120-237Z"/>
+    </g>
+    <g fill="none" stroke="#6d1620" stroke-width="8" stroke-linecap="round" opacity=".78">
+      <path d="M196 318c54 72 126 115 216 129"/>
+      <path d="M1510 306c38 82 94 139 168 171"/>
+      <path d="M250 330c-26 54-27 105-4 152"/>
+      <path d="M1602 296c-18 62-10 118 24 168"/>
+    </g>
+  </g>
+  <g fill="none" stroke="#f04e58" stroke-width="5" opacity=".48">
+    <path d="M86 104h260"/>
+    <path d="M512 128h182"/>
+    <path d="M1114 108h280"/>
+    <path d="M1464 132h198"/>
+  </g>
+  <g fill="#f04e58" opacity=".62">
+    <circle cx="516" cy="368" r="10"/>
+    <circle cx="1112" cy="330" r="8"/>
+    <circle cx="1010" cy="650" r="7"/>
+    <circle cx="1620" cy="622" r="10"/>
+  </g>
+</svg>

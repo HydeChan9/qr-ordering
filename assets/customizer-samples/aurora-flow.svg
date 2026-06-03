@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Abstract aurora artwork for custom keycaps">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#151719"/>
+      <stop offset="0.5" stop-color="#22211e"/>
+      <stop offset="1" stop-color="#0f1114"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7ef5db"/>
+      <stop offset="1" stop-color="#3e9fd8"/>
+    </linearGradient>
+    <linearGradient id="sunset" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5b4d"/>
+      <stop offset="0.48" stop-color="#f4a340"/>
+      <stop offset="1" stop-color="#f5df75"/>
+    </linearGradient>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a3f23"/>
+      <stop offset="1" stop-color="#c47b43"/>
+    </linearGradient>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1800" height="900" fill="url(#bg)"/>
+  <path d="M-80 568C180 418 365 442 566 520c244 95 437 78 640-71 188-138 394-152 674-48v510H-80Z" fill="url(#copper)" opacity=".9"/>
+  <path d="M-75 470c175-134 348-155 525-63 176 92 286 116 452 24 216-119 386-215 742-70 87 36 166 52 236 46v136c-126 13-263-20-410-99-209-112-346-62-531 53-178 111-340 102-542-10-154-85-308-64-472 63Z" fill="url(#sunset)" opacity=".96"/>
+  <path d="M-120 372C70 268 272 249 454 329c182 79 324 88 475 19 176-81 333-159 607-37 121 54 235 73 344 50v92c-135 30-286 3-453-85-181-96-310-67-482 25-187 100-354 108-558 10-161-78-314-53-507 80Z" fill="url(#teal)" opacity=".92"/>
+  <circle cx="1310" cy="220" r="140" fill="#f0d09d" opacity=".18" filter="url(#soft)"/>
+  <circle cx="298" cy="604" r="220" fill="#7ef5db" opacity=".13" filter="url(#soft)"/>
+  <g opacity=".18" fill="#f6f2ea">
+    <circle cx="266" cy="204" r="7"/>
+    <circle cx="362" cy="176" r="3"/>
+    <circle cx="484" cy="246" r="4"/>
+    <circle cx="1030" cy="170" r="5"/>
+    <circle cx="1126" cy="242" r="3"/>
+    <circle cx="1412" cy="174" r="4"/>
+    <circle cx="1510" cy="264" r="6"/>
+  </g>
+  <g fill="none" stroke="#f6f2ea" stroke-linecap="round" opacity=".2">
+    <path d="M240 716c90-26 177-28 262-6"/>
+    <path d="M986 678c126-46 246-47 360-5"/>
+    <path d="M1270 304c76-28 158-29 246-2"/>
+  </g>
+</svg>

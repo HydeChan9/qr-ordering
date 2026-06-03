@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Minimal emblem artwork for custom keycaps">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f2ea"/>
+      <stop offset=".58" stop-color="#e7ddd0"/>
+      <stop offset="1" stop-color="#d0d9dc"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#202024"/>
+      <stop offset="1" stop-color="#315f7d"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b96f3b"/>
+      <stop offset="1" stop-color="#f0d09d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1800" height="900" fill="url(#base)"/>
+  <rect x="0" y="650" width="1800" height="250" fill="#202024"/>
+  <rect x="0" y="628" width="1800" height="18" fill="url(#gold)"/>
+  <g transform="translate(760 646)">
+    <path d="M140 0 280 78v156l-140 78L0 234V78Z" fill="#f6f2ea"/>
+    <path d="M140 30 248 90v123l-108 60-108-60V90Z" fill="url(#ink)"/>
+    <path d="M116 100h48v44h46v48h-46v44h-48v-44H70v-48h46Z" fill="#f0d09d"/>
+  </g>
+  <g fill="none" stroke="#202024" stroke-width="6" opacity=".14">
+    <path d="M146 198h360"/>
+    <path d="M188 256h256"/>
+    <path d="M1290 196h360"/>
+    <path d="M1334 256h256"/>
+    <path d="M132 492h520"/>
+    <path d="M1148 492h520"/>
+  </g>
+  <g fill="#b96f3b" opacity=".42">
+    <circle cx="462" cy="390" r="18"/>
+    <circle cx="1338" cy="390" r="18"/>
+    <circle cx="900" cy="294" r="13"/>
+  </g>
+</svg>

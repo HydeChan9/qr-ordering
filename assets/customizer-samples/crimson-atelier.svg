@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Premium crimson atelier artwork for custom keycaps">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f0e6"/>
+      <stop offset=".52" stop-color="#ead8cc"/>
+      <stop offset="1" stop-color="#1f2022"/>
+    </linearGradient>
+    <linearGradient id="crimson" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff695d"/>
+      <stop offset=".5" stop-color="#a72c39"/>
+      <stop offset="1" stop-color="#2a1519"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#19191b"/>
+      <stop offset="1" stop-color="#3a2a27"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#1d1412" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect width="1800" height="900" fill="url(#paper)"/>
+  <rect y="596" width="1800" height="304" fill="#1b1c1f"/>
+  <path d="M0 604c230-92 442-96 635-12 192 83 356 76 552-48 202-128 410-155 613-72v134c-224-71-426-37-606 91-194 137-389 145-584 55-178-82-380-64-610 55Z" fill="#f1dfce" opacity=".76"/>
+  <path d="M0 692c240-92 460-92 660 0 196 90 364 84 520-31 188-139 396-160 620-61v300H0Z" fill="url(#ink)"/>
+  <g filter="url(#shadow)">
+    <path d="M420 258c140-62 271-51 393 34 109 75 216 83 322 23 125-72 249-67 373 15v134c-118-88-239-94-363-18-124 76-252 64-385-38-105-81-219-93-340-38Z" fill="url(#crimson)" opacity=".96"/>
+    <path d="M298 442c186-62 352-45 498 50 137 89 280 101 427 34 111-51 230-51 359 0v62c-119-48-232-46-339 6-163 79-323 64-480-45-131-91-286-109-465-54Z" fill="#f0d09d" opacity=".68"/>
+    <path d="M526 208h118v420H526z" fill="#f7f0e6" opacity=".84"/>
+    <path d="M1160 178h92v500h-92z" fill="#f7f0e6" opacity=".74"/>
+  </g>
+  <g fill="none" stroke="#f7f0e6" stroke-linecap="round" opacity=".34">
+    <path d="M250 192h238"/>
+    <path d="M1308 238h270"/>
+    <path d="M280 720h380"/>
+    <path d="M1162 724h338"/>
+  </g>
+  <g fill="#f0d09d" opacity=".5">
+    <circle cx="735" cy="160" r="10"/>
+    <circle cx="1012" cy="206" r="7"/>
+    <circle cx="1448" cy="596" r="8"/>
+    <circle cx="326" cy="612" r="6"/>
+  </g>
+</svg>
