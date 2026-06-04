@@ -84,30 +84,36 @@
     "100": { width: 22.5, height: 6 },
   };
 
+  const sampleVersion = "luxe-samples2";
+  const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
+
   const sampleArtworks = [
     {
-      label: "Hero big keys",
-      url: "../assets/customizer-samples/feature-spacebar-luxe-line.svg?v=bigkeys1",
+      label: "Luxe line",
+      url: sampleUrl("feature-spacebar-luxe-line.svg"),
       type: "illustration",
       preset: "feature",
-      opacity: 0.92,
-      description: "Homepage-style large keys",
+      opacity: 0.94,
+      isSvg: true,
+      description: "Homepage-style large-key direction",
     },
     {
-      label: "Gold accents",
-      url: "../assets/customizer-samples/accent-ribbon.svg?v=bigkeys1",
+      label: "Porcelain",
+      url: sampleUrl("porcelain-butterfly.svg"),
       type: "illustration",
+      preset: "feature",
+      opacity: 0.88,
+      isSvg: true,
+      description: "Soft butterfly artwork direction",
+    },
+    {
+      label: "Brass mark",
+      url: sampleUrl("accent-ribbon.svg"),
+      type: "logo",
       preset: "accent",
       opacity: 0.94,
-      description: "Small motif direction",
-    },
-    {
-      label: "Gallery tone",
-      url: "../assets/customizer-samples/copper-studio.svg?v=bigkeys1",
-      type: "pattern",
-      preset: "soft",
-      opacity: 0.56,
-      description: "Soft colour direction",
+      isSvg: true,
+      description: "Minimal brass accent-key direction",
     },
   ];
 
@@ -330,16 +336,61 @@
       image.src = url;
     });
 
-  const loadSampleArtwork = async (sample) => {
-    const response = await fetch(sample.url);
-    if (!response.ok) throw new Error("Could not load sample artwork.");
-    const blob = await response.blob();
-    if (blob.type === "image/svg+xml" || sample.url.toLowerCase().endsWith(".svg")) {
-      return rasterizeSvgSample(blob, sample.label);
+  const samplePathIsSvg = (sample, blob) => {
+    if (sample.isSvg || blob?.type === "image/svg+xml") return true;
+    try {
+      return new URL(sample.url, window.location.href).pathname.toLowerCase().endsWith(".svg");
+    } catch (error) {
+      return String(sample.url || "").toLowerCase().includes(".svg");
     }
-    const extension = (blob.type.split("/")[1] || "jpg").replace("jpeg", "jpg");
-    const file = makeFileFromBlob(blob, `${sample.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.${extension}`);
-    return loadImageFile(file);
+  };
+
+  const loadSampleViaImage = (sample) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = image.naturalWidth || 1800;
+          canvas.height = image.naturalHeight || 900;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#f6f2ea";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error("Could not prepare sample artwork."));
+                return;
+              }
+              const fileName = `${sample.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.jpg`;
+              resolve(loadImageFile(makeFileFromBlob(blob, fileName)));
+            },
+            "image/jpeg",
+            0.9
+          );
+        } catch (error) {
+          reject(new Error("Could not prepare sample artwork. Open the designer through the website or local server, then try again."));
+        }
+      };
+      image.onerror = () => reject(new Error("Could not load sample artwork."));
+      image.src = sample.url;
+    });
+
+  const loadSampleArtwork = async (sample) => {
+    try {
+      const response = await fetch(sample.url);
+      if (!response.ok) throw new Error("Could not load sample artwork.");
+      const blob = await response.blob();
+      if (samplePathIsSvg(sample, blob)) {
+        return rasterizeSvgSample(blob, sample.label);
+      }
+      const extension = (blob.type.split("/")[1] || "jpg").replace("jpeg", "jpg");
+      const file = makeFileFromBlob(blob, `${sample.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.${extension}`);
+      return loadImageFile(file);
+    } catch (error) {
+      return loadSampleViaImage(sample);
+    }
   };
 
   const setStatus = (message, tone = "info") => {
@@ -782,10 +833,10 @@
           </label>
           <p class="fk-guide" data-fk-guide>${presetCopy.feature}</p>
         </details>
-        <div class="fk-samples" aria-label="Sample artwork">
-          <span>Design directions</span>
+        <div class="fk-samples" aria-label="Curated design directions">
+          <span>Directions</span>
           ${sampleArtworks.map((sample, index) => `
-            <button class="fk-sample" type="button" data-fk-sample="${index}">
+            <button class="fk-sample" type="button" data-fk-sample="${index}" title="${sample.description}" aria-label="${sample.label}: ${sample.description}">
               <span class="fk-sample-thumb" style="background-image: url('${sample.url}')"></span>
               <span>${sample.label}</span>
             </button>
