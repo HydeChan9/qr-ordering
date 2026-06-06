@@ -84,7 +84,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "luxe-samples2";
+  const sampleVersion = "cover-upload1";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -844,7 +844,7 @@
         </div>
         <div class="fk-section">
           <span class="fk-kicker">Artwork</span>
-        <label class="fk-field">Main artwork <span>JPG / PNG / WebP, max 3 MB</span>
+        <label class="fk-field">Main artwork <span>Fills the large keys. JPG / PNG / WebP, max 3 MB</span>
           <input type="file" accept="image/png,image/jpeg,image/webp" data-fk-base>
         </label>
         <label class="fk-field">Extra references <span>Optional logos, colours, desk photos.</span>
@@ -1058,15 +1058,11 @@
         state.baseImage = asset.image;
         state.baseFile = asset.file;
         state.baseAsset = asset;
-        const recommended = {
-          illustration: "accent",
-          pattern: "soft",
-          photo: "feature",
-          logo: "accent",
-          desk: "desk",
-        }[state.artworkType] || "feature";
-        applyDesignPreset(panel, recommended, { type: state.artworkType });
-        setStatus(`Loaded: ${asset.name}. Previewing ${panel.querySelector("[data-fk-style-preset]").selectedOptions[0]?.textContent || "a direction"}.`, "success");
+        applyDesignPreset(panel, "feature", { type: "photo" });
+        panel.querySelectorAll("[data-fk-sample]").forEach((sampleButton) => {
+          sampleButton.classList.remove("is-active");
+        });
+        setStatus(`Loaded: ${asset.name}. Filled the large keys for preview.`, "success");
         refreshTextures();
       } catch (error) {
         event.target.value = "";
