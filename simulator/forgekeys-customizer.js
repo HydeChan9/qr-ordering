@@ -84,7 +84,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable1";
+  const sampleVersion = "display-stable2";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [

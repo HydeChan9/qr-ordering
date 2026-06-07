@@ -834,3 +834,98 @@
     display: none !important;
   }
 }
+
+/* Keep the original keysim scene and controls visible. ForgeKeys controls are an overlay only. */
+[class^="action_actionBar"],
+[class*=" action_actionBar"] {
+  display: flex !important;
+}
+
+#sidebar [class*="Sidebar_intro"] {
+  display: block !important;
+}
+
+@media (min-width: 901px) {
+  .App {
+    position: relative !important;
+    display: block !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
+
+  .App > div {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  #sidebar {
+    display: flex !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 20em !important;
+    height: 100% !important;
+    max-width: none !important;
+    overflow-y: scroll !important;
+    z-index: 5 !important;
+  }
+
+  .App #canvas-wrapper {
+    position: absolute !important;
+    inset: auto !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin-left: 20em !important;
+    width: calc(100% - 20em) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    z-index: 1 !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .App {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    height: 100vh !important;
+    overflow: auto !important;
+  }
+
+  .App > div {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+  }
+
+  .App #canvas-wrapper {
+    order: -1 !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 300px !important;
+    min-height: 300px !important;
+    margin-left: 0 !important;
+    z-index: 1 !important;
+  }
+
+  #sidebar {
+    display: flex !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    z-index: 5 !important;
+  }
+
+  body[data-fk-mobile-mode="preview"] .fk-customizer,
+  body[data-fk-mobile-mode="layout"] .fk-customizer {
+    display: none !important;
+  }
+}
