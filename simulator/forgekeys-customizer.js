@@ -84,7 +84,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "cover-upload1";
+  const sampleVersion = "mobile-safari3";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -957,9 +957,14 @@
     mobileActions.innerHTML = `
       <button class="fk-mobile-action is-active" type="button" data-fk-mobile-mode="preview">Preview</button>
       <button class="fk-mobile-action" type="button" data-fk-mobile-mode="edit">Design</button>
-      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="layout">Advanced</button>
     `;
     document.body.appendChild(mobileActions);
+
+    const refitMobileScene = () => {
+      window.dispatchEvent(new Event("resize"));
+      window.setTimeout(() => window.dispatchEvent(new Event("resize")), 180);
+      window.setTimeout(() => fitCustomerPreview(), 240);
+    };
 
     const setMobileMode = (mode) => {
       document.body.dataset.fkMobileMode = mode;
@@ -974,6 +979,10 @@
         panel.querySelector("[data-fk-toggle]").textContent = "Edit";
       }
       syncPanelCollapsed();
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        setAdvancedOpen(false);
+        refitMobileScene();
+      }
     };
 
     mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
@@ -996,7 +1005,7 @@
     });
     panel.querySelector("[data-fk-advanced-toggle]").addEventListener("click", () => {
       if (window.matchMedia("(max-width: 760px)").matches) {
-        setMobileMode(document.body.dataset.fkMobileMode === "layout" ? "edit" : "layout");
+        setStatus("Use the desktop view for detailed layout controls.", "info");
         return;
       }
       setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
@@ -1123,12 +1132,18 @@
     panel.querySelector("[data-fk-submit]").addEventListener("click", () => submitRequest(panel));
 
     let cameraAttempts = 0;
-    const fitCustomerPreview = () => {
+    function fitCustomerPreview() {
       cameraAttempts += 1;
       const manager = sceneManager();
       if (manager?.camera && manager?.controls) {
-        manager.camera.position.set(0, 15, 15);
-        manager.controls.target.set(0, 0, 0);
+        if (window.matchMedia("(max-width: 760px)").matches) {
+          const isEditing = document.body.dataset.fkMobileMode === "edit";
+          manager.camera.position.set(0, isEditing ? 9.2 : 11, isEditing ? 13.6 : 16.5);
+          manager.controls.target.set(0, 0, isEditing ? 1.1 : 1.6);
+        } else {
+          manager.camera.position.set(0, 15, 15);
+          manager.controls.target.set(0, 0, 0);
+        }
         manager.controls.update();
         window.dispatchEvent(new Event("resize"));
         return;
@@ -1136,7 +1151,7 @@
       if (cameraAttempts < 40) {
         window.setTimeout(fitCustomerPreview, 250);
       }
-    };
+    }
     fitCustomerPreview();
     refreshTextures();
   };
