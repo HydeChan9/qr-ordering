@@ -84,7 +84,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable2";
+  const sampleVersion = "display-stable6";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -567,6 +567,56 @@
     return brightPixels > 18 || variedPixels > 18;
   };
 
+  const installSceneFallback = () => {
+    const wrapper = document.querySelector("#canvas-wrapper");
+    if (!wrapper) {
+      window.setTimeout(installSceneFallback, 250);
+      return;
+    }
+
+    if (!wrapper.querySelector(".fk-scene-fallback")) {
+      const fallback = document.createElement("div");
+      fallback.className = "fk-scene-fallback";
+      fallback.setAttribute("aria-hidden", "true");
+      wrapper.appendChild(fallback);
+    }
+
+    let attempts = 0;
+    const checkCanvas = () => {
+      attempts += 1;
+      const canvas = wrapper.querySelector("canvas");
+      let hasKeyboard = false;
+
+      if (canvas && canvas.width && canvas.height) {
+        try {
+          const probe = document.createElement("canvas");
+          probe.width = Math.max(1, Math.floor(canvas.width / 3));
+          probe.height = Math.max(1, Math.floor(canvas.height / 3));
+          const ctx = probe.getContext("2d", { willReadFrequently: true });
+          ctx.drawImage(canvas, 0, 0, probe.width, probe.height);
+          hasKeyboard = previewHasKeyboardPixels(ctx, probe.width, probe.height);
+        } catch (error) {
+          hasKeyboard = false;
+        }
+      }
+
+      document.body.classList.toggle("fk-scene-fallback-active", !hasKeyboard && attempts >= 8);
+      if (hasKeyboard) {
+        document.body.classList.remove("fk-scene-fallback-active");
+      }
+      if (!hasKeyboard && attempts < 30) {
+        window.setTimeout(checkCanvas, 500);
+      }
+    };
+
+    window.setTimeout(checkCanvas, 800);
+    window.addEventListener("resize", () => {
+      attempts = 0;
+      document.body.classList.remove("fk-scene-fallback-active");
+      window.setTimeout(checkCanvas, 500);
+    });
+  };
+
   const sceneManager = () => window.ForgeKeysSceneManager || null;
 
   const currentSceneView = () => {
@@ -793,8 +843,13 @@
   };
 
   const buildPanel = () => {
+    const isMobileView = window.matchMedia("(max-width: 900px)").matches;
+    if (isMobileView && !document.body.dataset.fkMobileMode) {
+      document.body.dataset.fkMobileMode = "preview";
+    }
+
     const panel = document.createElement("section");
-    panel.className = "fk-customizer";
+    panel.className = `fk-customizer${isMobileView ? " is-collapsed" : ""}`;
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
     panel.innerHTML = `
       <div class="fk-panel-head">
@@ -951,21 +1006,8 @@
       window.dispatchEvent(new Event("resize"));
     };
 
-    const mobileActions = document.createElement("nav");
-    mobileActions.className = "fk-mobile-actions";
-    mobileActions.setAttribute("aria-label", "Mobile customizer sections");
-    mobileActions.innerHTML = `
-      <button class="fk-mobile-action is-active" type="button" data-fk-mobile-mode="preview">Preview</button>
-      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="edit">Design</button>
-      <button class="fk-mobile-action" type="button" data-fk-mobile-mode="layout">Advanced</button>
-    `;
-    document.body.appendChild(mobileActions);
-
     const setMobileMode = (mode) => {
       document.body.dataset.fkMobileMode = mode;
-      mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.fkMobileMode === mode);
-      });
       if (mode === "edit") {
         panel.classList.remove("is-collapsed");
         panel.querySelector("[data-fk-toggle]").textContent = "Hide";
@@ -976,29 +1018,22 @@
       syncPanelCollapsed();
     };
 
-    mobileActions.querySelectorAll("[data-fk-mobile-mode]").forEach((button) => {
-      button.addEventListener("click", () => setMobileMode(button.dataset.fkMobileMode));
-    });
-
-    if (window.matchMedia("(max-width: 760px)").matches) {
-      panel.classList.add("is-collapsed");
-      panel.querySelector("[data-fk-toggle]").textContent = "Edit";
-      setMobileMode("preview");
+    if (isMobileView) {
+      document.body.dataset.fkMobileMode = "preview";
+      panel.classList.remove("is-collapsed");
+      panel.querySelector("[data-fk-toggle]").textContent = "Hide";
+      syncPanelCollapsed();
     }
 
     panel.querySelector("[data-fk-toggle]").addEventListener("click", (event) => {
       panel.classList.toggle("is-collapsed");
       event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Hide";
       syncPanelCollapsed();
-      if (window.matchMedia("(max-width: 760px)").matches) {
+      if (window.matchMedia("(max-width: 900px)").matches) {
         setMobileMode(panel.classList.contains("is-collapsed") ? "preview" : "edit");
       }
     });
     panel.querySelector("[data-fk-advanced-toggle]").addEventListener("click", () => {
-      if (window.matchMedia("(max-width: 760px)").matches) {
-        setMobileMode(document.body.dataset.fkMobileMode === "layout" ? "edit" : "layout");
-        return;
-      }
       setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
     });
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
@@ -1138,6 +1173,7 @@
       }
     };
     fitCustomerPreview();
+    installSceneFallback();
     refreshTextures();
   };
 

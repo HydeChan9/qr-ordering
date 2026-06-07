@@ -841,6 +841,27 @@
   display: flex !important;
 }
 
+.App #canvas-wrapper {
+  background-color: #b7d0c4 !important;
+}
+
+.App #canvas-wrapper .fk-scene-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: #b7d0c4 url("./keysim.png") center / contain no-repeat;
+  z-index: 2;
+  pointer-events: none;
+}
+
+body.fk-scene-fallback-active .App #canvas-wrapper canvas {
+  opacity: 0 !important;
+}
+
+body.fk-scene-fallback-active .App #canvas-wrapper .fk-scene-fallback {
+  display: block;
+}
+
 #sidebar [class*="Sidebar_intro"] {
   display: block !important;
 }
@@ -926,6 +947,45 @@
 
   body[data-fk-mobile-mode="preview"] .fk-customizer,
   body[data-fk-mobile-mode="layout"] .fk-customizer {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  body {
+    overflow: auto !important;
+  }
+
+  .fk-mobile-actions {
+    display: none !important;
+  }
+
+  .fk-stage-prompt {
+    display: none !important;
+  }
+
+  .fk-customizer,
+  body[data-fk-mobile-mode="edit"] .fk-customizer,
+  body:not([data-fk-mobile-mode="edit"]) .fk-customizer {
+    position: relative !important;
+    inset: auto !important;
+    display: block !important;
+    width: auto !important;
+    max-height: none !important;
+    margin: 14px 10px 18px !important;
+    border-radius: 12px !important;
+    z-index: 1 !important;
+  }
+
+  .fk-customizer.is-collapsed .fk-panel-body {
+    display: grid !important;
+  }
+
+  .fk-customizer.is-collapsed {
+    display: block !important;
+  }
+
+  .fk-customizer .fk-toggle {
     display: none !important;
   }
 }
