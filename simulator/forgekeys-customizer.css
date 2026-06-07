@@ -744,7 +744,7 @@
     bottom: max(10px, env(safe-area-inset-bottom));
     z-index: 80;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 12px;
@@ -767,10 +767,6 @@
   .fk-mobile-action.is-active {
     color: #161719;
     background: #f6f2ea;
-  }
-
-  .fk-advanced-card {
-    display: none;
   }
 }
 
@@ -816,31 +812,22 @@
     background: color-mix(in srgb, var(--sceneColor, #cccccc) 34%, #d1c8ba) !important;
   }
 
-  .App #canvas-wrapper canvas {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  body[data-fk-mobile-mode="preview"] .fk-customizer {
-    display: none !important;
-  }
-
-  body[data-fk-mobile-mode="edit"] .App #canvas-wrapper {
-    height: 43dvh !important;
-  }
-
-  body[data-fk-mobile-mode="edit"] .fk-customizer {
-    top: auto;
-    max-height: calc(100dvh - 43dvh - 78px - env(safe-area-inset-bottom));
-  }
-
-  body[data-fk-mobile-mode="edit"] .fk-panel-body {
-    max-height: calc(100dvh - 43dvh - 143px - env(safe-area-inset-bottom));
-  }
-
   .fk-stage-prompt {
     display: none;
+  }
+
+  body[data-fk-mobile-mode="layout"] #sidebar {
+    display: block !important;
+  }
+
+  body[data-fk-mobile-mode="layout"] .App #canvas-wrapper,
+  body[data-fk-mobile-mode="edit"] .App #canvas-wrapper {
+    height: 50dvh !important;
+  }
+
+  body[data-fk-mobile-mode="layout"] .fk-customizer,
+  body[data-fk-mobile-mode="preview"] .fk-customizer {
+    display: none !important;
   }
 
   body[data-fk-mobile-mode="edit"] #sidebar {
