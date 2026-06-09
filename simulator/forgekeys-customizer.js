@@ -88,7 +88,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable13";
+  const sampleVersion = "display-stable12";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -227,7 +227,7 @@
     draw(ctx, canvas, opts) {
       drawBaseArtwork(ctx, canvas, opts);
       drawAccent(ctx, canvas, opts);
-      if (!state.keepLegends) {
+      if (!state.keepLegends && !document.body.classList.contains("fk-advanced-open")) {
         opts.legend = "";
       }
     },
@@ -811,7 +811,17 @@
     }
   };
 
+  const syncBodyPanelState = (panel) => {
+    document.body.classList.toggle("fk-panel-collapsed", panel.classList.contains("is-collapsed"));
+    window.dispatchEvent(new Event("resize"));
+  };
+
   const buildPanel = () => {
+    const isMobileView = window.matchMedia("(max-width: 900px)").matches;
+    if (isMobileView && !document.body.dataset.fkMobileMode) {
+      document.body.dataset.fkMobileMode = "preview";
+    }
+
     const panel = document.createElement("section");
     panel.className = "fk-customizer fk-sidebar-module";
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
@@ -979,6 +989,13 @@
       }, 150);
     }
 
+    const setMobileMode = (mode) => {
+      document.body.dataset.fkMobileMode = mode;
+    };
+
+    if (isMobileView) {
+      document.body.dataset.fkMobileMode = "preview";
+    }
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
       refreshTextures();
