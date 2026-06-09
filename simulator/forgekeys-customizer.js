@@ -88,7 +88,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable11";
+  const sampleVersion = "display-stable13";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -227,7 +227,7 @@
     draw(ctx, canvas, opts) {
       drawBaseArtwork(ctx, canvas, opts);
       drawAccent(ctx, canvas, opts);
-      if (!state.keepLegends && !document.body.classList.contains("fk-advanced-open")) {
+      if (!state.keepLegends) {
         opts.legend = "";
       }
     },
@@ -811,36 +811,20 @@
     }
   };
 
-  const syncBodyPanelState = (panel) => {
-    document.body.classList.toggle("fk-panel-collapsed", panel.classList.contains("is-collapsed"));
-    window.dispatchEvent(new Event("resize"));
-  };
-
   const buildPanel = () => {
-    const isMobileView = window.matchMedia("(max-width: 900px)").matches;
-    if (isMobileView && !document.body.dataset.fkMobileMode) {
-      document.body.dataset.fkMobileMode = "preview";
-    }
-
     const panel = document.createElement("section");
-    panel.className = `fk-customizer${isMobileView ? " is-collapsed" : ""}`;
+    panel.className = "fk-customizer fk-sidebar-module";
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
-    const advancedControls = `
-        <div class="fk-advanced-card">
-          <strong>${isEmbedMode ? "Advanced keyboard setup" : "Fine tune layout"}</strong>
-          <span>${isEmbedMode ? "Open the original keyboard layout, case, colourway, and tester-style controls when needed." : "Original layout, case, and colourway controls."}</span>
-          <button class="fk-button secondary full" type="button" data-fk-advanced-toggle>Open layout controls</button>
-        </div>
-      `;
 
     panel.innerHTML = `
+      <details class="fk-shell-details">
+      <summary>ForgeKeys artwork quote</summary>
       <div class="fk-panel-head">
         <div class="fk-panel-title">
           <span class="fk-brand-badge">ForgeKeys AU</span>
           <strong>Custom Keycap Quote</strong>
           <span>Upload. Direction. Quote.</span>
         </div>
-        <button class="fk-toggle" type="button" data-fk-toggle>Hide</button>
       </div>
       <div class="fk-panel-body">
         <div class="fk-step-row" aria-label="Customizer steps">
@@ -941,7 +925,6 @@
           <button class="fk-button secondary full" type="button" data-fk-clear-all>Reset design</button>
         </div>
         </details>
-        ${advancedControls}
         <div class="fk-quote-card">
         <div class="fk-quote-head">
           <strong>Send artwork for quote</strong>
@@ -966,56 +949,36 @@
         </div>
         <p class="fk-status" data-fk-status>Upload artwork or choose a direction sample.</p>
       </div>
+      </details>
     `;
     document.body.appendChild(panel);
 
-    const syncPanelCollapsed = () => {
-      syncBodyPanelState(panel);
-    };
-
-    const setAdvancedOpen = (open) => {
-      document.body.classList.toggle("fk-advanced-open", open);
-      const advancedToggle = panel.querySelector("[data-fk-advanced-toggle]");
-      if (advancedToggle) {
-        advancedToggle.textContent = open ? "Hide layout controls" : "Open layout controls";
+    const mountInsideOriginalSidebar = () => {
+      const sidebar = document.querySelector("#sidebar");
+      if (!sidebar || sidebar.contains(panel)) {
+        return !!sidebar;
       }
-      refreshTextures();
-      window.dispatchEvent(new Event("resize"));
-    };
-
-    const setMobileMode = (mode) => {
-      document.body.dataset.fkMobileMode = mode;
-      if (mode === "edit") {
-        panel.classList.remove("is-collapsed");
-        panel.querySelector("[data-fk-toggle]").textContent = "Hide";
+      const tabList = sidebar.querySelector(".react-tabs__tab-list");
+      if (tabList?.parentElement) {
+        tabList.insertAdjacentElement("afterend", panel);
       } else {
-        panel.classList.add("is-collapsed");
-        panel.querySelector("[data-fk-toggle]").textContent = "Edit";
+        sidebar.appendChild(panel);
       }
-      syncPanelCollapsed();
+      document.body.classList.add("fk-sidebar-mounted");
+      window.dispatchEvent(new Event("resize"));
+      return true;
     };
 
-    if (isMobileView) {
-      document.body.dataset.fkMobileMode = "preview";
-      panel.classList.remove("is-collapsed");
-      panel.querySelector("[data-fk-toggle]").textContent = "Hide";
-      syncPanelCollapsed();
+    if (!mountInsideOriginalSidebar()) {
+      let mountAttempts = 0;
+      const mountTimer = window.setInterval(() => {
+        mountAttempts += 1;
+        if (mountInsideOriginalSidebar() || mountAttempts > 80) {
+          window.clearInterval(mountTimer);
+        }
+      }, 150);
     }
 
-    panel.querySelector("[data-fk-toggle]").addEventListener("click", (event) => {
-      panel.classList.toggle("is-collapsed");
-      event.currentTarget.textContent = panel.classList.contains("is-collapsed") ? "Edit" : "Hide";
-      syncPanelCollapsed();
-      if (window.matchMedia("(max-width: 900px)").matches) {
-        setMobileMode(panel.classList.contains("is-collapsed") ? "preview" : "edit");
-      }
-    });
-    const advancedToggle = panel.querySelector("[data-fk-advanced-toggle]");
-    if (advancedToggle) {
-      advancedToggle.addEventListener("click", () => {
-        setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
-      });
-    }
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
       refreshTextures();
