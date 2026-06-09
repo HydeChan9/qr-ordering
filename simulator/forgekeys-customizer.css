@@ -19,71 +19,6 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.fk-mobile-actions {
-  display: none;
-}
-
-.fk-stage-prompt {
-  position: fixed;
-  top: 24px;
-  left: 26px;
-  z-index: 18;
-  display: grid;
-  gap: 10px;
-  width: min(360px, calc(100vw - var(--fk-panel-space, 430px) - 70px));
-  padding: 16px;
-  color: #f6f2ea;
-  background:
-    linear-gradient(135deg, rgba(240, 208, 157, 0.12), rgba(49, 95, 125, 0.08)),
-    rgba(17, 18, 20, 0.72);
-  border: 1px solid rgba(246, 242, 234, 0.13);
-  border-radius: 16px;
-  box-shadow: 0 18px 58px rgba(0, 0, 0, 0.34);
-  backdrop-filter: blur(16px);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-.fk-stage-prompt span {
-  color: #f0d09d;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.fk-stage-prompt strong {
-  font-size: 19px;
-  line-height: 1.18;
-  letter-spacing: 0;
-}
-
-.fk-stage-prompt p {
-  margin: 0;
-  color: #cfc6ba;
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.fk-stage-button {
-  width: fit-content;
-  border: 1px solid rgba(240, 208, 157, 0.34);
-  border-radius: 12px;
-  min-height: 40px;
-  padding: 10px 13px;
-  color: #161719;
-  background: linear-gradient(135deg, #f6f2ea, #f0d09d);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: transform 160ms ease, filter 160ms ease;
-}
-
-.fk-stage-button:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-}
-
 [class^="action_actionBar"],
 [class*=" action_actionBar"] {
   display: none !important;
@@ -554,7 +489,38 @@
   background: rgba(169, 58, 58, 0.16);
 }
 
-@media (min-width: 761px) {
+.App #canvas-wrapper {
+  background-color: #b7d0c4 !important;
+}
+
+.App #canvas-wrapper .fk-scene-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: #b7d0c4 url("./keysim.png") center / contain no-repeat;
+  z-index: 2;
+  pointer-events: none;
+}
+
+body.fk-scene-fallback-active .App #canvas-wrapper canvas {
+  opacity: 0 !important;
+}
+
+body.fk-scene-fallback-active .App #canvas-wrapper .fk-scene-fallback {
+  display: block;
+}
+
+#sidebar,
+[class^="action_actionBar"],
+[class*=" action_actionBar"] {
+  display: none !important;
+}
+
+#sidebar [class*="Sidebar_intro"] {
+  display: none !important;
+}
+
+@media (min-width: 901px) {
   :root {
     --fk-panel-space: 428px;
   }
@@ -565,19 +531,26 @@
   }
 
   .App {
+    position: relative !important;
     display: block !important;
     height: 100vh !important;
     overflow: hidden !important;
   }
 
+  .App > div {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
   .App #canvas-wrapper {
-    position: fixed !important;
+    position: absolute !important;
     inset: 0 var(--fk-panel-space) 0 0 !important;
-    z-index: 1 !important;
     width: auto !important;
-    height: 100vh !important;
+    height: 100% !important;
     min-height: 0 !important;
     margin: 0 !important;
+    z-index: 1 !important;
     background: #d1c8ba !important;
     background: color-mix(in srgb, var(--sceneColor, #cccccc) 34%, #d1c8ba) !important;
   }
@@ -586,8 +559,22 @@
     filter: saturate(1.05) contrast(1.04);
   }
 
-  #sidebar {
-    display: none !important;
+  .fk-customizer {
+    top: 18px;
+    right: 18px;
+    bottom: 18px;
+    z-index: 60;
+    max-height: none;
+  }
+
+  .fk-customizer.is-collapsed {
+    top: auto;
+    bottom: 18px;
+  }
+
+  body.fk-panel-collapsed .App #canvas-wrapper {
+    inset: 0 !important;
+    width: 100vw !important;
   }
 
   body.fk-advanced-open #sidebar {
@@ -612,7 +599,6 @@
 
   body.fk-advanced-open .App #canvas-wrapper {
     inset: 0 var(--fk-panel-space) 0 378px !important;
-    width: auto !important;
   }
 
   body.fk-panel-collapsed.fk-advanced-open .App #canvas-wrapper {
@@ -620,48 +606,11 @@
     width: auto !important;
   }
 
-  .fk-customizer {
-    top: 18px;
-    right: 18px;
-    bottom: 18px;
-    z-index: 60;
-    max-height: none;
-  }
-
-  .fk-customizer.is-collapsed {
-    top: auto;
-    bottom: 18px;
-  }
-
-  body.fk-panel-collapsed .App #canvas-wrapper {
-    inset: 0 !important;
-    width: 100vw !important;
-  }
-
-  body.fk-advanced-open .fk-stage-prompt,
-  body.fk-panel-collapsed .fk-stage-prompt {
-    display: none;
-  }
 }
 
-@media (min-width: 761px) and (max-width: 980px) {
+@media (min-width: 901px) and (max-width: 1080px) {
   :root {
     --fk-panel-space: 396px;
-  }
-
-  .App #canvas-wrapper {
-    inset: 0 !important;
-    width: 100vw !important;
-  }
-
-  body.fk-advanced-open #sidebar {
-    max-width: 360px !important;
-  }
-
-  body.fk-advanced-open .App #canvas-wrapper,
-  body.fk-panel-collapsed.fk-advanced-open .App #canvas-wrapper {
-    inset: 0 !important;
-    width: 100vw !important;
   }
 
   .fk-customizer {
@@ -676,28 +625,71 @@
     padding: 13px;
   }
 
-  .fk-panel-title strong {
-    font-size: 17px;
+  body.fk-advanced-open #sidebar {
+    width: 320px !important;
   }
 
-  .fk-sample {
-    min-height: 100px;
-    padding: 7px;
+  body.fk-advanced-open .App #canvas-wrapper,
+  body.fk-panel-collapsed.fk-advanced-open .App #canvas-wrapper {
+    inset: 0 var(--fk-panel-space) 0 342px !important;
   }
 }
 
-@media (max-width: 760px) {
-  .fk-customizer {
-    left: 10px;
-    right: 10px;
-    bottom: calc(66px + env(safe-area-inset-bottom));
-    width: auto;
-    max-height: min(52dvh, 460px);
-    border-radius: 12px;
+@media (max-width: 900px) {
+  body {
+    overflow: auto !important;
+    background: #141311;
   }
 
+  .App {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+  }
+
+  .App > div {
+    position: relative !important;
+    inset: auto !important;
+  }
+
+  .App #canvas-wrapper {
+    order: 0 !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: clamp(320px, 54dvh, 560px) !important;
+    min-height: 320px !important;
+    margin: 0 !important;
+    z-index: 1 !important;
+    background: #d1c8ba !important;
+    background: color-mix(in srgb, var(--sceneColor, #cccccc) 34%, #d1c8ba) !important;
+  }
+
+  .fk-customizer,
   .fk-customizer.is-collapsed {
-    display: none;
+    order: 1 !important;
+    position: relative !important;
+    inset: auto !important;
+    display: block !important;
+    width: auto !important;
+    max-height: none !important;
+    margin: 12px 10px 18px !important;
+    border-radius: 12px !important;
+    z-index: 1 !important;
+  }
+
+  .fk-customizer .fk-panel-body,
+  .fk-customizer.is-collapsed .fk-panel-body {
+    display: grid !important;
+    max-height: none !important;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .fk-customizer .fk-toggle {
+    display: none !important;
   }
 
   .fk-panel-head {
@@ -712,17 +704,9 @@
     display: none;
   }
 
-  .fk-toggle {
-    min-width: 76px;
-    min-height: 44px;
-    padding: 10px 14px;
-    font-size: 14px;
-  }
-
-  .fk-panel-body {
-    max-height: calc(min(52dvh, 460px) - 65px);
-    gap: 12px;
-    padding: 12px;
+  .fk-row,
+  .fk-actions {
+    grid-template-columns: 1fr;
   }
 
   .fk-field input,
@@ -731,261 +715,76 @@
   .fk-button {
     min-height: 44px;
   }
-
-  .fk-row,
-  .fk-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .fk-mobile-actions {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    z-index: 80;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 12px;
-    padding: 8px;
-    background: rgba(22, 23, 25, 0.94);
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
-    backdrop-filter: blur(14px);
-  }
-
-  .fk-mobile-action {
-    border: 0;
-    border-radius: 9px;
-    min-height: 44px;
-    color: #f6f2ea;
-    background: #303339;
-    font: 800 12px Inter, ui-sans-serif, system-ui, sans-serif;
-    cursor: pointer;
-  }
-
-  .fk-mobile-action.is-active {
-    color: #161719;
-    background: #f6f2ea;
-  }
 }
 
-@media screen and (max-width: 760px) {
-  .App {
-    display: block !important;
-    height: 100dvh !important;
-    overflow: hidden !important;
-  }
-
-  .App > div {
-    position: relative !important;
-  }
-
-  #sidebar {
-    position: fixed !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: calc(72px + env(safe-area-inset-bottom)) !important;
-    z-index: 55 !important;
-    display: none !important;
-    width: auto !important;
-    max-width: none !important;
-    height: min(42dvh, 390px) !important;
-    overflow-y: auto !important;
-    border: 1px solid rgba(255, 255, 255, 0.14) !important;
-    border-radius: 12px !important;
-    background: var(--main, #202024) !important;
-    background: color-mix(in srgb, var(--main, #202024) 78%, var(--sceneColor, #202024)) !important;
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38) !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .App #canvas-wrapper {
-    position: fixed !important;
-    inset: 0 0 auto 0 !important;
-    z-index: 1 !important;
-    width: 100vw !important;
-    height: calc(100dvh - 72px - env(safe-area-inset-bottom)) !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    background: #d1c8ba !important;
-    background: color-mix(in srgb, var(--sceneColor, #cccccc) 34%, #d1c8ba) !important;
-  }
-
-  .fk-stage-prompt {
-    display: none;
-  }
-
-  body[data-fk-mobile-mode="layout"] #sidebar {
-    display: block !important;
-  }
-
-  body[data-fk-mobile-mode="layout"] .App #canvas-wrapper,
-  body[data-fk-mobile-mode="edit"] .App #canvas-wrapper {
-    height: 50dvh !important;
-  }
-
-  body[data-fk-mobile-mode="layout"] .fk-customizer,
-  body[data-fk-mobile-mode="preview"] .fk-customizer {
-    display: none !important;
-  }
-
-  body[data-fk-mobile-mode="edit"] #sidebar {
-    display: none !important;
-  }
+body.fk-embed-mode {
+  overflow: auto !important;
 }
 
-/* Keep the original keysim scene and controls visible. ForgeKeys controls are an overlay only. */
-[class^="action_actionBar"],
-[class*=" action_actionBar"] {
-  display: flex !important;
+body.fk-embed-mode #sidebar,
+body.fk-embed-mode [class^="action_actionBar"],
+body.fk-embed-mode [class*=" action_actionBar"] {
+  display: none !important;
 }
 
-.App #canvas-wrapper {
-  background-color: #b7d0c4 !important;
+body.fk-embed-mode .fk-customizer .fk-toggle {
+  display: none !important;
 }
 
-.App #canvas-wrapper .fk-scene-fallback {
-  position: absolute;
-  inset: 0;
-  display: none;
-  background: #b7d0c4 url("./keysim.png") center / contain no-repeat;
-  z-index: 2;
-  pointer-events: none;
-}
-
-body.fk-scene-fallback-active .App #canvas-wrapper canvas {
-  opacity: 0 !important;
-}
-
-body.fk-scene-fallback-active .App #canvas-wrapper .fk-scene-fallback {
-  display: block;
-}
-
-#sidebar [class*="Sidebar_intro"] {
+body.fk-embed-mode .fk-customizer,
+body.fk-embed-mode .fk-customizer.is-collapsed {
   display: block !important;
 }
 
+body.fk-embed-mode .fk-customizer .fk-panel-body,
+body.fk-embed-mode .fk-customizer.is-collapsed .fk-panel-body {
+  display: grid !important;
+}
+
 @media (min-width: 901px) {
-  .App {
-    position: relative !important;
-    display: block !important;
+  body.fk-embed-mode {
     height: 100vh !important;
     overflow: hidden !important;
   }
 
-  .App > div {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-  }
-
-  #sidebar {
-    display: flex !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 20em !important;
-    height: 100% !important;
-    max-width: none !important;
-    overflow-y: scroll !important;
-    z-index: 5 !important;
-  }
-
-  .App #canvas-wrapper {
-    position: absolute !important;
-    inset: auto !important;
-    top: 0 !important;
-    left: 0 !important;
-    margin-left: 20em !important;
-    width: calc(100% - 20em) !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    z-index: 1 !important;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .App {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    height: 100vh !important;
-    overflow: auto !important;
-  }
-
-  .App > div {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-  }
-
-  .App #canvas-wrapper {
-    order: -1 !important;
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    height: 300px !important;
-    min-height: 300px !important;
-    margin-left: 0 !important;
-    z-index: 1 !important;
-  }
-
-  #sidebar {
-    display: flex !important;
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: auto !important;
-    overflow-y: visible !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    z-index: 5 !important;
-  }
-
-  body[data-fk-mobile-mode="preview"] .fk-customizer,
-  body[data-fk-mobile-mode="layout"] .fk-customizer {
-    display: none !important;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  body {
-    overflow: auto !important;
-  }
-
-  .fk-mobile-actions {
-    display: none !important;
-  }
-
-  .fk-stage-prompt {
-    display: none !important;
-  }
-
-  .fk-customizer,
-  body[data-fk-mobile-mode="edit"] .fk-customizer,
-  body:not([data-fk-mobile-mode="edit"]) .fk-customizer {
-    position: relative !important;
-    inset: auto !important;
-    display: block !important;
+  body.fk-embed-mode .App #canvas-wrapper {
+    inset: 0 430px 0 0 !important;
     width: auto !important;
-    max-height: none !important;
-    margin: 14px 10px 18px !important;
-    border-radius: 12px !important;
-    z-index: 1 !important;
   }
 
-  .fk-customizer.is-collapsed .fk-panel-body {
-    display: grid !important;
-  }
-
-  .fk-customizer.is-collapsed {
+  body.fk-embed-mode.fk-advanced-open #sidebar {
+    position: fixed !important;
+    top: 16px !important;
+    left: 16px !important;
+    bottom: 16px !important;
+    z-index: 22 !important;
     display: block !important;
+    width: 330px !important;
+    max-width: calc(100vw - 470px) !important;
+    height: auto !important;
+    overflow: auto !important;
   }
 
-  .fk-customizer .fk-toggle {
-    display: none !important;
+  body.fk-embed-mode.fk-advanced-open .App #canvas-wrapper {
+    inset: 0 430px 0 360px !important;
+  }
+
+  body.fk-embed-mode .fk-customizer,
+  body.fk-embed-mode .fk-customizer.is-collapsed {
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    left: auto !important;
+    width: 398px !important;
+    max-height: none !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    z-index: 20 !important;
+  }
+
+  body.fk-embed-mode .fk-panel-body {
+    max-height: calc(100vh - 106px) !important;
+    overflow-y: auto !important;
   }
 }

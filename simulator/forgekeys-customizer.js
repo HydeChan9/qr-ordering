@@ -74,6 +74,10 @@
   const config = window.FORGEKEYS_CONFIG || {};
   const maxUploadBytes = config.maxUploadBytes || 5 * 1024 * 1024;
   const acceptedMimeTypes = config.acceptedMimeTypes || ["image/jpeg", "image/png", "image/webp"];
+  const isEmbedMode = new URLSearchParams(window.location.search).get("embed") === "1";
+  if (isEmbedMode) {
+    document.body.classList.add("fk-embed-mode");
+  }
 
   const boundsMap = {
     "60": { width: 15, height: 5 },
@@ -84,7 +88,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable6";
+  const sampleVersion = "display-stable11";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -807,36 +811,6 @@
     }
   };
 
-  const buildStagePrompt = (panel) => {
-    const prompt = document.createElement("aside");
-    prompt.className = "fk-stage-prompt";
-    prompt.setAttribute("aria-label", "ForgeKeys custom quote reminder");
-    prompt.innerHTML = `
-      <span>Custom keycap quote</span>
-      <strong>Upload artwork. We shape the keycap direction.</strong>
-      <p>Quick preview first, refined proof before production.</p>
-      <button class="fk-stage-button" type="button" data-fk-stage-upload>Start quote</button>
-    `;
-    document.body.appendChild(prompt);
-    prompt.querySelector("[data-fk-stage-upload]").addEventListener("click", () => {
-      panel.classList.remove("is-collapsed");
-      const toggle = panel.querySelector("[data-fk-toggle]");
-      if (toggle) toggle.textContent = "Hide";
-      syncBodyPanelState(panel);
-      const body = panel.querySelector(".fk-panel-body");
-      const fileInput = panel.querySelector("[data-fk-base]");
-      if (body && fileInput) {
-        body.scrollTo({ top: fileInput.closest(".fk-section")?.offsetTop || 0, behavior: "smooth" });
-        fileInput.focus({ preventScroll: true });
-        setStatus("Upload your artwork in the Artwork section.", "info");
-      }
-      if (window.matchMedia("(max-width: 760px)").matches) {
-        document.body.dataset.fkMobileMode = "edit";
-      }
-    });
-    return prompt;
-  };
-
   const syncBodyPanelState = (panel) => {
     document.body.classList.toggle("fk-panel-collapsed", panel.classList.contains("is-collapsed"));
     window.dispatchEvent(new Event("resize"));
@@ -851,6 +825,14 @@
     const panel = document.createElement("section");
     panel.className = `fk-customizer${isMobileView ? " is-collapsed" : ""}`;
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
+    const advancedControls = `
+        <div class="fk-advanced-card">
+          <strong>${isEmbedMode ? "Advanced keyboard setup" : "Fine tune layout"}</strong>
+          <span>${isEmbedMode ? "Open the original keyboard layout, case, colourway, and tester-style controls when needed." : "Original layout, case, and colourway controls."}</span>
+          <button class="fk-button secondary full" type="button" data-fk-advanced-toggle>Open layout controls</button>
+        </div>
+      `;
+
     panel.innerHTML = `
       <div class="fk-panel-head">
         <div class="fk-panel-title">
@@ -959,11 +941,7 @@
           <button class="fk-button secondary full" type="button" data-fk-clear-all>Reset design</button>
         </div>
         </details>
-        <div class="fk-advanced-card">
-          <strong>Fine tune layout</strong>
-          <span>Original layout, case, and colourway controls.</span>
-          <button class="fk-button secondary full" type="button" data-fk-advanced-toggle>Open layout controls</button>
-        </div>
+        ${advancedControls}
         <div class="fk-quote-card">
         <div class="fk-quote-head">
           <strong>Send artwork for quote</strong>
@@ -990,7 +968,6 @@
       </div>
     `;
     document.body.appendChild(panel);
-    buildStagePrompt(panel);
 
     const syncPanelCollapsed = () => {
       syncBodyPanelState(panel);
@@ -1033,9 +1010,12 @@
         setMobileMode(panel.classList.contains("is-collapsed") ? "preview" : "edit");
       }
     });
-    panel.querySelector("[data-fk-advanced-toggle]").addEventListener("click", () => {
-      setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
-    });
+    const advancedToggle = panel.querySelector("[data-fk-advanced-toggle]");
+    if (advancedToggle) {
+      advancedToggle.addEventListener("click", () => {
+        setAdvancedOpen(!document.body.classList.contains("fk-advanced-open"));
+      });
+    }
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
       refreshTextures();
@@ -1162,7 +1142,8 @@
       cameraAttempts += 1;
       const manager = sceneManager();
       if (manager?.camera && manager?.controls) {
-        manager.camera.position.set(0, 15, 15);
+        const compactPreview = window.matchMedia("(max-width: 900px)").matches;
+        manager.camera.position.set(0, compactPreview ? 18 : 15, compactPreview ? 24 : 15);
         manager.controls.target.set(0, 0, 0);
         manager.controls.update();
         window.dispatchEvent(new Event("resize"));
