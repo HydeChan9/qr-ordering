@@ -88,7 +88,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable12";
+  const sampleVersion = "display-stable23";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -218,7 +218,38 @@
     ctx.restore();
   };
 
+  const readOriginalLayoutLabel = () => {
+    const tabsRoot = document.querySelector("#sidebar .react-tabs");
+    if (!tabsRoot) return "";
+    const labels = ["75% with Knob", "60% ISO", "Full size", "Full Size", "TKL", "96%", "80%", "75%", "65%", "60%"];
+    const visibleLeafText = [...tabsRoot.querySelectorAll("*")]
+      .filter((element) => {
+        if (element.children.length) return false;
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      })
+      .map((element) => element.textContent.trim())
+      .filter(Boolean);
+    return labels.find((label) => visibleLeafText.some((text) => text.includes(label))) || "";
+  };
+
+  const syncBoundsFromOriginalLayout = () => {
+    const label = readOriginalLayoutLabel();
+    const key = (() => {
+      if (/full/i.test(label)) return "100";
+      if (/96/.test(label)) return "96";
+      if (/80|tkl/i.test(label)) return "80";
+      if (/75/.test(label)) return "75";
+      if (/65/.test(label)) return "65";
+      if (/60/.test(label)) return "60";
+      return "75";
+    })();
+    state.bounds = boundsMap[key] || boundsMap["75"];
+    return label || "Original simulator layout";
+  };
+
   const refreshTextures = () => {
+    syncBoundsFromOriginalLayout();
     document.dispatchEvent(new CustomEvent("force_key_material_update"));
   };
 
@@ -227,7 +258,7 @@
     draw(ctx, canvas, opts) {
       drawBaseArtwork(ctx, canvas, opts);
       drawAccent(ctx, canvas, opts);
-      if (!state.keepLegends && !document.body.classList.contains("fk-advanced-open")) {
+      if (!state.keepLegends) {
         opts.legend = "";
       }
     },
@@ -571,56 +602,6 @@
     return brightPixels > 18 || variedPixels > 18;
   };
 
-  const installSceneFallback = () => {
-    const wrapper = document.querySelector("#canvas-wrapper");
-    if (!wrapper) {
-      window.setTimeout(installSceneFallback, 250);
-      return;
-    }
-
-    if (!wrapper.querySelector(".fk-scene-fallback")) {
-      const fallback = document.createElement("div");
-      fallback.className = "fk-scene-fallback";
-      fallback.setAttribute("aria-hidden", "true");
-      wrapper.appendChild(fallback);
-    }
-
-    let attempts = 0;
-    const checkCanvas = () => {
-      attempts += 1;
-      const canvas = wrapper.querySelector("canvas");
-      let hasKeyboard = false;
-
-      if (canvas && canvas.width && canvas.height) {
-        try {
-          const probe = document.createElement("canvas");
-          probe.width = Math.max(1, Math.floor(canvas.width / 3));
-          probe.height = Math.max(1, Math.floor(canvas.height / 3));
-          const ctx = probe.getContext("2d", { willReadFrequently: true });
-          ctx.drawImage(canvas, 0, 0, probe.width, probe.height);
-          hasKeyboard = previewHasKeyboardPixels(ctx, probe.width, probe.height);
-        } catch (error) {
-          hasKeyboard = false;
-        }
-      }
-
-      document.body.classList.toggle("fk-scene-fallback-active", !hasKeyboard && attempts >= 8);
-      if (hasKeyboard) {
-        document.body.classList.remove("fk-scene-fallback-active");
-      }
-      if (!hasKeyboard && attempts < 30) {
-        window.setTimeout(checkCanvas, 500);
-      }
-    };
-
-    window.setTimeout(checkCanvas, 800);
-    window.addEventListener("resize", () => {
-      attempts = 0;
-      document.body.classList.remove("fk-scene-fallback-active");
-      window.setTimeout(checkCanvas, 500);
-    });
-  };
-
   const sceneManager = () => window.ForgeKeysSceneManager || null;
 
   const currentSceneView = () => {
@@ -710,7 +691,7 @@
       orderId: submissionId,
       submittedAt: new Date().toISOString(),
       source: "ForgeKeys 3D Custom Designer",
-      layoutCrop: panel.querySelector("[data-fk-bounds]").selectedOptions[0]?.textContent || "",
+      layoutCrop: syncBoundsFromOriginalLayout(),
       baseArtworkMode: state.baseMode,
       artworkType: state.artworkType,
       stylePreset: state.stylePreset,
@@ -811,17 +792,7 @@
     }
   };
 
-  const syncBodyPanelState = (panel) => {
-    document.body.classList.toggle("fk-panel-collapsed", panel.classList.contains("is-collapsed"));
-    window.dispatchEvent(new Event("resize"));
-  };
-
   const buildPanel = () => {
-    const isMobileView = window.matchMedia("(max-width: 900px)").matches;
-    if (isMobileView && !document.body.dataset.fkMobileMode) {
-      document.body.dataset.fkMobileMode = "preview";
-    }
-
     const panel = document.createElement("section");
     panel.className = "fk-customizer fk-sidebar-module";
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
@@ -882,16 +853,6 @@
           <input type="file" multiple accept="image/png,image/jpeg,image/webp" data-fk-accents>
         </label>
         <div class="fk-assets" data-fk-assets></div>
-        <label class="fk-field">Layout
-          <select data-fk-bounds>
-            <option value="75">75% / 75% + Knob</option>
-            <option value="80">80% / TKL</option>
-            <option value="65">65%</option>
-            <option value="60">60%</option>
-            <option value="100">Full size</option>
-            <option value="96">96%</option>
-          </select>
-        </label>
         </div>
         <details class="fk-details">
           <summary>Fine tune one key</summary>
@@ -968,9 +929,9 @@
       if (!sidebar || sidebar.contains(panel)) {
         return !!sidebar;
       }
-      const tabList = sidebar.querySelector(".react-tabs__tab-list");
-      if (tabList?.parentElement) {
-        tabList.insertAdjacentElement("afterend", panel);
+      const tabsRoot = sidebar.querySelector(".react-tabs");
+      if (tabsRoot?.parentElement) {
+        tabsRoot.insertAdjacentElement("afterend", panel);
       } else {
         sidebar.appendChild(panel);
       }
@@ -989,13 +950,6 @@
       }, 150);
     }
 
-    const setMobileMode = (mode) => {
-      document.body.dataset.fkMobileMode = mode;
-    };
-
-    if (isMobileView) {
-      document.body.dataset.fkMobileMode = "preview";
-    }
     panel.querySelector("[data-fk-base-mode]").addEventListener("change", (event) => {
       state.baseMode = event.target.value;
       refreshTextures();
@@ -1039,11 +993,6 @@
           setStatus(error.message, "error");
         }
       });
-    });
-    panel.querySelector("[data-fk-bounds]").addEventListener("change", (event) => {
-      state.bounds = boundsMap[event.target.value] || boundsMap["75"];
-      setStatus(`Layout: ${event.target.options[event.target.selectedIndex].textContent}.`, "info");
-      refreshTextures();
     });
     panel.querySelector("[data-fk-base]").addEventListener("change", async (event) => {
       try {
@@ -1117,26 +1066,37 @@
     });
     panel.querySelector("[data-fk-submit]").addEventListener("click", () => submitRequest(panel));
 
-    let cameraAttempts = 0;
-    const fitCustomerPreview = () => {
-      cameraAttempts += 1;
-      const manager = sceneManager();
-      if (manager?.camera && manager?.controls) {
-        const compactPreview = window.matchMedia("(max-width: 900px)").matches;
-        manager.camera.position.set(0, compactPreview ? 18 : 15, compactPreview ? 24 : 15);
-        manager.controls.target.set(0, 0, 0);
-        manager.controls.update();
-        window.dispatchEvent(new Event("resize"));
-        return;
-      }
-      if (cameraAttempts < 40) {
-        window.setTimeout(fitCustomerPreview, 250);
-      }
-    };
-    fitCustomerPreview();
-    installSceneFallback();
     refreshTextures();
   };
+
+  const installLayoutSelectBridge = () => {
+    const handleLayoutSelect = (event) => {
+        document.documentElement.dataset.fkLayoutBridgeEvent = `${event.type}:${event.target?.className || event.target?.tagName || ""}`;
+        const option = event.target.closest?.(".SelectField_option__2kNtf, .SelectField_optionSelected__XrQNN");
+        if (!option) {
+          return;
+        }
+        const field = option.closest(".SelectField_field__2C-ap");
+        const label = field?.querySelector("label")?.textContent?.trim();
+        const layout = option.dataset.val;
+        const store = window.ForgeKeysStore || window.globalThis?.ForgeKeysStore || document.ForgeKeysStore;
+        if (label !== "Layout" || !layout || !store?.dispatch) {
+          if (label === "Layout" && layout) {
+            document.documentElement.dataset.fkLayoutBridgeMiss = layout;
+          }
+          return;
+        }
+        delete document.documentElement.dataset.fkLayoutBridgeMiss;
+        store.dispatch({ type: "case/setLayout", payload: layout });
+        document.documentElement.dataset.fkLayoutBridgeLast = layout;
+        window.dispatchEvent(new Event("resize"));
+    };
+    ["pointerdown", "mousedown", "click"].forEach((type) => {
+      document.addEventListener(type, handleLayoutSelect, true);
+    });
+  };
+
+  installLayoutSelectBridge();
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", buildPanel);
