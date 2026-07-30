@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,102 +7,237 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
-    <title>Contact & Quote | ForgeKeys AU</title>
-    <meta name="description" content="Contact ForgeKeys AU to request a custom keycap design, keyboard build reference quote, assembly planning, tuning support, or desk setup recommendation.">
+    <title>Get a Custom Keyboard Quote Australia | ForgeKeys AU</title>
+    <meta name="description" content="Request a ForgeKeys AU quote for custom keycaps, a styled keyboard build, tuning, or desk setup matching. Add your layout, budget, brief, and optional artwork.">
     <link rel="canonical" href="https://forgekeystudio.com.au/support.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ForgeKeys AU">
-    <meta property="og:title" content="Contact & Quote | ForgeKeys AU">
-    <meta property="og:description" content="Send ForgeKeys AU your artwork, keyboard layout, budget, theme, and deadline for a quote-ready custom keyboard recommendation.">
+    <meta property="og:title" content="Get a Custom Keyboard Quote | ForgeKeys AU">
+    <meta property="og:description" content="Tell ForgeKeys AU your layout, budget, and style. Artwork is optional and no payment is required with your enquiry.">
     <meta property="og:url" content="https://forgekeystudio.com.au/support.html">
     <meta property="og:image" content="https://forgekeystudio.com.au/assets/pastel-keycap-close-build.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="styles.css?v=display-stable22">
+    <link rel="stylesheet" href="styles.css?v=showcase-fin">
+    <link rel="stylesheet" href="keycaps-quote.css?v=showcase-fin">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ContactPage",
+            "name": "ForgeKeys AU Quote Request",
+            "url": "https://forgekeystudio.com.au/support.html",
+            "description": "Quote request page for custom keycaps, keyboard build planning, tuning, and desk setup styling in Australia."
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Do I need artwork before requesting a quote?",
+                "acceptedAnswer": { "@type": "Answer", "text": "No. Artwork is optional. You can begin with a keyboard reference, desk photo, colour direction, or written idea." }
+              },
+              {
+                "@type": "Question",
+                "name": "When do I pay for a custom order?",
+                "acceptedAnswer": { "@type": "Answer", "text": "No payment is taken with the enquiry. ForgeKeys AU first reviews the request and confirms the scope, proof, availability, timing, and quote." }
+              },
+              {
+                "@type": "Question",
+                "name": "What happens if a third-party part has a fault?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Contact ForgeKeys AU first for a fault involving goods or services supplied by us. We assess the issue and may coordinate with the supplier or manufacturer without limiting rights under Australian Consumer Law." }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://forgekeystudio.com.au/" },
+              { "@type": "ListItem", "position": 2, "name": "Get a Quote", "item": "https://forgekeystudio.com.au/support.html" }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
-  <body>
+  <body class="quote-page" data-analytics-page="quote">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="announcement-bar">Australia-wide custom keyboard planning · No payment with your enquiry</div>
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-mark logo-mark"><img src="assets/forgekeys-logo-mark.png" alt="" aria-hidden="true"></span><span>ForgeKeys AU</span></a>
+      <a class="brand" href="index.html" aria-label="ForgeKeys AU home">
+        <span class="brand-mark logo-mark"><img src="assets/optimized/forgekeys-logo-mark-96.png" alt="" width="96" height="96" aria-hidden="true"></span>
+        <span>ForgeKeys AU</span>
+      </a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="index.html">Home</a>
-        <a href="preview.html?v=display-stable22">Custom Keycaps</a>
-        <a href="products.html">Build References</a>
+        <a href="products.html">Builds</a>
+        <a href="custom-keycaps-australia.html">Custom Keycaps</a>
         <a href="services.html">Services</a>
-        <a href="support.html" aria-current="page">Contact</a>
+        <a href="support.html#quote" aria-current="page">Get a Quote</a>
       </nav>
-      <a class="quote-link" href="#quote">Start a Custom Order</a>
+      <a class="quote-link" href="#quote">Start a Quote</a>
     </header>
 
-    <main class="page two-column">
-      <section id="quote" class="quote-form">
-        <p class="eyebrow">Quote request</p>
-        <h1>Tell us what you want to customise.</h1>
-        <form id="quoteForm" novalidate>
-          <label>Name <input id="quoteName" type="text" autocomplete="name" required placeholder="Your name"></label>
-          <label>Email <input id="quoteEmail" type="email" autocomplete="email" required placeholder="name@example.com"></label>
-          <label>City <input id="quoteCity" type="text" autocomplete="address-level2" placeholder="Sydney / Melbourne / Brisbane / Perth"></label>
-          <label>What are you customising?
-            <select id="quoteType">
-              <option>Custom keycaps</option>
-              <option>Full keyboard styling</option>
-              <option>Switches and tuning</option>
-              <option>Future keyboard interest</option>
-              <option>Build reference request</option>
-            </select>
-          </label>
-          <label>Selected reference <input id="quoteProduct" type="text" placeholder="Optional build reference"></label>
-          <label>Brief <textarea id="quoteBrief" required placeholder="Keyboard model, layout, theme, colours, image ideas, budget, and deadline..."></textarea></label>
-          <button class="button primary" id="submitQuoteRequest" type="button">Submit Quote Request</button>
-          <p id="quoteStatus" class="helper-text">Submit this form and ForgeKeys AU will receive the request in the order database. We will reply by email with recommended parts, availability, price, and next steps.</p>
-        </form>
+    <main id="main-content" class="quote-main" tabindex="-1">
+      <section class="quote-intro">
+        <div class="quote-intro-inner">
+          <p class="eyebrow">One simple enquiry</p>
+          <h1>Tell us the look, layout, and budget.</h1>
+          <p>Start with a written idea, a build reference, or up to three images. We will review the practical fit and reply with the recommended next step before any payment.</p>
+        </div>
       </section>
 
-      <section id="faq" class="faq">
-        <p class="eyebrow">Support</p>
-        <h2>FAQ</h2>
-        <details open>
-          <summary>Can customers upload their own images?</summary>
-          <p>Yes. The custom designer can upload a main artwork image and multiple accent images, then submit the preview and original files for ForgeKeys AU to review.</p>
-        </details>
-        <details>
-          <summary>Are you selling your own keyboards now?</summary>
-          <p>Not yet. The site is structured for future own-brand or authorised partner drops, but the first commercial focus is custom keycaps, build planning, assembly, tuning, and customisation services.</p>
-        </details>
-        <details>
-          <summary>Are the shown keyboards and keycaps official collaborations?</summary>
-          <p>Only if a listing clearly says so. Otherwise, keyboard kits, keycaps, switches, and accessories shown may be third-party products, customer-provided parts, or previous build references used for custom consultation.</p>
-        </details>
-        <details>
-          <summary>What if a third-party part has a fault?</summary>
-          <p>ForgeKeys AU can help check the issue and guide the supplier warranty route where available. Third-party warranty, replacement, return shipping, and repair timing depend on the original seller or manufacturer policy and are confirmed before the order proceeds.</p>
-        </details>
-        <details>
-          <summary>How does payment work?</summary>
-          <p>Custom work is quote-based. Send your design first, approve the proof and price, then pay the deposit by PayID, bank transfer, or a secure card invoice link if requested.</p>
-        </details>
-        <details>
-          <summary>What happens after I submit artwork?</summary>
-          <p>ForgeKeys AU reviews the preview, original files, layout, print method, and factory requirements before replying with a quote or recommended changes.</p>
-        </details>
-        <details>
-          <summary>Can photos and videos be used on the site?</summary>
-          <p>Yes. Photos are best used as hero, case-study, and service proof. Videos can become short process clips, sound tests, or product loops.</p>
-        </details>
+      <div class="quote-layout">
+        <section id="quote" class="quote-form-shell" aria-labelledby="quote-heading">
+          <div class="quote-form-heading">
+            <p class="eyebrow">Quote request</p>
+            <h2 id="quote-heading">Your project details</h2>
+            <p>Fields marked required help us reply with a useful recommendation instead of asking you to repeat the basics.</p>
+          </div>
+
+          <form id="quoteForm" novalidate>
+            <div class="quote-form-grid">
+              <label class="quote-field"><span class="quote-label">Name <b aria-hidden="true">*</b></span>
+                <input id="quoteName" type="text" autocomplete="name" required placeholder="Your name">
+              </label>
+
+              <label class="quote-field">City
+                <input id="quoteCity" type="text" autocomplete="address-level2" placeholder="Sydney, Melbourne, Brisbane...">
+              </label>
+
+              <label class="quote-field"><span class="quote-label">Email <b aria-hidden="true">*</b></span>
+                <input id="quoteEmail" type="email" inputmode="email" autocomplete="email" required placeholder="name@example.com">
+              </label>
+
+              <label class="quote-field"><span class="quote-label">Confirm email <b aria-hidden="true">*</b></span>
+                <input id="quoteConfirmEmail" type="email" inputmode="email" autocomplete="email" required placeholder="Enter your email again">
+              </label>
+
+              <label class="quote-field"><span class="quote-label">What are you planning? <b aria-hidden="true">*</b></span>
+                <select id="quoteType" required>
+                  <option>Custom keycaps</option>
+                  <option>Full keyboard styling</option>
+                  <option>Switches and tuning</option>
+                  <option>Desk setup styling</option>
+                  <option>Build reference request</option>
+                </select>
+              </label>
+
+              <label class="quote-field"><span class="quote-label">Layout <b aria-hidden="true">*</b></span>
+                <select id="quoteLayout" required>
+                  <option>Not sure yet</option>
+                  <option>Single key or accent keys</option>
+                  <option>60% / 65%</option>
+                  <option>75%</option>
+                  <option>TKL / 80%</option>
+                  <option>Alice / ergonomic</option>
+                  <option>Full size / 96% / 1800</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <label class="quote-field"><span class="quote-label">Budget range <b aria-hidden="true">*</b></span>
+                <select id="quoteBudget" required>
+                  <option>Not sure yet</option>
+                  <option>Under A$150</option>
+                  <option>A$150-A$300</option>
+                  <option>A$300-A$500</option>
+                  <option>A$500-A$800</option>
+                  <option>A$800+</option>
+                </select>
+              </label>
+
+              <label class="quote-field">Selected reference
+                <input id="quoteProduct" type="text" placeholder="Optional build or service reference">
+              </label>
+
+              <input id="quoteReferenceId" type="hidden">
+              <input id="quoteSource" type="hidden">
+
+              <label class="quote-field quote-field-full"><span class="quote-label">Brief <b aria-hidden="true">*</b></span>
+                <textarea id="quoteBrief" required placeholder="Tell us the style, colours, keyboard model, keys you want to feature, sound preference, or deadline..."></textarea>
+                <small>A short idea is enough. We will ask for missing technical details after reviewing it.</small>
+              </label>
+
+              <label class="quote-field quote-field-full quote-file-control">Artwork or reference images
+                <input id="quoteFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                <span class="quote-file-help">Optional · Up to 3 JPG, PNG, or WebP images · Maximum 3 MB each</span>
+                <ul id="quoteFileList" class="quote-file-list" aria-live="polite"></ul>
+              </label>
+
+              <label class="quote-consent">
+                <input id="quoteRights" type="checkbox" required>
+                <span>I confirm that I own or have permission to use any material I send, understand this is a quote enquiry rather than a paid order, and have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="custom-order-policy.html" target="_blank" rel="noopener">Custom Order Policy</a>. <span aria-hidden="true">*</span></span>
+              </label>
+
+              <div id="quoteTurnstile" class="quote-turnstile" hidden aria-label="Human verification"></div>
+
+              <div class="quote-submit-row">
+                <button class="button primary" id="submitQuoteRequest" type="submit">Submit Quote Request</button>
+                <p id="quoteStatus" class="quote-status" role="status" aria-live="polite">No payment is required now. Your images stay attached to this quote request for review.</p>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <aside class="quote-next">
+          <p class="eyebrow">What happens next</p>
+          <h2>A practical review, then a written quote.</h2>
+          <ol>
+            <li><span>01</span><div><strong>We review the direction</strong><p>Layout, artwork, compatible parts, and missing information are checked.</p></div></li>
+            <li><span>02</span><div><strong>We recommend the scope</strong><p>You receive the suggested direction, availability notes, and any artwork changes needed.</p></div></li>
+            <li><span>03</span><div><strong>You approve before payment</strong><p>Production or sourcing only begins after the proof, quote, and payment stage are agreed.</p></div></li>
+          </ol>
+          <p class="quote-note"><strong>Not ready with artwork?</strong><br>Submit the theme and layout now. A clearer original file can be requested later.</p>
+        </aside>
+      </div>
+
+      <section id="faq" class="quote-faq">
+        <p class="eyebrow">Before you submit</p>
+        <h2>Quote FAQ</h2>
+        <div class="keycaps-faq-list">
+          <details open><summary>Do I need artwork before requesting a quote?</summary><p>No. A keyboard reference, desk photo, colour direction, or written idea is enough to begin.</p></details>
+          <details><summary>When do I pay?</summary><p>No payment is taken with this form. Scope, proof, availability, timing, and price are confirmed first.</p></details>
+          <details><summary>Can you match an exact colour from my screen?</summary><p>Screen colours vary. Final colour expectations and available sample or proof options are discussed before production.</p></details>
+          <details><summary>What if a third-party part has a fault?</summary><p>Contact ForgeKeys AU first for goods or services supplied by us. We assess the issue and may coordinate with the supplier or manufacturer. This process does not replace your rights under Australian Consumer Law.</p></details>
+        </div>
       </section>
     </main>
+
     <footer class="site-footer">
-      <div>
+      <div class="footer-brand">
         <strong>ForgeKeys AU</strong>
-        <p>Custom keycaps, keyboard styling, tuning, and quote-based build references.</p>
+        <p>Custom keyboards, keycap concepts, tuning, and desk setup matching for Australian customers.</p>
       </div>
-      <div class="footer-links">
-        <a href="preview.html?v=display-stable22">Custom Keycaps</a>
-        <a href="checkout.html">Pay Quote</a>
-        <a href="support.html#quote">Quote</a>
+      <div class="footer-column">
+        <span>Explore</span>
+        <a href="products.html">Builds</a>
+        <a href="custom-keycaps-australia.html">Custom Keycaps</a>
+        <a href="services.html">Services</a>
       </div>
-      <div class="footer-legal">Copyright © 2026 ForgeKeys AU. All rights reserved.</div>
+      <div class="footer-column" data-social-group>
+        <span>Follow Builds</span>
+        <div class="footer-socials">
+          <a data-social-link="instagram" href="#">Instagram</a>
+          <a data-social-link="discord" href="#">Discord</a>
+          <a data-social-link="facebook" href="#">Facebook</a>
+          <a data-social-link="tiktok" href="#">TikTok</a>
+          <a data-social-link="youtube" href="#">YouTube</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <span>Quote</span>
+        <a href="support.html#quote">Start a Quote</a>
+        <a href="checkout.html">Pay Approved Quote</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-legal"><span>Copyright © 2026 ForgeKeys AU. All rights reserved.</span><div class="footer-legal-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="custom-order-policy.html">Custom Orders</a></div></div>
     </footer>
     <script src="site-config.js"></script>
-    <script src="support.js"></script>
+    <script src="site-analytics.js"></script>
+    <script src="turnstile.js?v=showcase-fin"></script>
+    <script src="site-social.js"></script>
+    <script src="support.js?v=showcase-fin"></script>
   </body>
 </html>

@@ -17,6 +17,17 @@
   overscroll-behavior: contain;
 }
 
+#sidebar [data-val="numpad"],
+#sidebar [data-val="40"],
+#sidebar [data-val="40ortho"],
+#sidebar [data-val="leftnum"],
+#sidebar [data-val="50ortho"],
+#sidebar [data-val="60wkl"],
+#sidebar [data-val="60hhkb"],
+#sidebar [data-val="95"] {
+  display: none !important;
+}
+
 .fk-panel-head {
   position: sticky;
   top: 0;
@@ -95,6 +106,56 @@
   border-radius: 999px;
   background: rgba(246, 242, 234, 0.22);
   background-clip: padding-box;
+}
+
+.fk-sim-controls-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 1em 8px;
+  padding: 12px;
+  color: #f6f2ea;
+  border: 1px solid rgba(246, 242, 234, 0.14);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240, 208, 157, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(50, 50, 56, 0.92), rgba(30, 31, 35, 0.96));
+}
+
+.fk-sim-controls-card div {
+  display: grid;
+  gap: 3px;
+}
+
+.fk-sim-controls-card strong {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.fk-sim-controls-card span {
+  color: #aaa39a;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.fk-sim-controls-card button {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 9px;
+  min-width: 54px;
+  min-height: 34px;
+  padding: 7px 10px;
+  color: #161719;
+  background: #f6f2ea;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body.fk-sim-controls-collapsed #sidebar .react-tabs {
+  display: none;
 }
 
 .fk-step-row {
@@ -360,6 +421,147 @@
 .fk-field textarea {
   min-height: 84px;
   resize: vertical;
+}
+
+.fk-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #cfc6ba;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.fk-consent input {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
+}
+
+.fk-consent a {
+  color: #f3e4cf;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.fk-render-fallback[hidden] {
+  display: none !important;
+}
+
+.fk-render-fallback {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 24px;
+  color: #f8f4ee;
+  background: #1d1e21;
+}
+
+.fk-render-fallback-card {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 0.85fr);
+  width: min(980px, 100%);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: #26282c;
+}
+
+.fk-render-fallback-card img {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  object-fit: cover;
+}
+
+.fk-render-fallback-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: clamp(26px, 5vw, 54px);
+}
+
+.fk-render-fallback-copy span {
+  color: #bfc8c2;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fk-render-fallback-copy h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.fk-render-fallback-copy p {
+  margin: 0;
+  color: #d8d5d0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.fk-render-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fk-render-fallback-actions a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px;
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.fk-render-fallback-actions a:first-child {
+  color: #202124;
+  border-color: #f8f4ee;
+  background: #f8f4ee;
+}
+
+@media (max-width: 680px) {
+  .fk-render-fallback {
+    align-items: start;
+    padding: 16px;
+  }
+
+  .fk-render-fallback-card {
+    grid-template-columns: 1fr;
+  }
+
+  .fk-render-fallback-card img {
+    min-height: 210px;
+    max-height: 280px;
+  }
+
+  .fk-render-fallback-actions {
+    display: grid;
+  }
+}
+
+.fk-turnstile {
+  width: 100%;
+  min-height: 65px;
+}
+
+.fk-turnstile[hidden] {
+  display: none;
 }
 
 .fk-button:disabled {

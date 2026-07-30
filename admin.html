@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://fuyfhvcplchzxkcwfaxt.supabase.co; connect-src 'self' https://fuyfhvcplchzxkcwfaxt.supabase.co; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'">
+    <title>Quote Administration | ForgeKeys AU</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="admin.css?v=showcase-fin">
+  </head>
+  <body>
+    <header class="admin-header">
+      <a class="admin-brand" href="index.html" aria-label="ForgeKeys AU homepage">
+        <img src="assets/optimized/forgekeys-logo-mark-96.png" alt="" width="40" height="40">
+        <span><strong>ForgeKeys AU</strong><small>Quote administration</small></span>
+      </a>
+      <div class="admin-session" id="adminSession" hidden>
+        <span id="adminIdentity"></span>
+        <button class="admin-button secondary" id="adminRefresh" type="button">Refresh</button>
+        <button class="admin-button secondary" id="adminSignOut" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="admin-auth" id="adminAuth" aria-labelledby="admin-auth-title">
+        <div>
+          <p class="admin-kicker">Private workspace</p>
+          <h1 id="admin-auth-title">Quote administration</h1>
+          <p>Sign in with an authorised ForgeKeys account. Customer files remain private and are opened with short-lived links.</p>
+        </div>
+        <form id="adminLoginForm" novalidate>
+          <label>Email
+            <input id="adminEmail" type="email" autocomplete="username" required placeholder="owner@example.com">
+          </label>
+          <label>Password
+            <input id="adminPassword" type="password" autocomplete="current-password" required>
+          </label>
+          <button class="admin-button primary" id="adminLogin" type="submit">Sign in</button>
+          <p class="admin-status" id="adminAuthStatus" role="status" aria-live="polite">Only allowlisted accounts can access customer enquiries.</p>
+        </form>
+      </section>
+
+      <section class="admin-workspace" id="adminWorkspace" hidden aria-label="Quote workspace">
+        <aside class="admin-index">
+          <div class="admin-index-head">
+            <div><p class="admin-kicker">Enquiries</p><h1>Recent quotes</h1></div>
+            <span id="adminQuoteCount">0</span>
+          </div>
+          <div class="admin-filters">
+            <label class="admin-search">Search
+              <input id="adminSearch" type="search" autocomplete="off" placeholder="Reference, name, Email, layout...">
+            </label>
+            <label>Status
+              <select id="adminStatusFilter">
+                <option value="all">All statuses</option>
+                <option value="new">New</option>
+                <option value="reviewing">Reviewing</option>
+                <option value="quoted">Quoted</option>
+                <option value="approved">Approved</option>
+                <option value="declined">Declined</option>
+                <option value="closed">Closed</option>
+              </select>
+            </label>
+          </div>
+          <div class="admin-quote-list" id="adminQuoteList" aria-live="polite"></div>
+        </aside>
+
+        <section class="admin-detail" id="adminDetail" aria-live="polite">
+          <div class="admin-empty">
+            <p class="admin-kicker">Quote details</p>
+            <h2>Select an enquiry</h2>
+            <p>Customer contact, brief, original files, and 3D previews will appear here.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="site-config.js"></script>
+    <script src="assets/vendor/supabase-2.95.0.min.js"></script>
+    <script src="admin.js?v=showcase-fin"></script>
+  </body>
+</html>

@@ -16,16 +16,62 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--bg);
 }
 
+img,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
 a {
   color: inherit;
   text-decoration: none;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 11px 15px;
+  color: white;
+  background: var(--charcoal);
+  border: 2px solid white;
+  border-radius: 6px;
+  font-weight: 800;
+  transform: translateY(calc(-100% - 24px));
+  transition: transform 120ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+#main-content:focus {
+  outline: none;
 }
 
 .announcement-bar {
@@ -49,6 +95,15 @@ a {
   background: rgba(244, 241, 236, 0.94);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px);
+}
+
+.site-header,
+main,
+section,
+.hero-copy,
+.hero-showcase-media,
+.showcase-carousel {
+  min-width: 0;
 }
 
 .brand {
@@ -913,6 +968,10 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+
   .showcase-carousel.is-animating::after {
     animation: none;
   }
@@ -2017,11 +2076,57 @@ summary {
   font-weight: 800;
 }
 
-.site-footer {
+.social-channel-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  color: white;
+  background:
+    linear-gradient(135deg, rgba(37, 40, 42, 0.96), rgba(49, 95, 125, 0.86)),
+    var(--charcoal);
+}
+
+.social-channel-section h2 {
+  max-width: 760px;
+  margin: 0;
+  color: white;
+}
+
+.social-channel-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.social-link svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.social-link svg path,
+.social-link svg rect,
+.social-link svg circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.site-footer {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(3, minmax(140px, 0.8fr));
+  gap: 28px;
   padding: 34px clamp(20px, 5vw, 64px);
   color: white;
   background: var(--charcoal);
@@ -2032,19 +2137,107 @@ summary {
   color: #d1d4d5;
 }
 
-.footer-links {
+.footer-brand {
+  max-width: 390px;
+}
+
+.footer-column {
   display: flex;
-  gap: 18px;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  color: #d1d4d5;
+  font-size: 14px;
+}
+
+.footer-column > span {
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+.footer-socials {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-socials .social-link {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.footer-socials .social-link:hover {
+  color: var(--charcoal);
+  background: white;
+}
+
+.footer-socials .social-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .footer-legal {
-  flex: 0 0 100%;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
   margin-top: 10px;
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.14);
   color: #aeb5b8;
   font-size: 13px;
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.footer-legal-links a:hover,
+.footer-legal-links a:focus-visible {
+  color: white;
+}
+
+.chat-card {
+  margin: 18px 0 26px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.chat-card h3 {
+  margin: 0 0 8px;
+}
+
+.chat-card p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.chat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 @media (max-width: 980px) {
@@ -2166,9 +2359,17 @@ summary {
     overflow-x: hidden;
   }
 
+  .announcement-bar {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
   .site-header {
     gap: 14px;
     padding: 14px 20px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .brand {
@@ -2184,6 +2385,8 @@ summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     order: 3;
+    width: 100%;
+    max-width: 100%;
     overflow: visible;
     padding-bottom: 0;
   }
@@ -2202,6 +2405,7 @@ summary {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     text-align: center;
   }
 
@@ -2252,6 +2456,17 @@ summary {
   .hero {
     min-height: auto;
     padding: 28px 18px 34px;
+    width: 100%;
+    max-width: 100vw;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-copy,
+  .hero-showcase-media,
+  .hero-showcase .showcase-carousel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hero-image-panel {
@@ -2259,16 +2474,32 @@ summary {
   }
 
   .hero-showcase h1 {
+    max-width: 100%;
     font-size: clamp(34px, 10vw, 44px);
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .hero-showcase .hero-copy > p:not(.eyebrow) {
+    max-width: 100%;
     font-size: 16px;
     line-height: 1.55;
+    overflow-wrap: break-word;
   }
 
   .hero-showcase .showcase-carousel {
     min-height: 270px;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    justify-content: center;
   }
 
   .showcase-slide figcaption {
@@ -2350,6 +2581,19 @@ summary {
     display: grid;
   }
 
+  .site-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .social-channel-section {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .social-channel-actions {
+    justify-content: flex-start;
+  }
+
   .hero-image-panel,
   .hero-image-panel img {
     min-height: 280px;
@@ -2357,6 +2601,22 @@ summary {
 
   .seo-landing .page-title {
     min-height: 560px;
+    max-width: 100vw;
+    overflow: hidden;
+  }
+
+  .seo-landing .page-title h1,
+  .page-title h1 {
+    max-width: 100%;
+    font-size: clamp(32px, 9vw, 40px);
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .seo-landing .page-title p,
+  .page-title p {
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .landing-panel img {

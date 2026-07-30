@@ -1,4 +1,34 @@
 (function () {
+  if (!window.FORGEKEYS_RENDER_HEALTH_LOADING) {
+    window.FORGEKEYS_RENDER_HEALTH_LOADING = true;
+    const customizerSource = new URL(document.currentScript.src);
+    const healthSource = new URL("./render-health.js", customizerSource);
+    healthSource.search = customizerSource.search;
+    const healthScript = document.createElement("script");
+    healthScript.src = healthSource.href;
+    document.head.appendChild(healthScript);
+  }
+
+  if (!window.FORGEKEYS_ANALYTICS_LOADING) {
+    window.FORGEKEYS_ANALYTICS_LOADING = true;
+    const customizerSource = new URL(document.currentScript.src);
+    const analyticsSource = new URL("../site-analytics.js", customizerSource);
+    analyticsSource.search = customizerSource.search;
+    const analyticsScript = document.createElement("script");
+    analyticsScript.src = analyticsSource.href;
+    analyticsScript.addEventListener("load", () => {
+      window.ForgeKeysAnalytics?.track("designer_open", { source: "3d-designer" });
+    });
+    document.head.appendChild(analyticsScript);
+  }
+
+  const trackDesignerEvent = (name, metadata = {}) => {
+    window.ForgeKeysAnalytics?.track(name, { source: "3d-designer", ...metadata });
+  };
+
+  if (window.FORGEKEYS_CUSTOMIZER_INITIALIZED) return;
+  window.FORGEKEYS_CUSTOMIZER_INITIALIZED = true;
+
   const keyOptions = [
     ["KC_ESC", "Esc"],
     ["KC_F1", "F1"],
@@ -74,6 +104,9 @@
   const config = window.FORGEKEYS_CONFIG || {};
   const maxUploadBytes = config.maxUploadBytes || 5 * 1024 * 1024;
   const acceptedMimeTypes = config.acceptedMimeTypes || ["image/jpeg", "image/png", "image/webp"];
+  const protectedSubmissionEnabled = config.submissionMode === "endpoint";
+  const maxAccentFiles = 2;
+  let submissionSucceeded = false;
   const isEmbedMode = new URLSearchParams(window.location.search).get("embed") === "1";
   if (isEmbedMode) {
     document.body.classList.add("fk-embed-mode");
@@ -88,7 +121,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "display-stable23";
+  const sampleVersion = "showcase-fin";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
 
   const sampleArtworks = [
@@ -269,6 +302,7 @@
     (name || "upload")
       .replace(/[^a-z0-9._-]+/gi, "-")
       .replace(/-+/g, "-")
+      .replace(/^\.+|\.+$/g, "")
       .replace(/^-|-$/g, "")
       .slice(0, 90) || "upload";
 
@@ -576,6 +610,48 @@
     return { path };
   };
 
+  const submitToProtectedEndpoint = async (design, customerPreviewBlob, standardPreviewBlob) => {
+    const verification = window.ForgeKeysTurnstile;
+    if (!config.submissionEndpoint || !config.supabaseAnonKey || !verification?.isRequired()) {
+      const error = new Error("The protected quote service is not configured.");
+      error.code = "backend_not_configured";
+      throw error;
+    }
+    const token = verification.getToken();
+    if (!token) {
+      const error = new Error("Please complete the human verification before submitting.");
+      error.code = "verification_required";
+      throw error;
+    }
+
+    const form = new FormData();
+    form.append("metadata", JSON.stringify(design));
+    form.append("turnstileToken", token);
+    if (state.baseAsset?.file) form.append("artwork", state.baseAsset.file, state.baseAsset.name);
+    state.accents.forEach((asset) => form.append("artwork", asset.file, asset.name));
+    form.append("previewCustomer", customerPreviewBlob, "preview-customer-view.png");
+    form.append("previewStandard", standardPreviewBlob, "preview-standard.png");
+
+    const response = await fetch(config.submissionEndpoint, {
+      method: "POST",
+      headers: { apikey: config.supabaseAnonKey },
+      body: form,
+    });
+    let result = null;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
+    if (!response.ok || result?.ok !== true) {
+      const error = new Error(result?.error || "The quote could not be submitted.");
+      error.status = response.status;
+      error.code = result?.code || "submission_failed";
+      throw error;
+    }
+    return result;
+  };
+
   const waitForPaint = () =>
     new Promise((resolve) => {
       requestAnimationFrame(() => requestAnimationFrame(resolve));
@@ -687,11 +763,17 @@
       y: placement.y,
       rotation: placement.rotation,
     }));
-    return {
+    const layout = syncBoundsFromOriginalLayout();
+    const customerNotes = panel.querySelector("[data-fk-notes]").value.trim();
+    const artworkRoles = [
+      ...(state.baseAsset?.file ? ["main"] : []),
+      ...state.accents.map(() => "accent"),
+    ];
+    const designer = {
       orderId: submissionId,
       submittedAt: new Date().toISOString(),
       source: "ForgeKeys 3D Custom Designer",
-      layoutCrop: syncBoundsFromOriginalLayout(),
+      layoutCrop: layout,
       baseArtworkMode: state.baseMode,
       artworkType: state.artworkType,
       stylePreset: state.stylePreset,
@@ -706,7 +788,7 @@
         email: normalizeEmail(panel.querySelector("[data-fk-email]").value),
         instagram: panel.querySelector("[data-fk-instagram]").value.trim(),
         keyboardModel: panel.querySelector("[data-fk-keyboard]").value.trim(),
-        notes: panel.querySelector("[data-fk-notes]").value.trim(),
+        notes: customerNotes,
       },
       productionNotes: {
         material: "Factory to advise",
@@ -715,19 +797,52 @@
         warning: "Preview is for quoting. ForgeKeys AU must verify final production templates, safe area, bleed, material, and source resolution before manufacturing.",
       },
     };
+    return {
+      ...designer,
+      schemaVersion: 3,
+      submissionKind: "designer",
+      submissionId,
+      enquirySource: "3d-preview",
+      requestType: "Custom keycaps",
+      layout,
+      budgetRange: "Not sure yet",
+      selectedReferenceId: "",
+      selectedReference: "3D custom keycap preview",
+      brief: customerNotes || `3D custom keycap preview for ${layout}.`,
+      artworkRoles,
+      consent: {
+        artworkRightsConfirmed: panel.querySelector("[data-fk-rights]").checked,
+        quoteOnlyConfirmed: panel.querySelector("[data-fk-rights]").checked,
+        confirmedAt: new Date().toISOString(),
+      },
+      page: {
+        url: window.location.href,
+        referrer: document.referrer || "",
+      },
+      customer: {
+        ...designer.customer,
+        city: "",
+        socialHandle: designer.customer.instagram,
+      },
+      designer,
+    };
   };
 
   const setSubmitBusy = (panel, busy) => {
     const button = panel.querySelector("[data-fk-submit]");
     if (!button) return;
-    button.disabled = busy;
-    button.textContent = busy ? "Sending..." : "Send request";
+    button.disabled = busy || submissionSucceeded;
+    button.textContent = submissionSucceeded ? "Request sent" : busy ? "Sending..." : "Send request";
   };
 
   const submitRequest = async (panel) => {
+    if (submissionSucceeded) return;
+    trackDesignerEvent("quote_submit_attempt");
     const name = panel.querySelector("[data-fk-name]").value.trim();
     const emailField = panel.querySelector("[data-fk-email]");
     const email = normalizeEmail(emailField.value);
+    const confirmEmailField = panel.querySelector("[data-fk-confirm-email]");
+    const confirmEmail = normalizeEmail(confirmEmailField.value);
     const correction = emailCorrection(email);
     if (!name) {
       setStatus("Please add your name before submitting.", "error");
@@ -742,48 +857,76 @@
       emailField.focus();
       return;
     }
+    if (email !== confirmEmail) {
+      setStatus("The two email addresses do not match. Please check both.", "error");
+      confirmEmailField.focus();
+      return;
+    }
+    if (!panel.querySelector("[data-fk-rights]").checked) {
+      setStatus("Please confirm that you can use the material and understand this is a quote request.", "error");
+      panel.querySelector("[data-fk-rights]").focus();
+      return;
+    }
     const submissionId = `FK-${Date.now()}`;
     const folder = `${config.supabaseFolder || "submissions"}/${submissionId}`;
     const design = collectDesignData(panel, submissionId);
     setSubmitBusy(panel, true);
     setStatus("Submitting design files...", "info");
     try {
-      if (state.baseAsset?.file) {
-        await uploadToSupabaseStorage(`${folder}/main-artwork-${safeFileName(state.baseAsset.name)}`, state.baseAsset.file, state.baseAsset.type);
-      }
-      for (let index = 0; index < state.accents.length; index += 1) {
-        const asset = state.accents[index];
-        await uploadToSupabaseStorage(`${folder}/accents/${String(index + 1).padStart(2, "0")}-${safeFileName(asset.name)}`, asset.file, asset.type);
-      }
       const customerPreviewBlob = await canvasBlob();
-      await uploadToSupabaseStorage(`${folder}/preview-customer-view.png`, customerPreviewBlob, "image/png");
       const standardPreviewBlob = await standardCanvasBlob();
-      await uploadToSupabaseStorage(`${folder}/preview-standard.png`, standardPreviewBlob, "image/png");
-      await uploadToSupabaseStorage(`${folder}/preview.png`, standardPreviewBlob, "image/png");
-      const json = JSON.stringify(design, null, 2);
-      await uploadToSupabaseStorage(`${folder}/design.json`, new Blob([json], { type: "application/json" }), "application/json");
-      await uploadToSupabaseStorage(`${folder}/01-order-details.json`, new Blob([json], { type: "application/json" }), "application/json");
-      await uploadToSupabaseStorage(
-        `${folder}/00-read-me-first.txt`,
-        new Blob([
-          [
-            `ForgeKeys AU custom designer submission: ${submissionId}`,
-            "",
-            state.baseAsset || state.accents.length
-              ? "Open preview-standard.png first to see the customer's design direction in a consistent camera view. preview-customer-view.png shows the angle the customer had on screen."
-              : "No artwork was uploaded. Treat this as a brief-only enquiry and reply with recommended next steps.",
-            "If artwork was uploaded, original files are included as main-artwork-* and accents/*.",
-            "Use design.json for key placement, scale, rotation, and customer contact details.",
-            "Do not send to factory without checking final production template, safe area, bleed, material, print method, and source image resolution.",
-          ].join("\n"),
-        ], { type: "text/plain" }),
-        "text/plain"
-      );
-      setStatus(`Request submitted. Reference ${submissionId}. We will reply by email with the next step.`, "success");
+      let submittedReference = submissionId;
+      if (protectedSubmissionEnabled) {
+        const result = await submitToProtectedEndpoint(design, customerPreviewBlob, standardPreviewBlob);
+        submittedReference = result.reference || submissionId;
+      } else {
+        if (state.baseAsset?.file) {
+          await uploadToSupabaseStorage(`${folder}/main-artwork-${safeFileName(state.baseAsset.name)}`, state.baseAsset.file, state.baseAsset.type);
+        }
+        for (let index = 0; index < state.accents.length; index += 1) {
+          const asset = state.accents[index];
+          await uploadToSupabaseStorage(`${folder}/accents/${String(index + 1).padStart(2, "0")}-${safeFileName(asset.name)}`, asset.file, asset.type);
+        }
+        await uploadToSupabaseStorage(`${folder}/preview-customer-view.png`, customerPreviewBlob, "image/png");
+        await uploadToSupabaseStorage(`${folder}/preview-standard.png`, standardPreviewBlob, "image/png");
+        await uploadToSupabaseStorage(`${folder}/preview.png`, standardPreviewBlob, "image/png");
+        const json = JSON.stringify(design, null, 2);
+        await uploadToSupabaseStorage(`${folder}/design.json`, new Blob([json], { type: "application/json" }), "application/json");
+        await uploadToSupabaseStorage(`${folder}/01-order-details.json`, new Blob([json], { type: "application/json" }), "application/json");
+        await uploadToSupabaseStorage(
+          `${folder}/00-read-me-first.txt`,
+          new Blob([
+            [
+              `ForgeKeys AU custom designer submission: ${submissionId}`,
+              "",
+              state.baseAsset || state.accents.length
+                ? "Open preview-standard.png first to see the customer's design direction in a consistent camera view. preview-customer-view.png shows the angle the customer had on screen."
+                : "No artwork was uploaded. Treat this as a brief-only enquiry and reply with recommended next steps.",
+              "If artwork was uploaded, original files are included as main-artwork-* and accents/*.",
+              "Use design.json for key placement, scale, rotation, and customer contact details.",
+              "Do not send to factory without checking final production template, safe area, bleed, material, print method, and source image resolution.",
+            ].join("\n"),
+          ], { type: "text/plain" }),
+          "text/plain"
+        );
+      }
+      submissionSucceeded = true;
+      trackDesignerEvent("quote_submit_success");
+      setStatus(`Request submitted. Reference ${submittedReference}. We will reply by email with the next step.`, "success");
     } catch (error) {
       console.error("ForgeKeys upload failed", error);
-      if (error.status === 403) {
+      trackDesignerEvent("quote_submit_error", {
+        errorCode: error.code || (error.status ? `http_${error.status}` : "submission_failed"),
+      });
+      if (protectedSubmissionEnabled) window.ForgeKeysTurnstile?.reset();
+      if (error.code === "verification_required" || error.code === "verification_failed") {
+        setStatus(error.message, "error");
+      } else if (error.status === 429) {
+        setStatus("Too many requests were sent. Please wait before trying again.", "error");
+      } else if (error.status === 403) {
         setStatus("Upload is blocked by the site storage settings. Please contact ForgeKeys and quote this page.", "error");
+      } else if (error.code === "backend_not_configured") {
+        setStatus("The quote service is temporarily unavailable. Please contact ForgeKeys AU directly.", "error");
       } else {
         setStatus("Upload failed. Please check your connection and try again.", "error");
       }
@@ -793,8 +936,10 @@
   };
 
   const buildPanel = () => {
+    if (document.querySelector("[data-fk-customizer-root]")) return;
     const panel = document.createElement("section");
     panel.className = "fk-customizer fk-sidebar-module";
+    panel.setAttribute("data-fk-customizer-root", "");
     panel.setAttribute("aria-label", "ForgeKeys keycap image customizer");
 
     panel.innerHTML = `
@@ -849,7 +994,7 @@
         <label class="fk-field">Main artwork <span>Fills the large keys. JPG / PNG / WebP, max 3 MB</span>
           <input type="file" accept="image/png,image/jpeg,image/webp" data-fk-base>
         </label>
-        <label class="fk-field">Extra references <span>Optional logos, colours, desk photos.</span>
+        <label class="fk-field">Extra references <span>Optional logos, colours, or desk photos. Up to 2.</span>
           <input type="file" multiple accept="image/png,image/jpeg,image/webp" data-fk-accents>
         </label>
         <div class="fk-assets" data-fk-assets></div>
@@ -907,6 +1052,9 @@
         <label class="fk-field">Email
           <input type="email" data-fk-email placeholder="name@example.com">
         </label>
+        <label class="fk-field">Confirm email
+          <input type="email" data-fk-confirm-email placeholder="Enter your email again">
+        </label>
         <label class="fk-field">Instagram / social handle
           <input type="text" data-fk-instagram placeholder="@username">
         </label>
@@ -916,6 +1064,11 @@
         <label class="fk-field">Notes
           <textarea data-fk-notes placeholder="Theme, budget, deadline, legends, material..."></textarea>
         </label>
+        <label class="fk-consent">
+          <input type="checkbox" data-fk-rights>
+          <span>I can use the material I send, understand this is a quote request, and have read the <a href="../privacy.html" target="_parent">Privacy Policy</a> and <a href="../custom-order-policy.html" target="_parent">Custom Order Policy</a>.</span>
+        </label>
+        <div class="fk-turnstile" data-fk-turnstile hidden aria-label="Human verification"></div>
         <button class="fk-button full" type="button" data-fk-submit>Send request</button>
         </div>
         <p class="fk-status" data-fk-status>Upload artwork or choose a direction sample.</p>
@@ -924,14 +1077,44 @@
     `;
     document.body.appendChild(panel);
 
+    const ensureSimulatorControlsToggle = (tabsRoot, panelElement) => {
+      if (!tabsRoot || document.querySelector("[data-fk-sim-toggle]")) {
+        return;
+      }
+      const toggle = document.createElement("div");
+      toggle.className = "fk-sim-controls-card";
+      toggle.setAttribute("data-fk-sim-toggle", "");
+      toggle.innerHTML = `
+        <div>
+          <strong>Keyboard colour simulator</strong>
+          <span>Layouts, colourways, case colours and typing test.</span>
+        </div>
+        <button type="button" data-fk-sim-toggle-button>Hide</button>
+      `;
+      if (panelElement?.parentElement === tabsRoot.parentElement) {
+        panelElement.insertAdjacentElement("afterend", toggle);
+      } else {
+        tabsRoot.insertAdjacentElement("beforebegin", toggle);
+      }
+      const button = toggle.querySelector("[data-fk-sim-toggle-button]");
+      button.addEventListener("click", () => {
+        const collapsed = document.body.classList.toggle("fk-sim-controls-collapsed");
+        button.textContent = collapsed ? "Show" : "Hide";
+        window.dispatchEvent(new Event("resize"));
+      });
+    };
+
     const mountInsideOriginalSidebar = () => {
       const sidebar = document.querySelector("#sidebar");
       if (!sidebar || sidebar.contains(panel)) {
+        const tabsRoot = sidebar?.querySelector(".react-tabs");
+        ensureSimulatorControlsToggle(tabsRoot, panel);
         return !!sidebar;
       }
       const tabsRoot = sidebar.querySelector(".react-tabs");
       if (tabsRoot?.parentElement) {
-        tabsRoot.insertAdjacentElement("afterend", panel);
+        tabsRoot.insertAdjacentElement("beforebegin", panel);
+        ensureSimulatorControlsToggle(tabsRoot, panel);
       } else {
         sidebar.appendChild(panel);
       }
@@ -1002,6 +1185,7 @@
         state.baseImage = asset.image;
         state.baseFile = asset.file;
         state.baseAsset = asset;
+        trackDesignerEvent("artwork_selected", { count: 1 });
         applyDesignPreset(panel, "feature", { type: "photo" });
         panel.querySelectorAll("[data-fk-sample]").forEach((sampleButton) => {
           sampleButton.classList.remove("is-active");
@@ -1017,9 +1201,13 @@
       try {
         const files = Array.from(event.target.files || []);
         validateImageFiles(files);
+        if (files.length > maxAccentFiles || state.accents.length + files.length > maxAccentFiles) {
+          throw new Error(`Choose no more than ${maxAccentFiles} extra reference images.`);
+        }
         const loaded = await Promise.all(files.map(loadImageFile));
         state.accents.push(...loaded);
         state.selectedAccent = state.selectedAccent || state.accents[0] || null;
+        trackDesignerEvent("artwork_selected", { count: loaded.length });
         renderAssets();
         setStatus(`${loaded.length} reference image${loaded.length === 1 ? "" : "s"} loaded.`, "success");
       } catch (error) {
@@ -1066,10 +1254,23 @@
     });
     panel.querySelector("[data-fk-submit]").addEventListener("click", () => submitRequest(panel));
 
+    if (protectedSubmissionEnabled) {
+      window.ForgeKeysTurnstile?.mount(panel.querySelector("[data-fk-turnstile]"), {
+        theme: "dark",
+        expiredCallback: () => setStatus("Human verification expired. Please complete it again.", "info"),
+        errorCallback: () => setStatus("Human verification could not be loaded. Refresh and try again.", "error"),
+      }).catch((error) => {
+        console.error("ForgeKeys verification failed to load", error);
+        setStatus("Human verification could not be loaded. Refresh and try again.", "error");
+      });
+    }
+
     refreshTextures();
   };
 
   const installLayoutSelectBridge = () => {
+    let lastDispatchLayout = "";
+    let lastDispatchAt = 0;
     const handleLayoutSelect = (event) => {
         document.documentElement.dataset.fkLayoutBridgeEvent = `${event.type}:${event.target?.className || event.target?.tagName || ""}`;
         const option = event.target.closest?.(".SelectField_option__2kNtf, .SelectField_optionSelected__XrQNN");
@@ -1086,6 +1287,10 @@
           }
           return;
         }
+        const now = performance.now();
+        if (layout === lastDispatchLayout && now - lastDispatchAt < 400) return;
+        lastDispatchLayout = layout;
+        lastDispatchAt = now;
         delete document.documentElement.dataset.fkLayoutBridgeMiss;
         store.dispatch({ type: "case/setLayout", payload: layout });
         document.documentElement.dataset.fkLayoutBridgeLast = layout;

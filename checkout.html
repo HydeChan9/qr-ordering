@@ -10,7 +10,7 @@
     <title>Pay an Approved Quote | ForgeKeys AU</title>
     <meta name="description" content="Payment information for approved ForgeKeys AU custom keycap and keyboard build quotes. Only pay after your quote and proof are confirmed.">
     <link rel="canonical" href="https://forgekeystudio.com.au/checkout.html">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ForgeKeys AU">
     <meta property="og:title" content="Pay an Approved Quote | ForgeKeys AU">
@@ -18,14 +18,15 @@
     <meta property="og:url" content="https://forgekeystudio.com.au/checkout.html">
     <meta property="og:image" content="https://forgekeystudio.com.au/assets/soft-desk-keyboard-build.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="styles.css?v=display-stable22">
+    <link rel="stylesheet" href="styles.css?v=showcase-fin">
   </head>
-  <body>
+  <body data-analytics-page="payment">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-mark logo-mark"><img src="assets/forgekeys-logo-mark.png" alt="" aria-hidden="true"></span><span>ForgeKeys AU</span></a>
+      <a class="brand" href="index.html"><span class="brand-mark logo-mark"><img src="assets/optimized/forgekeys-logo-mark-96.png" alt="" width="96" height="96" aria-hidden="true"></span><span>ForgeKeys AU</span></a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="index.html">Home</a>
-        <a href="preview.html?v=display-stable22">Custom Keycaps</a>
+        <a href="preview.html?v=showcase-fin">Custom Keycaps</a>
         <a href="products.html">Build References</a>
         <a href="services.html">Services</a>
         <a href="support.html">Contact</a>
@@ -33,7 +34,7 @@
       <a class="quote-link" href="support.html#quote">Start a Custom Order</a>
     </header>
 
-    <main class="page checkout-layout">
+    <main id="main-content" class="page checkout-layout" tabindex="-1">
       <section class="page-title">
         <p class="eyebrow">Approved quote payment</p>
         <h1>Only pay after ForgeKeys AU confirms your quote.</h1>
@@ -84,18 +85,37 @@
 
     </main>
     <footer class="site-footer">
-      <div>
+      <div class="footer-brand">
         <strong>ForgeKeys AU</strong>
-        <p>Custom keycaps, keyboard styling, tuning, and quote-based build references.</p>
+        <p>Custom keycaps, keyboard styling, tuning, and quote-based build references for Australian customers.</p>
       </div>
-      <div class="footer-links">
-        <a href="preview.html?v=display-stable22">Custom Keycaps</a>
-        <a href="checkout.html">Pay Quote</a>
-        <a href="support.html#quote">Quote</a>
+      <div class="footer-column">
+        <span>Explore</span>
+        <a href="products.html">Build References</a>
+        <a href="preview.html?v=showcase-fin">Custom Keycaps</a>
+        <a href="services.html">Services</a>
       </div>
-      <div class="footer-legal">Copyright © 2026 ForgeKeys AU. All rights reserved.</div>
+      <div class="footer-column" data-social-group>
+        <span>Follow Builds</span>
+        <div class="footer-socials">
+          <a data-social-link="instagram" href="#">Instagram</a>
+          <a data-social-link="discord" href="#">Discord</a>
+          <a data-social-link="facebook" href="#">Facebook</a>
+          <a data-social-link="tiktok" href="#">TikTok</a>
+          <a data-social-link="youtube" href="#">YouTube</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <span>Quote</span>
+        <a href="support.html#quote">Start a Custom Order</a>
+        <a href="checkout.html">Pay Approved Quote</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-legal"><span>Copyright © 2026 ForgeKeys AU. All rights reserved.</span><div class="footer-legal-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="custom-order-policy.html">Custom Orders</a></div></div>
     </footer>
     <script src="site-config.js"></script>
-    <script src="checkout.js?v=pay-info1"></script>
+    <script src="site-analytics.js"></script>
+    <script src="site-social.js"></script>
+    <script src="checkout.js?v=showcase-fin"></script>
   </body>
 </html>
