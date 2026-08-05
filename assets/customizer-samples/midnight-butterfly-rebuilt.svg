@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Midnight Butterfly transparent keycap artwork layer">
+  <defs>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8c9ea"/><stop offset="1" stop-color="#8c72ae"/></linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3442"/><stop offset="1" stop-color="#17151c"/></linearGradient>
+    <pattern id="plaid" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M0 8h34M0 25h34M8 0v34M25 0v34" fill="none" stroke="#8f79ae" stroke-width="5" opacity=".42"/></pattern>
+  </defs>
+  <g fill="none" stroke="#8f79ae" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M132 630c179-72 345-70 498 5 143 70 274 72 394 7 143-78 337-78 581 0" stroke-width="11"/>
+    <path d="M126 657c183-52 348-35 494 51 129 76 263 75 400-4 147-84 340-88 578-11" stroke="#d2c2e5" stroke-width="6"/>
+    <path d="M208 608l42 44 43-44 42 44 43-44M1418 608l42 44 43-44 42 44 43-44" stroke-width="8" opacity=".78"/>
+  </g>
+  <g fill="url(#violet)" opacity=".94">
+    <path d="M326 392c-74-86-176-72-188 14-9 57 50 107 159 123 33-35 43-81 29-137Zm19 0c74-86 176-72 188 14 9 57-50 107-159 123-33-35-43-81-29-137Z"/>
+    <path d="M1281 367c-59-68-140-57-150 11-7 46 40 85 127 98 26-28 34-64 23-109Zm15 0c59-68 140-57 150 11 7 46-40 85-127 98-26-28-34-64-23-109Z"/>
+  </g>
+  <g fill="url(#ink)" opacity=".9">
+    <path d="M42 350c94-95 193-119 298-72-57 49-88 113-93 191-79-8-147-48-205-119Z"/>
+    <path d="M1758 350c-94-95-193-119-298-72 57 49 88 113 93 191 79-8 147-48 205-119Z"/>
+  </g>
+  <g fill="none" stroke="#f6f0e8" stroke-width="7" stroke-linecap="round">
+    <path d="M336 386c-15 69-9 135 20 198M1289 361c-12 55-7 108 16 157"/>
+    <path d="M98 420c53-51 105-82 157-92M1702 420c-53-51-105-82-157-92" opacity=".72"/>
+  </g>
+  <g opacity=".82">
+    <rect x="92" y="110" width="220" height="130" rx="18" fill="url(#plaid)"/>
+    <rect x="1488" y="110" width="220" height="130" rx="18" fill="url(#plaid)"/>
+  </g>
+  <g fill="#aa91c6"><circle cx="613" cy="596" r="11"/><circle cx="916" cy="624" r="9"/><circle cx="1186" cy="591" r="12"/></g>
+</svg>

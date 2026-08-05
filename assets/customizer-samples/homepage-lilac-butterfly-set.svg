@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Midnight butterfly keycap set artwork">
+  <defs>
+    <linearGradient id="cream" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset=".55" stop-color="#eadfce"/><stop offset="1" stop-color="#f8f0e6"/></linearGradient>
+    <linearGradient id="lilac" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6c4ec"/><stop offset=".52" stop-color="#9d82bd"/><stop offset="1" stop-color="#655276"/></linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#27232d"/><stop offset=".6" stop-color="#15141a"/><stop offset="1" stop-color="#37303f"/></linearGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+  <rect width="1800" height="900" fill="url(#cream)"/>
+  <rect width="1800" height="238" fill="url(#ink)"/>
+  <rect y="690" width="1800" height="210" fill="url(#ink)"/>
+  <rect x="0" y="238" width="260" height="452" fill="#222029"/>
+  <rect x="1515" y="238" width="285" height="452" fill="#24212b"/>
+  <path d="M260 238h320l85 452H260Z" fill="url(#lilac)" opacity=".82"/>
+  <path d="M1515 238h-330l-70 452h400Z" fill="url(#lilac)" opacity=".86"/>
+  <path d="M552 238h666l-92 452H652Z" fill="url(#cream)"/>
+  <path d="M90 550c170-58 318-57 444 3 133 63 245 68 337 15 104-60 214-63 330-8 125 60 287 59 487-4" fill="none" stroke="#4b3e5a" stroke-width="14" stroke-linecap="round" opacity=".78"/>
+  <path d="M108 576c190-42 348-24 475 54 105 65 216 69 332 14 130-62 248-63 354-4 104 58 243 64 417 19" fill="none" stroke="#b19acb" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+  <g fill="#211d28" opacity=".92">
+    <path d="M460 404c-72-82-169-69-181 12-8 54 49 100 153 115 31-33 41-75 28-127Zm18 0c72-82 169-69 181 12 8 54-49 100-153 115-31-33-41-75-28-127Z"/>
+    <path d="M1188 370c-54-62-128-52-137 9-6 41 37 76 116 87 23-25 31-57 21-96Zm15 0c54-62 128-52 137 9 6 41-37 76-116 87-23-25-31-57-21-96Z"/>
+  </g>
+  <g fill="none" stroke="#f4eadf" stroke-width="8" stroke-linecap="round" opacity=".9"><path d="M469 399c-16 63-10 126 17 188"/><path d="M1195 365c-12 49-7 98 13 145"/></g>
+  <g fill="#d9c8ec" opacity=".72" filter="url(#soft)"><circle cx="770" cy="392" r="68"/><circle cx="980" cy="510" r="54"/></g>
+  <g fill="#f4eadf" opacity=".88"><circle cx="84" cy="104" r="8"/><circle cx="180" cy="104" r="8"/><circle cx="276" cy="104" r="8"/><circle cx="1510" cy="105" r="8"/><circle cx="1606" cy="105" r="8"/><circle cx="1702" cy="105" r="8"/></g>
+</svg>

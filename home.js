@@ -63,7 +63,6 @@
 
   const player = section.querySelector("[data-film-player]");
   const caption = section.querySelector("[data-film-caption]");
-  const soundButton = section.querySelector("[data-film-sound]");
   const choices = Array.from(section.querySelectorAll("[data-film-src]"));
   if (!player || choices.length === 0) return;
 
@@ -88,12 +87,5 @@
 
   choices.forEach((choice) => {
     choice.addEventListener("click", () => selectFilm(choice));
-  });
-
-  soundButton?.addEventListener("click", () => {
-    player.muted = !player.muted;
-    soundButton.textContent = player.muted ? "Sound off" : "Sound on";
-    soundButton.setAttribute("aria-label", player.muted ? "Turn video sound on" : "Turn video sound off");
-    soundButton.setAttribute("aria-pressed", String(!player.muted));
   });
 })();

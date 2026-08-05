@@ -1,0 +1,1171 @@
+{
+  "schemaVersion": "1.0",
+  "designId": "FK-NS-001",
+  "source": "customer-supplied-factory-reference",
+  "atlas": "neon-system-factory-reference.jpg",
+  "renderLegends": false,
+  "palette": {
+    "ink": {
+      "background": "#202426",
+      "legend": "#86df58"
+    },
+    "bone": {
+      "background": "#f1eee4",
+      "legend": "#34393a"
+    },
+    "acid": {
+      "background": "#75dc4d",
+      "legend": "#1d3020"
+    }
+  },
+  "sourceDimensions": {
+    "width": 1000,
+    "height": 750
+  },
+  "keys": {
+    "KC_ESC": {
+      "x": 40,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F1": {
+      "x": 121,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F2": {
+      "x": 163,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F3": {
+      "x": 205,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F4": {
+      "x": 247,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F5": {
+      "x": 311,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F6": {
+      "x": 353,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F7": {
+      "x": 395,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F8": {
+      "x": 437,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F9": {
+      "x": 504,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F10": {
+      "x": 546,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F11": {
+      "x": 588,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F12": {
+      "x": 630,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PSCR": {
+      "x": 687,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_SLCK": {
+      "x": 729,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PAUS": {
+      "x": 771,
+      "y": 117,
+      "width": 34,
+      "height": 38,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_GRV": {
+      "x": 40,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_1": {
+      "x": 82,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_2": {
+      "x": 124,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_3": {
+      "x": 166,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_4": {
+      "x": 208,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_5": {
+      "x": 250,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_6": {
+      "x": 292,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_7": {
+      "x": 334,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_8": {
+      "x": 376,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_9": {
+      "x": 418,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_0": {
+      "x": 460,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_MINS": {
+      "x": 502,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_EQL": {
+      "x": 544,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_BSPC": {
+      "x": 586,
+      "y": 184,
+      "width": 76,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 2,
+        "height": 1
+      }
+    },
+    "KC_TAB": {
+      "x": 40,
+      "y": 234,
+      "width": 55,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 1.5,
+        "height": 1
+      }
+    },
+    "KC_Q": {
+      "x": 103,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_W": {
+      "x": 145,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_E": {
+      "x": 187,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_R": {
+      "x": 229,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_T": {
+      "x": 271,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_Y": {
+      "x": 313,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_U": {
+      "x": 355,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_I": {
+      "x": 397,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_O": {
+      "x": 439,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P": {
+      "x": 481,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_LBRC": {
+      "x": 523,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_RBRC": {
+      "x": 565,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_BSLS": {
+      "x": 607,
+      "y": 234,
+      "width": 55,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1.5,
+        "height": 1
+      }
+    },
+    "KC_CAPS": {
+      "x": 40,
+      "y": 284,
+      "width": 66,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 1.75,
+        "height": 1
+      }
+    },
+    "KC_A": {
+      "x": 114,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_S": {
+      "x": 156,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_D": {
+      "x": 198,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_F": {
+      "x": 240,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_G": {
+      "x": 282,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_H": {
+      "x": 324,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_J": {
+      "x": 366,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_K": {
+      "x": 408,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_L": {
+      "x": 450,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_SCLN": {
+      "x": 492,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_QUOT": {
+      "x": 534,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_ENT": {
+      "x": 576,
+      "y": 284,
+      "width": 87,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 2.25,
+        "height": 1
+      }
+    },
+    "KC_LSFT": {
+      "x": 40,
+      "y": 334,
+      "width": 87,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 2.25,
+        "height": 1
+      }
+    },
+    "KC_Z": {
+      "x": 135,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_X": {
+      "x": 177,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_C": {
+      "x": 219,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_V": {
+      "x": 261,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_B": {
+      "x": 303,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_N": {
+      "x": 345,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_M": {
+      "x": 387,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_COMM": {
+      "x": 429,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_DOT": {
+      "x": 471,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_SLSH": {
+      "x": 513,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "acid",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_RSFT": {
+      "x": 555,
+      "y": 334,
+      "width": 108,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 2.75,
+        "height": 1
+      }
+    },
+    "KC_LCTL": {
+      "x": 40,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_LGUI": {
+      "x": 93,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_LALT": {
+      "x": 145,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_SPC": {
+      "x": 198,
+      "y": 384,
+      "width": 255,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 6.25,
+        "height": 1
+      }
+    },
+    "KC_RALT": {
+      "x": 460,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_RGUI": {
+      "x": 513,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_APP": {
+      "x": 565,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_RCTL": {
+      "x": 618,
+      "y": 384,
+      "width": 45,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1.25,
+        "height": 1
+      }
+    },
+    "KC_INS": {
+      "x": 687,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_HOME": {
+      "x": 729,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PGUP": {
+      "x": 771,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_DEL": {
+      "x": 687,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_END": {
+      "x": 729,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PGDN": {
+      "x": 771,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_UP": {
+      "x": 729,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_LEFT": {
+      "x": 687,
+      "y": 384,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_DOWN": {
+      "x": 729,
+      "y": 384,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_RGHT": {
+      "x": 771,
+      "y": 384,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_NLCK": {
+      "x": 828,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PSLS": {
+      "x": 870,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PAST": {
+      "x": 912,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PMNS": {
+      "x": 954,
+      "y": 184,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P7": {
+      "x": 828,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P8": {
+      "x": 870,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P9": {
+      "x": 912,
+      "y": 234,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PPLS": {
+      "x": 954,
+      "y": 234,
+      "width": 34,
+      "height": 89,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 2
+      }
+    },
+    "KC_P4": {
+      "x": 828,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P5": {
+      "x": 870,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P6": {
+      "x": 912,
+      "y": 284,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P1": {
+      "x": 828,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P2": {
+      "x": 870,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_P3": {
+      "x": 912,
+      "y": 334,
+      "width": 34,
+      "height": 39,
+      "style": "ink",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    },
+    "KC_PENT": {
+      "x": 954,
+      "y": 334,
+      "width": 34,
+      "height": 89,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 2
+      }
+    },
+    "KC_P0": {
+      "x": 828,
+      "y": 384,
+      "width": 76,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 2,
+        "height": 1
+      }
+    },
+    "KC_PDOT": {
+      "x": 912,
+      "y": 384,
+      "width": 34,
+      "height": 38,
+      "style": "bone",
+      "units": {
+        "width": 1,
+        "height": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,638 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2300" height="1050" viewBox="0 0 2300 1050" style="display:block;max-width:100%;height:auto" role="img" aria-label="Midnight Butterfly per-key print artwork reconstruction">
+  <defs><linearGradient id="page" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf8f4"/><stop offset="1" stop-color="#eee6f1"/></linearGradient></defs>
+  <rect width="2300" height="1050" fill="url(#page)"/>
+  <text x="78" y="72" fill="#272329" font-family="Arial, sans-serif" font-size="38" font-weight="800">MIDNIGHT BUTTERFLY · TECHNICAL KEY MAP</text>
+  <text x="78" y="108" fill="#6f6571" font-family="Arial, sans-serif" font-size="17">Physical key sizes and codes · Pair with midnight-butterfly-visual-draft.png · Not an original factory production file</text>
+  <rect x="78" y="136" width="2144" height="38" rx="6" fill="#2b2730"/>
+  <text x="98" y="161" fill="#f5edf7" font-family="Arial, sans-serif" font-size="14" font-weight="700">Dashed inset = provisional safe area. Replace with the manufacturer&apos;s exact template before production.</text>
+  <g data-row="1"><g data-code="KC_ESC">
+    <rect x="78" y="210" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="215" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#f3e9f6" opacity=".74"><path d="M108.5 242.5C104.0605 226.6 96.19 229.462 96.19 239.638C96.19 251.245 105.4915 252.358 108.5 242.5Z"/><path d="M112.5 242.5C116.9395 226.6 124.81 229.462 124.81 239.638C124.81 251.245 115.5085 252.358 112.5 242.5Z"/><rect x="108.7" y="234.868" width="3.6" height="15.104999999999999"/></g>
+    <text x="110.5" y="246.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Esc</text>
+    <text x="110.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_ESC · 1U</text>
+  </g><g data-code="KC_F1">
+    <rect x="186" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="191" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="218.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F1</text>
+    <text x="218.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F1 · 1U</text>
+  </g><g data-code="KC_F2">
+    <rect x="258" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="263" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="290.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F2</text>
+    <text x="290.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F2 · 1U</text>
+  </g><g data-code="KC_F3">
+    <rect x="330" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="335" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="362.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F3</text>
+    <text x="362.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F3 · 1U</text>
+  </g><g data-code="KC_F4">
+    <rect x="402" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="407" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="434.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F4</text>
+    <text x="434.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F4 · 1U</text>
+  </g><g data-code="KC_F5">
+    <rect x="492" y="210" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="497" y="215" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="524.5" y="246.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">F5</text>
+    <text x="524.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F5 · 1U</text>
+  </g><g data-code="KC_F6">
+    <rect x="564" y="210" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="569" y="215" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="596.5" y="246.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">F6</text>
+    <text x="596.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F6 · 1U</text>
+  </g><g data-code="KC_F7">
+    <rect x="636" y="210" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="641" y="215" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <polygon points="668.5,229.25 670.5612162671588,240.43878373284122 681.75,242.5 670.5612162671588,244.56121626715878 668.5,255.75 666.4387837328412,244.56121626715878 655.25,242.5 666.4387837328412,240.43878373284122" fill="#f3e9f6" opacity=".78"/>
+    <text x="668.5" y="246.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">F7</text>
+    <text x="668.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F7 · 1U</text>
+  </g><g data-code="KC_F8">
+    <rect x="708" y="210" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="713" y="215" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="740.5" y="246.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">F8</text>
+    <text x="740.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F8 · 1U</text>
+  </g><g data-code="KC_F9">
+    <rect x="798" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="803" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="830.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F9</text>
+    <text x="830.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F9 · 1U</text>
+  </g><g data-code="KC_F10">
+    <rect x="870" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="875" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="902.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F10</text>
+    <text x="902.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F10 · 1U</text>
+  </g><g data-code="KC_F11">
+    <rect x="942" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="947" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="974.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F11</text>
+    <text x="974.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F11 · 1U</text>
+  </g><g data-code="KC_F12">
+    <rect x="1014" y="210" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1019" y="215" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1046.5" y="246.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">F12</text>
+    <text x="1046.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F12 · 1U</text>
+  </g><g data-code="KC_PSCR">
+    <rect x="1122" y="210" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1127" y="215" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1154.5" y="246.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Prt</text>
+    <text x="1154.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PSCR · 1U</text>
+  </g><g data-code="KC_SLCK">
+    <rect x="1194" y="210" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1199" y="215" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1226.5" y="246.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Scr</text>
+    <text x="1226.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_SLCK · 1U</text>
+  </g><g data-code="KC_PAUS">
+    <rect x="1266" y="210" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1271" y="215" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1298.5" y="246.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Pau</text>
+    <text x="1298.5" y="289" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PAUS · 1U</text>
+  </g></g><g data-row="2"><g data-code="KC_GRV">
+    <rect x="78" y="302" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="307" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <polygon points="110.5,321.25 112.56121626715878,332.4387837328412 123.75,334.5 112.56121626715878,336.5612162671588 110.5,347.75 108.43878373284122,336.5612162671588 97.25,334.5 108.43878373284122,332.4387837328412" fill="#8d79ad" opacity=".78"/>
+    <text x="110.5" y="338.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">~</text>
+    <text x="110.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_GRV · 1U</text>
+  </g><g data-code="KC_1">
+    <rect x="150" y="302" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="155" y="307" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="182.5" y="338.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">1</text>
+    <text x="182.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_1 · 1U</text>
+  </g><g data-code="KC_2">
+    <rect x="222" y="302" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="227" y="307" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="254.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">2</text>
+    <text x="254.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_2 · 1U</text>
+  </g><g data-code="KC_3">
+    <rect x="294" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="299" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="326.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">3</text>
+    <text x="326.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_3 · 1U</text>
+  </g><g data-code="KC_4">
+    <rect x="366" y="302" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="371" y="307" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="398.5" y="338.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">4</text>
+    <text x="398.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_4 · 1U</text>
+  </g><g data-code="KC_5">
+    <rect x="438" y="302" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="443" y="307" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="470.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">5</text>
+    <text x="470.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_5 · 1U</text>
+  </g><g data-code="KC_6">
+    <rect x="510" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="515" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="542.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">6</text>
+    <text x="542.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_6 · 1U</text>
+  </g><g data-code="KC_7">
+    <rect x="582" y="302" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="587" y="307" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="614.5" y="338.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">7</text>
+    <text x="614.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_7 · 1U</text>
+  </g><g data-code="KC_8">
+    <rect x="654" y="302" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="659" y="307" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="686.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">8</text>
+    <text x="686.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_8 · 1U</text>
+  </g><g data-code="KC_9">
+    <rect x="726" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="731" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="758.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">9</text>
+    <text x="758.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_9 · 1U</text>
+  </g><g data-code="KC_0">
+    <rect x="798" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="803" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="830.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">0</text>
+    <text x="830.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_0 · 1U</text>
+  </g><g data-code="KC_MINS">
+    <rect x="870" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="875" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="902.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">-</text>
+    <text x="902.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_MINS · 1U</text>
+  </g><g data-code="KC_EQL">
+    <rect x="942" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="947" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="974.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">=</text>
+    <text x="974.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_EQL · 1U</text>
+  </g><g data-code="KC_BSPC">
+    <rect x="1014" y="302" width="137" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1019" y="307" width="127" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#f3e9f6" opacity=".7"><path d="M1080.5 334.5C1047.5 318.6 1040 349.34 1080.5 337.5Z"/><path d="M1084.5 334.5C1117.5 318.6 1125 349.34 1084.5 337.5Z"/><rect x="1078.5" y="330.5" width="8" height="8"/></g>
+    <text x="1082.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Backspace</text>
+    <text x="1082.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_BSPC · 2U</text>
+  </g><g data-code="KC_INS">
+    <rect x="1194" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1199" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1226.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Ins</text>
+    <text x="1226.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_INS · 1U</text>
+  </g><g data-code="KC_HOME">
+    <rect x="1266" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1271" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1298.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Home</text>
+    <text x="1298.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_HOME · 1U</text>
+  </g><g data-code="KC_PGUP">
+    <rect x="1338" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1343" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1370.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">PgUp</text>
+    <text x="1370.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PGUP · 1U</text>
+  </g><g data-code="KC_NLCK">
+    <rect x="1428" y="302" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1433" y="307" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1460.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Num</text>
+    <text x="1460.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_NLCK · 1U</text>
+  </g><g data-code="KC_PSLS">
+    <rect x="1500" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1505" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1532.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">/</text>
+    <text x="1532.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PSLS · 1U</text>
+  </g><g data-code="KC_PAST">
+    <rect x="1572" y="302" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1577" y="307" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1604.5" y="338.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">*</text>
+    <text x="1604.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PAST · 1U</text>
+  </g><g data-code="KC_PMNS">
+    <rect x="1644" y="302" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1649" y="307" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1676.5" y="338.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">-</text>
+    <text x="1676.5" y="381" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PMNS · 1U</text>
+  </g></g><g data-row="3"><g data-code="KC_TAB">
+    <rect x="78" y="394" width="101" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="399" width="91" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#786390" opacity=".74"><path d="M126.5 426.5C117.6865 410.6 104.47 413.462 104.47 423.638C104.47 435.245 120.0895 436.358 126.5 426.5Z"/><path d="M130.5 426.5C139.3135 410.6 152.53 413.462 152.53 423.638C152.53 435.245 136.9105 436.358 130.5 426.5Z"/><rect x="126.7" y="418.868" width="3.6" height="15.104999999999999"/></g>
+    <text x="128.5" y="430.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Tab</text>
+    <text x="128.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_TAB · 1.5U</text>
+  </g><g data-code="KC_Q">
+    <rect x="186" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="191" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="218.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Q</text>
+    <text x="218.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_Q · 1U</text>
+  </g><g data-code="KC_W">
+    <rect x="258" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="263" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="290.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">W</text>
+    <text x="290.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_W · 1U</text>
+  </g><g data-code="KC_E">
+    <rect x="330" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="335" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="362.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">E</text>
+    <text x="362.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_E · 1U</text>
+  </g><g data-code="KC_R">
+    <rect x="402" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="407" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="434.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">R</text>
+    <text x="434.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_R · 1U</text>
+  </g><g data-code="KC_T">
+    <rect x="474" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="479" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="506.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">T</text>
+    <text x="506.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_T · 1U</text>
+  </g><g data-code="KC_Y">
+    <rect x="546" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="551" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="578.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Y</text>
+    <text x="578.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_Y · 1U</text>
+  </g><g data-code="KC_U">
+    <rect x="618" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="623" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="650.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">U</text>
+    <text x="650.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_U · 1U</text>
+  </g><g data-code="KC_I">
+    <rect x="690" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="695" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="722.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">I</text>
+    <text x="722.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_I · 1U</text>
+  </g><g data-code="KC_O">
+    <rect x="762" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="767" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="794.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">O</text>
+    <text x="794.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_O · 1U</text>
+  </g><g data-code="KC_P">
+    <rect x="834" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="839" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="866.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">P</text>
+    <text x="866.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P · 1U</text>
+  </g><g data-code="KC_LBRC">
+    <rect x="906" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="911" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="938.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">[</text>
+    <text x="938.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LBRC · 1U</text>
+  </g><g data-code="KC_RBRC">
+    <rect x="978" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="983" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1010.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">]</text>
+    <text x="1010.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RBRC · 1U</text>
+  </g><g data-code="KC_BSLS">
+    <rect x="1050" y="394" width="101" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1055" y="399" width="91" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".72"><path d="M1061.34 435.74C1080.92 420.74 1118.3 440.74 1139.66 425.74"/><circle cx="1064.9" cy="430.74" r="3.2"/><circle cx="1100.5" cy="430.74" r="3.2"/><circle cx="1136.1" cy="430.74" r="3.2"/></g>
+    <text x="1100.5" y="430.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">\</text>
+    <text x="1100.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_BSLS · 1.5U</text>
+  </g><g data-code="KC_DEL">
+    <rect x="1194" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1199" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1226.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Del</text>
+    <text x="1226.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_DEL · 1U</text>
+  </g><g data-code="KC_END">
+    <rect x="1266" y="394" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1271" y="399" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1298.5" y="430.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">End</text>
+    <text x="1298.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_END · 1U</text>
+  </g><g data-code="KC_PGDN">
+    <rect x="1338" y="394" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1343" y="399" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1370.5" y="430.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">PgDn</text>
+    <text x="1370.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PGDN · 1U</text>
+  </g><g data-code="KC_P7">
+    <rect x="1428" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1433" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1460.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">7</text>
+    <text x="1460.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P7 · 1U</text>
+  </g><g data-code="KC_P8">
+    <rect x="1500" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1505" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1532.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">8</text>
+    <text x="1532.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P8 · 1U</text>
+  </g><g data-code="KC_P9">
+    <rect x="1572" y="394" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1577" y="399" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1604.5" y="430.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">9</text>
+    <text x="1604.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P9 · 1U</text>
+  </g><g data-code="KC_PPLS">
+    <rect x="1644" y="394" width="65" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1649" y="399" width="55" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#f3e9f6" stroke-width="2" opacity=".72"><path d="M1653.18 435.74C1664.84 420.74 1687.1 440.74 1699.82 425.74"/><circle cx="1655.3" cy="430.74" r="3.2"/><circle cx="1676.5" cy="430.74" r="3.2"/><circle cx="1697.7" cy="430.74" r="3.2"/></g>
+    <text x="1676.5" y="430.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">+</text>
+    <text x="1676.5" y="473" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PPLS · 1U</text>
+  </g></g><g data-row="4"><g data-code="KC_CAPS">
+    <rect x="78" y="486" width="119" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="491" width="109" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="137.5" y="522.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Caps</text>
+    <text x="137.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_CAPS · 1.75U</text>
+  </g><g data-code="KC_A">
+    <rect x="204" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="209" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="236.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">A</text>
+    <text x="236.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_A · 1U</text>
+  </g><g data-code="KC_S">
+    <rect x="276" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="281" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="308.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">S</text>
+    <text x="308.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_S · 1U</text>
+  </g><g data-code="KC_D">
+    <rect x="348" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="353" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="380.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">D</text>
+    <text x="380.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_D · 1U</text>
+  </g><g data-code="KC_F">
+    <rect x="420" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="425" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="452.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">F</text>
+    <text x="452.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_F · 1U</text>
+  </g><g data-code="KC_G">
+    <rect x="492" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="497" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="524.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">G</text>
+    <text x="524.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_G · 1U</text>
+  </g><g data-code="KC_H">
+    <rect x="564" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="569" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="596.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">H</text>
+    <text x="596.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_H · 1U</text>
+  </g><g data-code="KC_J">
+    <rect x="636" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="641" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="668.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">J</text>
+    <text x="668.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_J · 1U</text>
+  </g><g data-code="KC_K">
+    <rect x="708" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="713" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="740.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">K</text>
+    <text x="740.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_K · 1U</text>
+  </g><g data-code="KC_L">
+    <rect x="780" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="785" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="812.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">L</text>
+    <text x="812.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_L · 1U</text>
+  </g><g data-code="KC_SCLN">
+    <rect x="852" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="857" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="884.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">;</text>
+    <text x="884.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_SCLN · 1U</text>
+  </g><g data-code="KC_QUOT">
+    <rect x="924" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="929" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="956.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">&apos;</text>
+    <text x="956.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_QUOT · 1U</text>
+  </g><g data-code="KC_ENT">
+    <rect x="996" y="486" width="155" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1001" y="491" width="145" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#786390" opacity=".7"><path d="M1071.5 518.5C1033.46 502.6 1024.88 533.34 1071.5 521.5Z"/><path d="M1075.5 518.5C1113.54 502.6 1122.12 533.34 1075.5 521.5Z"/><rect x="1069.5" y="514.5" width="8" height="8"/></g>
+    <text x="1073.5" y="522.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Enter</text>
+    <text x="1073.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_ENT · 2.25U</text>
+  </g><g data-code="KC_P4">
+    <rect x="1428" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1433" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1460.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">4</text>
+    <text x="1460.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P4 · 1U</text>
+  </g><g data-code="KC_P5">
+    <rect x="1500" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1505" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1532.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">5</text>
+    <text x="1532.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P5 · 1U</text>
+  </g><g data-code="KC_P6">
+    <rect x="1572" y="486" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1577" y="491" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1604.5" y="522.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">6</text>
+    <text x="1604.5" y="565" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P6 · 1U</text>
+  </g></g><g data-row="5"><g data-code="KC_LSFT">
+    <rect x="78" y="578" width="155" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="583" width="145" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".72"><path d="M92.58 619.74C124.04 604.74 184.1 624.74 218.42 609.74"/><circle cx="98.3" cy="614.74" r="3.2"/><circle cx="126.9" cy="614.74" r="3.2"/><circle cx="155.5" cy="614.74" r="3.2"/><circle cx="184.10000000000002" cy="614.74" r="3.2"/><circle cx="212.70000000000002" cy="614.74" r="3.2"/></g>
+    <text x="155.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Shift</text>
+    <text x="155.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LSFT · 2.25U</text>
+  </g><g data-code="KC_Z">
+    <rect x="240" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="245" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="272.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Z</text>
+    <text x="272.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_Z · 1U</text>
+  </g><g data-code="KC_X">
+    <rect x="312" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="317" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="344.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">X</text>
+    <text x="344.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_X · 1U</text>
+  </g><g data-code="KC_C">
+    <rect x="384" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="389" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="416.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">C</text>
+    <text x="416.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_C · 1U</text>
+  </g><g data-code="KC_V">
+    <rect x="456" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="461" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="488.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">V</text>
+    <text x="488.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_V · 1U</text>
+  </g><g data-code="KC_B">
+    <rect x="528" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="533" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="560.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">B</text>
+    <text x="560.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_B · 1U</text>
+  </g><g data-code="KC_N">
+    <rect x="600" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="605" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="632.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">N</text>
+    <text x="632.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_N · 1U</text>
+  </g><g data-code="KC_M">
+    <rect x="672" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="677" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="704.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">M</text>
+    <text x="704.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_M · 1U</text>
+  </g><g data-code="KC_COMM">
+    <rect x="744" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="749" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="776.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">,</text>
+    <text x="776.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_COMM · 1U</text>
+  </g><g data-code="KC_DOT">
+    <rect x="816" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="821" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="848.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">.</text>
+    <text x="848.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_DOT · 1U</text>
+  </g><g data-code="KC_SLSH">
+    <rect x="888" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="893" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="920.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">/</text>
+    <text x="920.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_SLSH · 1U</text>
+  </g><g data-code="KC_RSFT">
+    <rect x="960" y="578" width="191" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="965" y="583" width="181" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#f3e9f6" opacity=".74"><path d="M1053.5 610.5C1033.7515 594.6 1007.17 597.462 1007.17 607.638C1007.17 619.245 1038.5845 620.358 1053.5 610.5Z"/><path d="M1057.5 610.5C1077.2485 594.6 1103.83 597.462 1103.83 607.638C1103.83 619.245 1072.4155 620.358 1057.5 610.5Z"/><rect x="1053.7" y="602.868" width="3.6" height="15.104999999999999"/></g>
+    <text x="1055.5" y="614.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Shift</text>
+    <text x="1055.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RSFT · 2.75U</text>
+  </g><g data-code="KC_UP">
+    <rect x="1266" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1271" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".72"><path d="M1275.18 619.74C1286.84 604.74 1309.1 624.74 1321.82 609.74"/><circle cx="1277.3" cy="614.74" r="3.2"/><circle cx="1298.5" cy="614.74" r="3.2"/><circle cx="1319.7" cy="614.74" r="3.2"/></g>
+    <text x="1298.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Up</text>
+    <text x="1298.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_UP · 1U</text>
+  </g><g data-code="KC_P1">
+    <rect x="1446" y="578" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1451" y="583" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1478.5" y="614.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">1</text>
+    <text x="1478.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P1 · 1U</text>
+  </g><g data-code="KC_P2">
+    <rect x="1518" y="578" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1523" y="583" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1550.5" y="614.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">2</text>
+    <text x="1550.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P2 · 1U</text>
+  </g><g data-code="KC_P3">
+    <rect x="1590" y="578" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1595" y="583" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1622.5" y="614.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">3</text>
+    <text x="1622.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P3 · 1U</text>
+  </g><g data-code="KC_PENT">
+    <rect x="1662" y="578" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1667" y="583" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".7"><path d="M1681.25 607.85A13.25 13.25 0 0 1 1707.75 607.85M1681.25 607.85V628.52M1707.75 607.85V628.52"/><path d="M1687.875 601.49V628.52M1694.5 594.6V628.52M1701.125 601.49V628.52"/></g>
+    <text x="1694.5" y="614.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Enter</text>
+    <text x="1694.5" y="657" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PENT · 1U</text>
+  </g></g><g data-row="6"><g data-code="KC_LCTL">
+    <rect x="78" y="670" width="83" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="83" y="675" width="73" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="119.5" y="706.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Ctrl</text>
+    <text x="119.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LCTL · 1.25U</text>
+  </g><g data-code="KC_LGUI">
+    <rect x="168" y="670" width="83" height="65" rx="7" fill="#eee8e1" stroke="#403846" stroke-width="2"/>
+    <rect x="173" y="675" width="73" height="55" rx="5" fill="none" stroke="#8f79ae" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#8f79ae" opacity=".7"><path d="M207.5 702.5C189.62 686.6 185.36 717.34 207.5 705.5Z"/><path d="M211.5 702.5C229.38 686.6 233.64 717.34 211.5 705.5Z"/><rect x="205.5" y="698.5" width="8" height="8"/></g>
+    <text x="209.5" y="706.5" text-anchor="middle" fill="#8f79ae" font-family="Arial, sans-serif" font-size="15" font-weight="700">Win</text>
+    <text x="209.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LGUI · 1.25U</text>
+  </g><g data-code="KC_LALT">
+    <rect x="258" y="670" width="83" height="65" rx="7" fill="#eee8e1" stroke="#403846" stroke-width="2"/>
+    <rect x="263" y="675" width="73" height="55" rx="5" fill="none" stroke="#8f79ae" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="299.5" y="706.5" text-anchor="middle" fill="#8f79ae" font-family="Arial, sans-serif" font-size="15" font-weight="700">Alt</text>
+    <text x="299.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LALT · 1.25U</text>
+  </g><g data-code="KC_SPC">
+    <rect x="348" y="670" width="443" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="353" y="675" width="433" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#f3e9f6" stroke-width="2" opacity=".72"><path d="M379.86 711.74C474.68 696.74 655.7 716.74 759.14 701.74"/><circle cx="397.1" cy="706.74" r="3.2"/><circle cx="421.7285714285714" cy="706.74" r="3.2"/><circle cx="446.3571428571429" cy="706.74" r="3.2"/><circle cx="470.98571428571427" cy="706.74" r="3.2"/><circle cx="495.6142857142857" cy="706.74" r="3.2"/><circle cx="520.2428571428571" cy="706.74" r="3.2"/><circle cx="544.8714285714286" cy="706.74" r="3.2"/><circle cx="569.5" cy="706.74" r="3.2"/><circle cx="594.1285714285714" cy="706.74" r="3.2"/><circle cx="618.7571428571429" cy="706.74" r="3.2"/><circle cx="643.3857142857144" cy="706.74" r="3.2"/><circle cx="668.0142857142857" cy="706.74" r="3.2"/><circle cx="692.6428571428571" cy="706.74" r="3.2"/><circle cx="717.2714285714286" cy="706.74" r="3.2"/><circle cx="741.9000000000001" cy="706.74" r="3.2"/></g>
+    <text x="569.5" y="706.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">Midnight Butterfly</text>
+    <text x="569.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_SPC · 6.25U</text>
+  </g><g data-code="KC_RALT">
+    <rect x="798" y="670" width="83" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="803" y="675" width="73" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="839.5" y="706.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Alt</text>
+    <text x="839.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RALT · 1.25U</text>
+  </g><g data-code="KC_RGUI">
+    <rect x="888" y="670" width="83" height="65" rx="7" fill="#eee8e1" stroke="#403846" stroke-width="2"/>
+    <rect x="893" y="675" width="73" height="55" rx="5" fill="none" stroke="#8f79ae" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#8f79ae" stroke-width="2" opacity=".28"><path d="M904 681V724"/><path d="M920 681V724"/><path d="M936 681V724"/><path d="M952 681V724"/><path d="M899 688H960"/><path d="M899 704H960"/><path d="M899 720H960"/></g>
+    <text x="929.5" y="706.5" text-anchor="middle" fill="#8f79ae" font-family="Arial, sans-serif" font-size="15" font-weight="700">Win</text>
+    <text x="929.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RGUI · 1.25U</text>
+  </g><g data-code="KC_APP">
+    <rect x="978" y="670" width="83" height="65" rx="7" fill="#eee8e1" stroke="#403846" stroke-width="2"/>
+    <rect x="983" y="675" width="73" height="55" rx="5" fill="none" stroke="#8f79ae" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <polygon points="1019.5,689.25 1021.5612162671588,700.4387837328412 1032.75,702.5 1021.5612162671588,704.5612162671588 1019.5,715.75 1017.4387837328412,704.5612162671588 1006.25,702.5 1017.4387837328412,700.4387837328412" fill="#8f79ae" opacity=".78"/>
+    <text x="1019.5" y="706.5" text-anchor="middle" fill="#8f79ae" font-family="Arial, sans-serif" font-size="15" font-weight="700">Fn</text>
+    <text x="1019.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_APP · 1.25U</text>
+  </g><g data-code="KC_RCTL">
+    <rect x="1068" y="670" width="83" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1073" y="675" width="73" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#8d79ad" opacity=".7"><path d="M1107.5 702.5C1089.62 686.6 1085.36 717.34 1107.5 705.5Z"/><path d="M1111.5 702.5C1129.38 686.6 1133.64 717.34 1111.5 705.5Z"/><rect x="1105.5" y="698.5" width="8" height="8"/></g>
+    <text x="1109.5" y="706.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">Ctrl</text>
+    <text x="1109.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RCTL · 1.25U</text>
+  </g><g data-code="KC_LEFT">
+    <rect x="1194" y="670" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1199" y="675" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".72"><path d="M1203.18 711.74C1214.84 696.74 1237.1 716.74 1249.82 701.74"/><circle cx="1205.3" cy="706.74" r="3.2"/><circle cx="1226.5" cy="706.74" r="3.2"/><circle cx="1247.7" cy="706.74" r="3.2"/></g>
+    <text x="1226.5" y="706.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Left</text>
+    <text x="1226.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_LEFT · 1U</text>
+  </g><g data-code="KC_DOWN">
+    <rect x="1266" y="670" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1271" y="675" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#786390" opacity=".74"><path d="M1296.5 702.5C1292.0605 686.6 1284.19 689.462 1284.19 699.638C1284.19 711.245 1293.4915 712.358 1296.5 702.5Z"/><path d="M1300.5 702.5C1304.9395 686.6 1312.81 689.462 1312.81 699.638C1312.81 711.245 1303.5085 712.358 1300.5 702.5Z"/><rect x="1296.7" y="694.868" width="3.6" height="15.104999999999999"/></g>
+    <text x="1298.5" y="706.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Down</text>
+    <text x="1298.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_DOWN · 1U</text>
+  </g><g data-code="KC_RGHT">
+    <rect x="1338" y="670" width="65" height="65" rx="7" fill="#d8c9e7" stroke="#403846" stroke-width="2"/>
+    <rect x="1343" y="675" width="55" height="55" rx="5" fill="none" stroke="#786390" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="none" stroke="#786390" stroke-width="2" opacity=".72"><path d="M1347.18 711.74C1358.84 696.74 1381.1 716.74 1393.82 701.74"/><circle cx="1349.3" cy="706.74" r="3.2"/><circle cx="1370.5" cy="706.74" r="3.2"/><circle cx="1391.7" cy="706.74" r="3.2"/></g>
+    <text x="1370.5" y="706.5" text-anchor="middle" fill="#786390" font-family="Arial, sans-serif" font-size="15" font-weight="700">Right</text>
+    <text x="1370.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_RGHT · 1U</text>
+  </g><g data-code="KC_P0">
+    <rect x="1428" y="670" width="137" height="65" rx="7" fill="#28242f" stroke="#403846" stroke-width="2"/>
+    <rect x="1433" y="675" width="127" height="55" rx="5" fill="none" stroke="#f3e9f6" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    <g fill="#f3e9f6" opacity=".74"><path d="M1494.5 702.5C1481.3125 686.6 1462.75 689.462 1462.75 699.638C1462.75 711.245 1484.6875 712.358 1494.5 702.5Z"/><path d="M1498.5 702.5C1511.6875 686.6 1530.25 689.462 1530.25 699.638C1530.25 711.245 1508.3125 712.358 1498.5 702.5Z"/><rect x="1494.7" y="694.868" width="3.6" height="15.104999999999999"/></g>
+    <text x="1496.5" y="706.5" text-anchor="middle" fill="#f3e9f6" font-family="Arial, sans-serif" font-size="15" font-weight="700">0</text>
+    <text x="1496.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_P0 · 2U</text>
+  </g><g data-code="KC_PDOT">
+    <rect x="1572" y="670" width="65" height="65" rx="7" fill="#f4eee5" stroke="#403846" stroke-width="2"/>
+    <rect x="1577" y="675" width="55" height="55" rx="5" fill="none" stroke="#8d79ad" stroke-width="1" stroke-dasharray="4 3" opacity=".28"/>
+    
+    <text x="1604.5" y="706.5" text-anchor="middle" fill="#8d79ad" font-family="Arial, sans-serif" font-size="15" font-weight="700">.</text>
+    <text x="1604.5" y="749" text-anchor="middle" fill="#766c78" font-family="Arial, sans-serif" font-size="8">KC_PDOT · 1U</text>
+  </g></g>
+  <text x="78" y="822" fill="#6f5d7f" font-family="Arial, sans-serif" font-size="15" font-weight="800">COLOUR REFERENCES · PHOTO ESTIMATES ONLY</text>
+  <g><rect x="78" y="850" width="54" height="38" rx="5" fill="#f4eee5" stroke="#403846"/><text x="146" y="866" fill="#2b272d" font-family="Arial" font-size="13" font-weight="700">porcelain</text><text x="146" y="884" fill="#766c78" font-family="Arial" font-size="11">#f4eee5</text></g><g><rect x="298" y="850" width="54" height="38" rx="5" fill="#d8c9e7" stroke="#403846"/><text x="366" y="866" fill="#2b272d" font-family="Arial" font-size="13" font-weight="700">lilac</text><text x="366" y="884" fill="#766c78" font-family="Arial" font-size="11">#d8c9e7</text></g><g><rect x="518" y="850" width="54" height="38" rx="5" fill="#28242f" stroke="#403846"/><text x="586" y="866" fill="#2b272d" font-family="Arial" font-size="13" font-weight="700">ink</text><text x="586" y="884" fill="#766c78" font-family="Arial" font-size="11">#28242f</text></g><g><rect x="738" y="850" width="54" height="38" rx="5" fill="#eee8e1" stroke="#403846"/><text x="806" y="866" fill="#2b272d" font-family="Arial" font-size="13" font-weight="700">clear</text><text x="806" y="884" fill="#766c78" font-family="Arial" font-size="11">#eee8e1</text></g>
+  <rect x="78" y="930" width="2144" height="64" rx="6" fill="#e4d7e8"/>
+  <text x="98" y="958" fill="#342f36" font-family="Arial, sans-serif" font-size="14" font-weight="700">Factory fields still required: profile, material, print process, colour standard, key dimensions, bleed, safe area, UV/template, and commercial permission.</text>
+  <text x="98" y="980" fill="#6f6571" font-family="Arial, sans-serif" font-size="12">Generated from FK-MB-001 · Midnight Butterfly</text>
+</svg>

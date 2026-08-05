@@ -2369,7 +2369,7 @@ summary {
     padding: 14px 20px;
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .brand {
@@ -2381,30 +2381,25 @@ summary {
   }
 
   .nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    display: flex;
+    grid-template-columns: none;
+    gap: 6px;
     order: 3;
     width: 100%;
     max-width: 100%;
-    overflow: visible;
-    padding-bottom: 0;
-  }
-
-  .nav a:nth-child(3),
-  .nav a:nth-child(4),
-  .nav a:nth-child(5) {
-    display: none;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
   }
 
   .nav a {
     display: grid;
     min-height: 44px;
     place-items: center;
-    padding: 8px 6px;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 8px 12px;
+    min-width: max-content;
+    overflow: visible;
+    text-overflow: clip;
     white-space: nowrap;
     text-align: center;
   }

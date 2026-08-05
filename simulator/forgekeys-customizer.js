@@ -99,6 +99,16 @@
     artworkType: "photo",
     stylePreset: "feature",
     baseOpacity: 0.82,
+    showroomTheme: null,
+    showroomKeyMap: null,
+    showroomPalette: null,
+    showroomAtlasImage: null,
+    showroomAtlasKeys: null,
+    showroomView: "3d",
+    switchPreset: "crystal-linear",
+    keycapMaterial: "solid",
+    switchLighting: "off",
+    keycapLifted: false,
   };
 
   const config = window.FORGEKEYS_CONFIG || {};
@@ -107,9 +117,14 @@
   const protectedSubmissionEnabled = config.submissionMode === "endpoint";
   const maxAccentFiles = 2;
   let submissionSucceeded = false;
-  const isEmbedMode = new URLSearchParams(window.location.search).get("embed") === "1";
+  const pageParams = new URLSearchParams(window.location.search);
+  const isEmbedMode = pageParams.get("embed") === "1";
+  const isShowroomMode = pageParams.get("mode") === "showroom";
   if (isEmbedMode) {
     document.body.classList.add("fk-embed-mode");
+  }
+  if (isShowroomMode) {
+    document.body.classList.add("fk-showroom-mode");
   }
 
   const boundsMap = {
@@ -121,8 +136,12 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "showcase-fin";
+  const sampleVersion = "20260805-fk2";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
+  const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
+  let showroomSets = [];
+  let activeShowroomSet = null;
+  let showroomPanelBuilding = false;
 
   const sampleArtworks = [
     {
@@ -153,6 +172,52 @@
       description: "Minimal brass accent-key direction",
     },
   ];
+
+  const resolveCatalogAsset = (relativeUrl) => relativeUrl ? new URL(relativeUrl, showroomCatalogUrl).href : null;
+  const escapeMarkup = (value) => String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+
+  const loadShowroomCatalog = async () => {
+    const response = await fetch(showroomCatalogUrl.href);
+    if (!response.ok) throw new Error("The keycap product catalog could not be loaded.");
+    const catalog = await response.json();
+    if (catalog.schemaVersion !== "1.0" || !Array.isArray(catalog.products) || !catalog.products.length) {
+      throw new Error("The keycap product catalog is empty or invalid.");
+    }
+    return catalog.products.filter((product) => product.preview?.threeD).map((product) => {
+      const threeD = product.preview?.threeD || null;
+      return {
+        id: product.id,
+        slug: product.slug,
+        label: product.name,
+        description: product.description,
+        studio: product.studio,
+        commercialStatus: product.commercialStatus,
+        productThumbnailUrl: resolveCatalogAsset(product.product?.thumbnail || product.product?.image),
+        availability: product.product?.availability || "Enquire for availability",
+        priceAud: product.product?.priceAud,
+        purchaseUrl: product.product?.purchaseUrl || null,
+        profile: product.preview?.profile || "Profile to be confirmed",
+        layouts: product.preview?.layouts || "Compatibility to be confirmed",
+        finish: product.preview?.finish || "Finish to be confirmed",
+        preferredLayout: product.preview?.preferredLayout || null,
+        hasThreeD: Boolean(threeD),
+        threeDMode: threeD?.mode || null,
+        previewAccuracy: threeD?.accuracy || null,
+        renderLegends: threeD?.renderLegends !== false,
+        url: resolveCatalogAsset(threeD?.artwork),
+        opacity: threeD?.opacity || 0.96,
+        transparent: Boolean(threeD?.transparent),
+        theme: threeD?.theme || null,
+        designDataUrl: resolveCatalogAsset(threeD?.designData),
+        keyArtManifestUrl: resolveCatalogAsset(threeD?.keyArtManifest),
+      };
+    });
+  };
 
   const fitCover = (imageW, imageH, boxW, boxH) => {
     const scale = Math.max(boxW / imageW, boxH / imageH);
@@ -227,6 +292,240 @@
     ctx.restore();
   };
 
+  const drawShowroomThemeBase = (ctx, canvas, opts) => {
+    if (state.showroomKeyMap) return;
+    if (!state.showroomTheme) return;
+    const code = opts.code || "";
+    const isAlpha = /^KC_[A-Z]$/.test(code);
+    const isFunction = /^KC_F\d+$/.test(code) || code === "KC_ESC" || code === "KC_GESC";
+    const isNumber = /^KC_[0-9]$/.test(code) || ["KC_MINS", "KC_EQL", "KC_GRV"].includes(code);
+    if (state.showroomTheme === "midnight-butterfly") {
+      const darkFunctions = new Set(["KC_F5", "KC_F6", "KC_F7", "KC_F8"]);
+      const darkKeys = new Set(["KC_ESC", "KC_CAPS", "KC_RSFT", "KC_SPC", "KC_END", "KC_PMNS", "KC_P0", "KC_PENT"]);
+      const lilacKeys = new Set(["KC_TAB", "KC_ENT", "KC_LSFT", "KC_LCTL", "KC_RCTL", "KC_LEFT", "KC_DOWN", "KC_RGHT", "KC_UP", "KC_DEL", "KC_PGUP", "KC_PGDN"]);
+      const lilacAlphas = new Set(["KC_Z", "KC_X", "KC_C", "KC_V", "KC_B", "KC_N", "KC_M"]);
+      let colour = "#f4eee5";
+      if (isFunction) colour = darkFunctions.has(code) ? "#26222d" : "#d8c9e7";
+      if (isNumber) {
+        const number = Number(code.replace("KC_", ""));
+        if ([2, 5, 8].includes(number)) colour = "#29252f";
+        else if ([3, 6, 9].includes(number)) colour = "#d7c8e7";
+      }
+      if (lilacAlphas.has(code) || lilacKeys.has(code)) colour = "#d7c8e7";
+      if (darkKeys.has(code)) colour = "#28242f";
+      if (["KC_LALT", "KC_RALT", "KC_LGUI", "KC_RGUI", "KC_APP", "KC_INS", "KC_HOME"].includes(code)) colour = "#eee8e1";
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      if (colour === "#28242f" || colour === "#29252f" || colour === "#26222d") {
+        gradient.addColorStop(0, "#403947");
+        gradient.addColorStop(1, "#17151c");
+      } else if (colour === "#d7c8e7" || colour === "#d8c9e7") {
+        gradient.addColorStop(0, "#eee5f5");
+        gradient.addColorStop(1, "#b7a0ce");
+      } else {
+        gradient.addColorStop(0, "#fffaf2");
+        gradient.addColorStop(1, "#e2d9cf");
+      }
+      ctx.save();
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+      return;
+    }
+    if (state.showroomTheme !== "crimson-bloom") return;
+    const porcelainFunctions = new Set(["KC_F5", "KC_F6", "KC_F7", "KC_F8"]);
+    const porcelainMods = new Set(["KC_TAB", "KC_CAPS", "KC_LSFT", "KC_LEFT", "KC_DOWN", "KC_RGHT", "KC_UP"]);
+    const artworkMods = new Set(["KC_ENT", "KC_RSFT", "KC_BSPC", "KC_LCTL", "KC_RCTL"]);
+    let colour = "#f6eee5";
+    if (isFunction || isNumber) colour = "#ae1d31";
+    if (porcelainFunctions.has(code) || porcelainMods.has(code) || isAlpha || code === "KC_SPC") colour = "#f6eee5";
+    if (artworkMods.has(code)) colour = "#d7b3aa";
+    if (["KC_LALT", "KC_RALT", "KC_LGUI", "KC_RGUI", "KC_APP", "KC_DEL", "KC_PGUP", "KC_PGDN", "KC_HOME", "KC_END"].includes(code)) colour = "#a91b2f";
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, colour === "#f6eee5" ? "#fffaf3" : colour);
+    gradient.addColorStop(1, colour === "#f6eee5" ? "#e8ddd2" : "#6f1422");
+    ctx.save();
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  };
+
+  const drawButterflyMark = (ctx, canvas, colour) => {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const wingW = canvas.width * 0.27;
+    const wingH = canvas.height * 0.3;
+    ctx.save();
+    ctx.fillStyle = colour;
+    ctx.globalAlpha = 0.78;
+    ctx.beginPath();
+    ctx.moveTo(cx - 2, cy);
+    ctx.bezierCurveTo(cx - wingW * 0.45, cy - wingH, cx - wingW, cy - wingH * 0.82, cx - wingW, cy - wingH * 0.18);
+    ctx.bezierCurveTo(cx - wingW, cy + wingH * 0.55, cx - wingW * 0.35, cy + wingH * 0.62, cx - 2, cy);
+    ctx.moveTo(cx + 2, cy);
+    ctx.bezierCurveTo(cx + wingW * 0.45, cy - wingH, cx + wingW, cy - wingH * 0.82, cx + wingW, cy - wingH * 0.18);
+    ctx.bezierCurveTo(cx + wingW, cy + wingH * 0.55, cx + wingW * 0.35, cy + wingH * 0.62, cx + 2, cy);
+    ctx.fill();
+    ctx.globalAlpha = 0.95;
+    ctx.fillRect(cx - 2, cy - wingH * 0.48, 4, wingH * 0.95);
+    ctx.restore();
+  };
+
+  const drawChainMark = (ctx, canvas, colour) => {
+    const y = canvas.height * 0.58;
+    ctx.save();
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = Math.max(2, canvas.height * 0.026);
+    ctx.globalAlpha = 0.68;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.06, y + canvas.height * 0.08);
+    ctx.bezierCurveTo(canvas.width * 0.28, y - canvas.height * 0.14, canvas.width * 0.7, y + canvas.height * 0.14, canvas.width * 0.94, y - canvas.height * 0.08);
+    ctx.stroke();
+    const links = Math.max(3, Math.round(canvas.width / Math.max(canvas.height * 0.5, 18)));
+    for (let index = 0; index < links; index += 1) {
+      const x = canvas.width * (0.1 + (index / Math.max(1, links - 1)) * 0.8);
+      ctx.beginPath();
+      ctx.arc(x, y, Math.max(2.5, canvas.height * 0.045), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+
+  const drawBowMark = (ctx, canvas, colour) => {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    ctx.save();
+    ctx.fillStyle = colour;
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(cx - 3, cy);
+    ctx.bezierCurveTo(cx - canvas.width * 0.28, cy - canvas.height * 0.3, cx - canvas.width * 0.34, cy + canvas.height * 0.28, cx - 3, cy + 3);
+    ctx.moveTo(cx + 3, cy);
+    ctx.bezierCurveTo(cx + canvas.width * 0.28, cy - canvas.height * 0.3, cx + canvas.width * 0.34, cy + canvas.height * 0.28, cx + 3, cy + 3);
+    ctx.fill();
+    ctx.fillRect(cx - 4, cy - 4, 8, 8);
+    ctx.restore();
+  };
+
+  const drawPlaidMark = (ctx, canvas, colour) => {
+    ctx.save();
+    ctx.strokeStyle = colour;
+    ctx.globalAlpha = 0.26;
+    ctx.lineWidth = Math.max(2, canvas.height * 0.025);
+    const spacing = Math.max(14, canvas.height * 0.2);
+    for (let x = spacing; x < canvas.width; x += spacing) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = spacing; y < canvas.height; y += spacing) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+    ctx.restore();
+  };
+
+  const drawSparkMark = (ctx, canvas, colour) => {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const outer = Math.min(canvas.width, canvas.height) * 0.28;
+    const inner = outer * 0.2;
+    ctx.save();
+    ctx.fillStyle = colour;
+    ctx.globalAlpha = 0.78;
+    ctx.beginPath();
+    for (let point = 0; point < 8; point += 1) {
+      const angle = -Math.PI / 2 + (Math.PI / 4) * point;
+      const radius = point % 2 === 0 ? outer : inner;
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      if (point === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+
+  const drawCageMark = (ctx, canvas, colour) => {
+    ctx.save();
+    ctx.strokeStyle = colour;
+    ctx.globalAlpha = 0.66;
+    ctx.lineWidth = Math.max(2, canvas.width * 0.025);
+    const left = canvas.width * 0.25;
+    const right = canvas.width * 0.75;
+    const top = canvas.height * 0.2;
+    const bottom = canvas.height * 0.82;
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, top + canvas.width * 0.25, canvas.width * 0.25, Math.PI, Math.PI * 2);
+    ctx.moveTo(left, top + canvas.width * 0.25); ctx.lineTo(left, bottom);
+    ctx.moveTo(right, top + canvas.width * 0.25); ctx.lineTo(right, bottom);
+    for (let x = left + (right - left) / 4; x < right; x += (right - left) / 4) {
+      ctx.moveTo(x, top + canvas.width * 0.13); ctx.lineTo(x, bottom);
+    }
+    ctx.stroke();
+    ctx.restore();
+  };
+
+  const drawShowroomKeyDesign = (ctx, canvas, opts) => {
+    if (!state.showroomKeyMap || !state.showroomPalette) return false;
+    const key = state.showroomKeyMap[opts.code];
+    const style = state.showroomPalette[key?.style || "porcelain"] || state.showroomPalette.porcelain;
+    if (!style) return false;
+    const atlasKey = state.showroomAtlasKeys?.[opts.code];
+    if (atlasKey && state.showroomAtlasImage?.complete && state.showroomAtlasImage.naturalWidth) {
+      ctx.save();
+      if (state.showroomTheme === "midnight-butterfly") {
+        ctx.filter = "contrast(1.08) saturate(1.08) brightness(1.01)";
+      } else if (state.showroomTheme === "neon-system") {
+        ctx.filter = "contrast(1.12) saturate(1.1) brightness(1.01)";
+      } else if (state.showroomTheme === "crimson-bloom") {
+        ctx.filter = "contrast(1.08) saturate(1.06) brightness(1.01)";
+      }
+      ctx.drawImage(
+        state.showroomAtlasImage,
+        atlasKey.x,
+        atlasKey.y,
+        atlasKey.width,
+        atlasKey.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      ctx.restore();
+      if (state.showroomTheme === "midnight-butterfly") {
+        ctx.save();
+        ctx.globalCompositeOperation = "multiply";
+        ctx.globalAlpha = key?.style === "ink" ? 0.12 : key?.style === "lilac" ? 0.07 : 0.025;
+        ctx.fillStyle = style.background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+      opts.color = style.legend;
+      opts.background = style.background;
+      return true;
+    }
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    const lowerColour = {
+      ink: "#15131a",
+      lilac: "#b8a3cf",
+      porcelain: "#e7ddd2",
+      clear: "#ddd5d8",
+    }[key?.style || "porcelain"] || style.background;
+    gradient.addColorStop(0, style.background);
+    gradient.addColorStop(1, lowerColour);
+    ctx.save();
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const artwork = key?.artwork || "none";
+    if (artwork === "butterfly") drawButterflyMark(ctx, canvas, style.legend);
+    if (artwork === "chain") drawChainMark(ctx, canvas, style.legend);
+    if (artwork === "bow") drawBowMark(ctx, canvas, style.legend);
+    if (artwork === "plaid") drawPlaidMark(ctx, canvas, style.legend);
+    if (artwork === "spark") drawSparkMark(ctx, canvas, style.legend);
+    if (artwork === "cage") drawCageMark(ctx, canvas, style.legend);
+    ctx.restore();
+    opts.color = style.legend;
+    opts.background = style.background;
+    return true;
+  };
+
   const drawAccent = (ctx, canvas, opts) => {
     const placement = state.placements[opts.code];
     if (!placement || !placement.image || !placement.image.complete) return;
@@ -284,15 +583,22 @@
   const refreshTextures = () => {
     syncBoundsFromOriginalLayout();
     document.dispatchEvent(new CustomEvent("force_key_material_update"));
+    if (isShowroomMode) scheduleSwitchPresentation(180);
   };
 
   window.ForgeKeysKeycapTextures = {
     state,
     draw(ctx, canvas, opts) {
-      drawBaseArtwork(ctx, canvas, opts);
+      const usedPerKeyDesign = drawShowroomKeyDesign(ctx, canvas, opts);
+      if (!usedPerKeyDesign) {
+        drawShowroomThemeBase(ctx, canvas, opts);
+        drawBaseArtwork(ctx, canvas, opts);
+      }
       drawAccent(ctx, canvas, opts);
       if (!state.keepLegends) {
         opts.legend = "";
+        // The original simulator paints its legend after this hook.
+        ctx.fillText = () => {};
       }
     },
     refresh: refreshTextures,
@@ -372,7 +678,7 @@
     }
   };
 
-  const rasterizeSvgSample = (blob, name) =>
+  const rasterizeSvgSample = (blob, name, preserveAlpha = false) =>
     new Promise((resolve, reject) => {
       const image = new Image();
       const url = URL.createObjectURL(blob);
@@ -381,21 +687,24 @@
         canvas.width = image.naturalWidth || 1800;
         canvas.height = image.naturalHeight || 900;
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#f6f2ea";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (!preserveAlpha) {
+          ctx.fillStyle = "#f6f2ea";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
         canvas.toBlob(
-          (jpegBlob) => {
-            if (!jpegBlob) {
+          (outputBlob) => {
+            if (!outputBlob) {
               reject(new Error("Could not prepare sample artwork."));
               return;
             }
-            const fileName = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.jpg`;
-            resolve(loadImageFile(makeFileFromBlob(jpegBlob, fileName)));
+            const extension = preserveAlpha ? "png" : "jpg";
+            const fileName = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.${extension}`;
+            resolve(loadImageFile(makeFileFromBlob(outputBlob, fileName)));
           },
-          "image/jpeg",
-          0.9
+          preserveAlpha ? "image/png" : "image/jpeg",
+          preserveAlpha ? undefined : 0.9
         );
       };
       image.onerror = () => {
@@ -452,7 +761,7 @@
       if (!response.ok) throw new Error("Could not load sample artwork.");
       const blob = await response.blob();
       if (samplePathIsSvg(sample, blob)) {
-        return rasterizeSvgSample(blob, sample.label);
+        return rasterizeSvgSample(blob, sample.label, Boolean(sample.transparent));
       }
       const extension = (blob.type.split("/")[1] || "jpg").replace("jpeg", "jpg");
       const file = makeFileFromBlob(blob, `${sample.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.${extension}`);
@@ -461,6 +770,14 @@
       return loadSampleViaImage(sample);
     }
   };
+
+  const loadImageUrl = (url) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("Could not load the per-key artwork atlas."));
+      image.src = url;
+    });
 
   const setStatus = (message, tone = "info") => {
     const status = document.querySelector("[data-fk-status]");
@@ -680,6 +997,352 @@
 
   const sceneManager = () => window.ForgeKeysSceneManager || null;
 
+  const switchPresets = {
+    "crystal-linear": {
+      label: "Crystal Linear",
+      housing: "#dce8eb",
+      base: "#40474d",
+      stem: "#d65f68",
+      glow: "#ff6c82",
+    },
+    "ice-tactile": {
+      label: "Ice Tactile",
+      housing: "#d8e9ee",
+      base: "#35434b",
+      stem: "#65b9d1",
+      glow: "#64e6ff",
+    },
+    "jade-click": {
+      label: "Jade Click",
+      housing: "#dbeae5",
+      base: "#33433d",
+      stem: "#59ad7c",
+      glow: "#78ffc0",
+    },
+  };
+  let switchSyncTimer = 0;
+  let switchSyncAttempts = 0;
+  let keycapLiftFrame = 0;
+
+  const keyGroupFromScene = () => sceneManager()?.scene?.getObjectByName?.("KEYS") || null;
+
+  const keyMeshesFromGroup = (keyGroup) => (keyGroup?.children || []).filter((child) =>
+    child?.isMesh && /^(?:KC_|MO(?:_|\())/.test(child.name || "")
+  );
+
+  const restoreShowroomKeySides = (keyGroup) => {
+    keyMeshesFromGroup(keyGroup).forEach((key) => {
+      const originals = key.userData?.forgeKeysOriginalSideMaterials;
+      if (!originals || !Array.isArray(key.material)) return;
+      const nextMaterials = key.material.slice();
+      [0, 2].forEach((index) => {
+        const original = originals[index];
+        const current = nextMaterials[index];
+        if (!original) return;
+        if (current?.userData?.forgeKeysSideClone) current.dispose?.();
+        nextMaterials[index] = original;
+      });
+      key.material = nextMaterials;
+      delete key.userData.forgeKeysOriginalSideMaterials;
+    });
+  };
+
+  const applyShowroomKeySides = (keyGroup) => {
+    if (!["crimson-bloom", "midnight-butterfly", "neon-system"].includes(state.showroomTheme) || !state.showroomKeyMap) return;
+    const palette = state.showroomPalette || {};
+    keyMeshesFromGroup(keyGroup).forEach((key) => {
+      if (!Array.isArray(key.material) || key.material.length < 4) return;
+      const style = state.showroomKeyMap[key.name]?.style || "porcelain";
+      const sideColour = palette[style]?.background || palette.porcelain?.background || "#f4eee5";
+      const originals = key.userData.forgeKeysOriginalSideMaterials || {};
+      const nextMaterials = key.material.slice();
+      [0, 2].forEach((index) => {
+        const current = nextMaterials[index];
+        if (!current?.clone) return;
+        if (!current.userData?.forgeKeysSideClone) originals[index] = current;
+        const side = current.userData?.forgeKeysSideClone ? current : current.clone();
+        side.userData.forgeKeysSideClone = true;
+        side.color?.set?.(sideColour);
+        if (typeof side.roughness === "number") side.roughness = style === "clear" ? 0.28 : 0.66;
+        if (typeof side.metalness === "number") side.metalness = 0;
+        side.needsUpdate = true;
+        nextMaterials[index] = side;
+      });
+      key.userData.forgeKeysOriginalSideMaterials = originals;
+      key.material = nextMaterials;
+    });
+  };
+
+  const rememberKeycapMaterial = (material) => {
+    if (!material?.userData || material.userData.forgeKeysKeycapAppearance) return;
+    material.userData.forgeKeysKeycapAppearance = {
+      opacity: material.opacity,
+      transparent: material.transparent,
+      depthWrite: material.depthWrite,
+      roughness: material.roughness,
+      metalness: material.metalness,
+    };
+  };
+
+  const applyKeycapMaterial = (keyGroup) => {
+    const materials = new Set();
+    keyMeshesFromGroup(keyGroup).forEach((key) => {
+      const keyMaterials = Array.isArray(key.material) ? key.material : [key.material];
+      keyMaterials.filter(Boolean).forEach((material) => materials.add(material));
+    });
+    const mode = state.keycapMaterial;
+    materials.forEach((material) => {
+      rememberKeycapMaterial(material);
+      const original = material.userData.forgeKeysKeycapAppearance;
+      material.opacity = original.opacity;
+      material.transparent = original.transparent;
+      material.depthWrite = original.depthWrite;
+      if (typeof original.roughness === "number") material.roughness = original.roughness;
+      if (typeof original.metalness === "number") material.metalness = original.metalness;
+      if (mode !== "solid") {
+        material.transparent = true;
+        material.opacity = mode === "clear" ? 0.38 : 0.62;
+        material.depthWrite = false;
+        if (typeof material.roughness === "number") material.roughness = mode === "clear" ? 0.18 : 0.82;
+        if (typeof material.metalness === "number") material.metalness = 0;
+      }
+      material.needsUpdate = true;
+    });
+  };
+
+  const cloneSwitchMaterial = (source, options) => {
+    const material = source.clone();
+    material.map = null;
+    material.alphaMap = null;
+    material.color?.set?.(options.color);
+    material.transparent = Boolean(options.transparent);
+    material.opacity = options.opacity;
+    material.depthWrite = options.depthWrite !== false;
+    if (typeof material.roughness === "number") material.roughness = options.roughness;
+    if (typeof material.metalness === "number") material.metalness = options.metalness || 0;
+    if (material.emissive?.set) {
+      material.emissive.set(options.emissive || "#000000");
+      material.emissiveIntensity = options.emissiveIntensity || 0;
+    }
+    material.needsUpdate = true;
+    return material;
+  };
+
+  const removeSwitchGroup = (manager) => {
+    const existing = manager?.scene?.getObjectByName?.("FORGEKEYS_SWITCHES");
+    if (!existing) return;
+    Object.values(existing.userData?.forgeKeysMaterials || {}).forEach((material) => material?.dispose?.());
+    existing.parent?.remove(existing);
+  };
+
+  const switchLayoutSignature = (keyMeshes) => keyMeshes.map((key) => [
+    key.name,
+    key.position.x.toFixed(3),
+    key.position.z.toFixed(3),
+    key.rotation.y.toFixed(3),
+  ].join(":" )).join("|");
+
+  const createSwitchPiece = (template, material, key, dimensions, yOffset, name) => {
+    const geometry = template.geometry;
+    if (!geometry.boundingBox) geometry.computeBoundingBox?.();
+    const box = geometry.boundingBox;
+    const geometryWidth = Math.max(0.01, (box?.max.x || 0.5) - (box?.min.x || -0.5));
+    const geometryHeight = Math.max(0.01, (box?.max.y || 0.5) - (box?.min.y || 0));
+    const geometryDepth = Math.max(0.01, (box?.max.z || 0.5) - (box?.min.z || -0.5));
+    const piece = new template.constructor(geometry, material);
+    piece.name = name;
+    piece.position.set(key.position.x, key.position.y + yOffset, key.position.z);
+    piece.quaternion.copy(key.quaternion);
+    piece.scale.set(
+      dimensions.width / geometryWidth,
+      dimensions.height / geometryHeight,
+      dimensions.depth / geometryDepth
+    );
+    piece.castShadow = false;
+    piece.receiveShadow = false;
+    return piece;
+  };
+
+  const buildSwitchGroup = (manager, keyGroup, keyMeshes, signature) => {
+    removeSwitchGroup(manager);
+    const template = keyMeshes.find((key) => /^KC_[A-Z0-9]$/.test(key.name)) || keyMeshes[0];
+    const sourceMaterial = Array.isArray(template.material)
+      ? (template.material[3] || template.material[0])
+      : template.material;
+    if (!template?.geometry || !sourceMaterial?.clone) return null;
+
+    const GroupConstructor = keyGroup.constructor;
+    const group = new GroupConstructor();
+    group.name = "FORGEKEYS_SWITCHES";
+    group.position.copy(keyGroup.position);
+    group.rotation.copy(keyGroup.rotation);
+    group.scale.copy(keyGroup.scale);
+    group.userData.forgeKeysSignature = signature;
+
+    const materials = {
+      base: cloneSwitchMaterial(sourceMaterial, { color: "#40474d", opacity: 0.96, roughness: 0.7 }),
+      housing: cloneSwitchMaterial(sourceMaterial, { color: "#dce8eb", opacity: 0.34, transparent: true, depthWrite: false, roughness: 0.16 }),
+      stem: cloneSwitchMaterial(sourceMaterial, { color: "#d65f68", opacity: 1, roughness: 0.5 }),
+      glow: cloneSwitchMaterial(sourceMaterial, { color: "#ff6c82", opacity: 0, transparent: true, depthWrite: false, roughness: 0.1 }),
+    };
+    group.userData.forgeKeysMaterials = materials;
+
+    keyMeshes.forEach((key) => {
+      group.add(createSwitchPiece(template, materials.glow, key, { width: 0.84, height: 0.035, depth: 0.84 }, -0.43, `FK_GLOW_${key.name}`));
+      group.add(createSwitchPiece(template, materials.base, key, { width: 0.66, height: 0.15, depth: 0.66 }, -0.35, `FK_BASE_${key.name}`));
+      group.add(createSwitchPiece(template, materials.housing, key, { width: 0.72, height: 0.18, depth: 0.72 }, -0.17, `FK_HOUSING_${key.name}`));
+      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.23, height: 0.25, depth: 0.23 }, 0.03, `FK_STEM_${key.name}`));
+    });
+    keyGroup.parent?.add(group);
+    return group;
+  };
+
+  const updateSwitchGroupMaterials = (group) => {
+    const preset = switchPresets[state.switchPreset] || switchPresets["crystal-linear"];
+    const materials = group?.userData?.forgeKeysMaterials;
+    if (!materials) return;
+    materials.base.color?.set?.(preset.base);
+    materials.housing.color?.set?.(preset.housing);
+    materials.stem.color?.set?.(preset.stem);
+    materials.glow.color?.set?.(preset.glow);
+    materials.glow.opacity = state.switchLighting === "on" ? 0.72 : 0;
+    if (materials.glow.emissive?.set) {
+      materials.glow.emissive.set(state.switchLighting === "on" ? preset.glow : "#000000");
+      materials.glow.emissiveIntensity = state.switchLighting === "on" ? 1.25 : 0;
+    }
+    Object.values(materials).forEach((material) => { material.needsUpdate = true; });
+  };
+
+  const animateKeycapLift = (keyGroup) => {
+    if (!Number.isFinite(keyGroup.userData.forgeKeysBaseY)) {
+      keyGroup.userData.forgeKeysBaseY = keyGroup.position.y;
+    }
+    const target = keyGroup.userData.forgeKeysBaseY + (state.keycapLifted ? 1.55 : 0);
+    const start = keyGroup.position.y;
+    if (Math.abs(target - start) < 0.005) {
+      keyGroup.position.y = target;
+      return;
+    }
+    window.cancelAnimationFrame(keycapLiftFrame);
+    const startedAt = performance.now();
+    const duration = 360;
+    const step = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      keyGroup.position.y = start + (target - start) * eased;
+      if (progress < 1) keycapLiftFrame = window.requestAnimationFrame(step);
+    };
+    keycapLiftFrame = window.requestAnimationFrame(step);
+  };
+
+  const syncSwitchPresentation = () => {
+    if (!isShowroomMode) return true;
+    const manager = sceneManager();
+    const keyGroup = keyGroupFromScene();
+    const keyMeshes = keyMeshesFromGroup(keyGroup);
+    if (!manager?.scene || !keyGroup || !keyMeshes.length) return false;
+    if (!Number.isFinite(keyGroup.userData.forgeKeysBaseY)) {
+      keyGroup.userData.forgeKeysBaseY = keyGroup.position.y;
+    }
+    const signature = switchLayoutSignature(keyMeshes);
+    let switchGroup = manager.scene.getObjectByName?.("FORGEKEYS_SWITCHES");
+    if (!switchGroup || switchGroup.userData.forgeKeysSignature !== signature) {
+      switchGroup = buildSwitchGroup(manager, keyGroup, keyMeshes, signature);
+    }
+    if (!switchGroup) return false;
+    switchGroup.position.copy(keyGroup.position);
+    switchGroup.position.y = keyGroup.userData.forgeKeysBaseY;
+    switchGroup.rotation.copy(keyGroup.rotation);
+    switchGroup.scale.copy(keyGroup.scale);
+    switchGroup.visible = state.keycapMaterial !== "solid" || state.keycapLifted;
+    updateSwitchGroupMaterials(switchGroup);
+    applyShowroomKeySides(keyGroup);
+    applyKeycapMaterial(keyGroup);
+    animateKeycapLift(keyGroup);
+    document.documentElement.dataset.fkSwitchDisplay = [
+      state.switchPreset,
+      state.keycapMaterial,
+      state.switchLighting,
+      state.keycapLifted ? "lifted" : "seated",
+    ].join(":" );
+    return true;
+  };
+
+  function scheduleSwitchPresentation(delay = 120) {
+    if (!isShowroomMode) return;
+    window.clearTimeout(switchSyncTimer);
+    switchSyncTimer = window.setTimeout(() => {
+      if (syncSwitchPresentation()) {
+        switchSyncAttempts = 0;
+        return;
+      }
+      switchSyncAttempts += 1;
+      if (switchSyncAttempts < 24) scheduleSwitchPresentation(180);
+    }, delay);
+  }
+
+  const updateSwitchControlState = (panel) => {
+    panel.querySelectorAll("[data-fk-switch-preset]").forEach((button) => {
+      const active = button.dataset.fkSwitchPreset === state.switchPreset;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    panel.querySelectorAll("[data-fk-cap-material]").forEach((button) => {
+      const active = button.dataset.fkCapMaterial === state.keycapMaterial;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    panel.querySelectorAll("[data-fk-switch-light]").forEach((button) => {
+      const active = button.dataset.fkSwitchLight === state.switchLighting;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    const lift = panel.querySelector("[data-fk-keycap-lift]");
+    lift?.classList.toggle("is-active", state.keycapLifted);
+    lift?.setAttribute("aria-pressed", String(state.keycapLifted));
+    const summary = panel.querySelector("[data-fk-switch-summary]");
+    if (summary) {
+      const capLabel = state.keycapMaterial[0].toUpperCase() + state.keycapMaterial.slice(1);
+      summary.textContent = `${capLabel} · RGB ${state.switchLighting === "on" ? "on" : "off"}${state.keycapLifted ? " · lifted" : ""}`;
+    }
+  };
+
+  const wireSwitchDisplayControls = (panel) => {
+    panel.querySelectorAll("[data-fk-switch-preset]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.switchPreset = button.dataset.fkSwitchPreset;
+        updateSwitchControlState(panel);
+        scheduleSwitchPresentation(0);
+        trackDesignerEvent("showroom_switch_changed", { switchPreset: state.switchPreset });
+      });
+    });
+    panel.querySelectorAll("[data-fk-cap-material]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.keycapMaterial = button.dataset.fkCapMaterial;
+        updateSwitchControlState(panel);
+        scheduleSwitchPresentation(0);
+        trackDesignerEvent("showroom_keycap_material_changed", { material: state.keycapMaterial });
+      });
+    });
+    panel.querySelectorAll("[data-fk-switch-light]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.switchLighting = button.dataset.fkSwitchLight;
+        if (state.switchLighting === "on" && state.keycapMaterial === "solid") state.keycapMaterial = "clear";
+        updateSwitchControlState(panel);
+        scheduleSwitchPresentation(0);
+        trackDesignerEvent("showroom_switch_lighting_changed", { lighting: state.switchLighting });
+      });
+    });
+    panel.querySelector("[data-fk-keycap-lift]")?.addEventListener("click", () => {
+      state.keycapLifted = !state.keycapLifted;
+      updateSwitchControlState(panel);
+      scheduleSwitchPresentation(0);
+      trackDesignerEvent("showroom_keycap_lift_toggled", { lifted: state.keycapLifted });
+    });
+    updateSwitchControlState(panel);
+    scheduleSwitchPresentation(320);
+  };
+
   const currentSceneView = () => {
     const manager = sceneManager();
     if (!manager?.camera || !manager?.controls) return null;
@@ -700,6 +1363,7 @@
   const applySceneView = async (view) => {
     const manager = sceneManager();
     if (!manager?.camera || !manager?.controls || !view) return false;
+    manager.camera.up.set(0, 1, 0);
     manager.camera.position.set(view.camera.x, view.camera.y, view.camera.z);
     manager.controls.target.set(view.target.x, view.target.y, view.target.z);
     manager.controls.update();
@@ -711,6 +1375,22 @@
     camera: { x: 0, y: 15, z: 15 },
     target: { x: 0, y: 0, z: 0 },
   });
+
+  const showroomSceneView = (set) => {
+    if (set?.id === "FK-KC-001") {
+      return {
+        camera: { x: 0, y: 15.8, z: 10.2 },
+        target: { x: 0, y: 0.3, z: 0 },
+      };
+    }
+    if (["FK-KC-002", "FK-KC-003"].includes(set?.id)) {
+      return {
+        camera: { x: 0, y: 17.2, z: 12.4 },
+        target: { x: 0, y: 0.3, z: 0 },
+      };
+    }
+    return standardSceneView();
+  };
 
   const canvasBlob = async () => {
     let output = null;
@@ -933,6 +1613,306 @@
     } finally {
       setSubmitBusy(panel, false);
     }
+  };
+
+  const mountShowroomPanel = (panel) => {
+    const mount = () => {
+      const sidebar = document.querySelector("#sidebar");
+      if (!sidebar) return false;
+      if (!sidebar.contains(panel)) {
+        const tabsRoot = sidebar.querySelector(".react-tabs");
+        if (tabsRoot?.parentElement) {
+          tabsRoot.insertAdjacentElement("beforebegin", panel);
+        } else {
+          sidebar.appendChild(panel);
+        }
+      }
+      document.body.classList.add("fk-sidebar-mounted", "fk-showroom-ready");
+      window.dispatchEvent(new Event("resize"));
+      return true;
+    };
+
+    if (mount()) return;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (mount() || attempts > 80) window.clearInterval(timer);
+    }, 150);
+  };
+
+  const updateShowroomDetails = (panel, set) => {
+    panel.querySelector("[data-fk-showroom-name]").textContent = set.label;
+    panel.querySelector("[data-fk-showroom-description]").textContent = set.description;
+    panel.querySelector("[data-fk-showroom-studio]").textContent = set.studio?.name || "Studio to be confirmed";
+    panel.querySelector("[data-fk-showroom-availability]").textContent = set.availability;
+    panel.querySelector("[data-fk-showroom-profile]").textContent = set.profile;
+    panel.querySelector("[data-fk-showroom-layouts]").textContent = set.layouts;
+    panel.querySelector("[data-fk-showroom-finish]").textContent = set.finish;
+    const partnerNote = panel.querySelector("[data-fk-showroom-partner-note]");
+    if (set.previewAccuracy === "supplier-artwork") {
+      partnerNote.textContent = "This 3D view uses studio-supplied per-key artwork. Colour can still vary by screen and lighting.";
+    } else {
+      partnerNote.textContent = "This 3D view is a concept reconstruction. Final keycap colours and artwork are confirmed before ordering.";
+    }
+    const quoteParams = new URLSearchParams({
+      product: `${set.label} keycap set`,
+      ref: set.id,
+      type: "Keycap product enquiry",
+      source: "3d-keycap-showroom",
+    });
+    const action = panel.querySelector("[data-fk-showroom-quote]");
+    if (set.commercialStatus === "active-partner" && set.purchaseUrl) {
+      action.href = set.purchaseUrl;
+      action.target = "_blank";
+      action.rel = "noopener sponsored";
+      action.textContent = `Shop at ${set.studio.name}`;
+    } else {
+      action.href = `../support.html?${quoteParams.toString()}#quote`;
+      action.target = "_parent";
+      action.removeAttribute("rel");
+      action.textContent = "Ask about this set";
+    }
+  };
+
+  const showThreeDSet = (panel, set) => {
+    state.showroomView = "3d";
+    const controlsNote = panel.querySelector("[data-fk-showroom-controls-note]");
+    controlsNote.querySelector("strong").textContent = "Match your keyboard";
+    controlsNote.querySelector("span").textContent = "Use the controls below for layout and case finish.";
+    setStatus(`${set.label} ${set.previewAccuracy === "supplier-artwork" ? "studio-supplied" : "concept"} 3D preview shown.`, "success");
+  };
+
+  const loadShowroomDesignData = async (set) => {
+    if (!set.designDataUrl && !set.keyArtManifestUrl) return null;
+    const [designResponse, manifestResponse] = await Promise.all([
+      set.designDataUrl ? fetch(set.designDataUrl) : Promise.resolve(null),
+      set.keyArtManifestUrl ? fetch(set.keyArtManifestUrl) : Promise.resolve(null),
+    ]);
+    if (designResponse && !designResponse.ok) throw new Error("Could not load the per-key design data.");
+    if (manifestResponse && !manifestResponse.ok) throw new Error("Could not load the per-key artwork map.");
+    const design = designResponse ? await designResponse.json() : null;
+    const keyMap = {};
+    (design?.rows || []).forEach((row) => {
+      row.forEach((key) => {
+        if (key.code) keyMap[key.code] = key;
+      });
+    });
+    if (!manifestResponse) return { keyMap, palette: design.palette, renderLegends: set.renderLegends };
+    const manifest = await manifestResponse.json();
+    if (!design) {
+      Object.entries(manifest.keys || {}).forEach(([code, key]) => {
+        keyMap[code] = { code, style: key.style || "supplier" };
+      });
+    }
+    const manifestUrl = new URL(set.keyArtManifestUrl, window.location.href);
+    const atlasUrl = new URL(manifest.atlas, manifestUrl).href;
+    const atlasImage = await loadImageUrl(atlasUrl);
+    return {
+      keyMap,
+      palette: design?.palette || manifest.palette,
+      atlasImage,
+      atlasKeys: manifest.keys,
+      renderLegends: set.renderLegends ?? manifest.renderLegends ?? true,
+    };
+  };
+
+  const applyPreferredLayout = (label) => {
+    if (!label) return false;
+    const listbox = [...document.querySelectorAll('[role="listbox"]')].find((candidate) => {
+      const labelledBy = candidate.getAttribute("aria-labelledby");
+      return labelledBy && document.getElementById(labelledBy)?.textContent.trim() === "Layout";
+    });
+    if (!listbox) return false;
+    const current = listbox.textContent.replace(/\s+/g, " ").trim();
+    if (current.includes(label)) return true;
+    const selectedOption = listbox.querySelector('[role="option"][aria-selected="true"]');
+    if (!selectedOption) return false;
+    selectedOption.click();
+    window.setTimeout(() => {
+      const option = [...document.querySelectorAll('[role="option"]')].find((candidate) =>
+        candidate.textContent.replace(/\s+/g, " ").trim().endsWith(label)
+      );
+      if (!option) return;
+      option.click();
+      window.setTimeout(refreshTextures, 350);
+      window.setTimeout(() => scheduleSwitchPresentation(0), 520);
+    }, 60);
+    return true;
+  };
+
+  let showroomViewRequest = 0;
+
+  const loadShowroomSet = async (panel, set, button) => {
+    const viewRequest = ++showroomViewRequest;
+    setStatus(`Loading ${set.label}...`, "info");
+    try {
+      const [asset, designData] = await Promise.all([
+        set.threeDMode === "whole-board" ? loadSampleArtwork({ ...set, isSvg: true }) : Promise.resolve(null),
+        loadShowroomDesignData(set),
+      ]);
+      restoreShowroomKeySides(keyGroupFromScene());
+      activeShowroomSet = set;
+      state.baseImage = asset?.image || null;
+      state.baseFile = null;
+      state.baseAsset = null;
+      state.baseMode = set.threeDMode === "whole-board" ? "full" : "none";
+      state.baseOpacity = set.opacity;
+      state.keepLegends = set.hasThreeD && (designData?.renderLegends ?? set.renderLegends);
+      state.stylePreset = "full";
+      state.showroomTheme = set.theme || null;
+      state.showroomKeyMap = designData?.keyMap || null;
+      state.showroomPalette = designData?.palette || null;
+      state.showroomAtlasImage = designData?.atlasImage || null;
+      state.showroomAtlasKeys = designData?.atlasKeys || null;
+      state.placements = {};
+      panel.querySelectorAll("[data-fk-showroom-set]").forEach((candidate) => {
+        const active = candidate === button;
+        candidate.classList.toggle("is-active", active);
+        candidate.setAttribute("aria-pressed", String(active));
+      });
+      updateShowroomDetails(panel, set);
+      refreshTextures();
+      if (set.hasThreeD) applyPreferredLayout(set.preferredLayout);
+      window.setTimeout(() => {
+        if (viewRequest === showroomViewRequest && activeShowroomSet === set) {
+          applySceneView(showroomSceneView(set));
+        }
+      }, set.preferredLayout ? 760 : 220);
+      showThreeDSet(panel, set);
+      trackDesignerEvent("showroom_set_previewed", { referenceId: set.id });
+    } catch (error) {
+      setStatus(error.message || "Could not load this keycap set.", "error");
+    }
+  };
+
+  const buildShowroomPanel = async () => {
+    if (document.querySelector("[data-fk-customizer-root]") || showroomPanelBuilding) return;
+    showroomPanelBuilding = true;
+    try {
+      showroomSets = await loadShowroomCatalog();
+    } catch (error) {
+      const errorPanel = document.createElement("section");
+      errorPanel.className = "fk-customizer fk-sidebar-module fk-showroom-panel";
+      errorPanel.setAttribute("data-fk-customizer-root", "");
+      errorPanel.setAttribute("aria-label", "ForgeKeys 3D keycap showroom");
+      errorPanel.innerHTML = `<div class="fk-panel-body"><p class="fk-status" data-tone="error">${escapeMarkup(error.message || "The keycap catalog could not be loaded.")}</p></div>`;
+      document.body.appendChild(errorPanel);
+      mountShowroomPanel(errorPanel);
+      showroomPanelBuilding = false;
+      return;
+    }
+
+    const panel = document.createElement("section");
+    panel.className = "fk-customizer fk-sidebar-module fk-showroom-panel";
+    panel.setAttribute("data-fk-customizer-root", "");
+    panel.setAttribute("aria-label", "ForgeKeys 3D keycap showroom");
+    panel.innerHTML = `
+      <details class="fk-shell-details" open>
+        <summary>Curated keycap showroom</summary>
+        <div class="fk-panel-head fk-showroom-head">
+          <div class="fk-panel-title">
+            <span class="fk-brand-badge">ForgeKeys AU</span>
+            <strong>Try a keycap set</strong>
+            <span>Choose a set. See it in 3D.</span>
+          </div>
+        </div>
+        <div class="fk-panel-body">
+          <p class="fk-showroom-lead">Select a keycap direction to apply it directly to the 3D keyboard.</p>
+          <div class="fk-showroom-sets" aria-label="Keycap set directions">
+            ${showroomSets.map((set, index) => `
+              <button class="fk-showroom-set" type="button" data-fk-showroom-set="${index}" aria-pressed="false">
+                <span class="fk-showroom-set-thumb" data-fk-showroom-thumb="${index}"></span>
+                <span class="fk-showroom-set-copy">
+                  <strong>${escapeMarkup(set.label)}</strong>
+                  <small>${escapeMarkup(set.studio?.name || "Studio")}</small>
+                </span>
+                <span class="fk-showroom-apply">View</span>
+              </button>
+            `).join("")}
+          </div>
+          <article class="fk-showroom-selection">
+            <span class="fk-kicker">SELECTED KEYCAP SET</span>
+            <h2 data-fk-showroom-name>${escapeMarkup(showroomSets[0].label)}</h2>
+            <p data-fk-showroom-description>${escapeMarkup(showroomSets[0].description)}</p>
+            <dl class="fk-showroom-specs">
+              <div><dt>Studio</dt><dd data-fk-showroom-studio>${escapeMarkup(showroomSets[0].studio?.name)}</dd></div>
+              <div><dt>Status</dt><dd data-fk-showroom-availability>${escapeMarkup(showroomSets[0].availability)}</dd></div>
+              <div><dt>Profile</dt><dd data-fk-showroom-profile>${escapeMarkup(showroomSets[0].profile)}</dd></div>
+              <div><dt>Layouts</dt><dd data-fk-showroom-layouts>${escapeMarkup(showroomSets[0].layouts)}</dd></div>
+              <div><dt>Finish</dt><dd data-fk-showroom-finish>${escapeMarkup(showroomSets[0].finish)}</dd></div>
+            </dl>
+            <a class="fk-button full fk-showroom-quote" data-fk-showroom-quote href="../support.html#quote" target="_parent">Ask about this set</a>
+            <p class="fk-showroom-partner-note" data-fk-showroom-partner-note></p>
+          </article>
+          <details class="fk-switch-lab" open>
+            <summary>
+              <span>Switch view</span>
+              <small data-fk-switch-summary>Solid · RGB off</small>
+            </summary>
+            <div class="fk-switch-lab-body">
+              <div class="fk-switch-presets" role="group" aria-label="Switch style">
+                <button type="button" data-fk-switch-preset="crystal-linear" aria-pressed="true" title="Crystal Linear switch">
+                  <span class="fk-switch-chip" data-switch-colour="coral" aria-hidden="true"><i></i></span>
+                  <span>Crystal<small>Linear</small></span>
+                </button>
+                <button type="button" data-fk-switch-preset="ice-tactile" aria-pressed="false" title="Ice Tactile switch">
+                  <span class="fk-switch-chip" data-switch-colour="ice" aria-hidden="true"><i></i></span>
+                  <span>Ice<small>Tactile</small></span>
+                </button>
+                <button type="button" data-fk-switch-preset="jade-click" aria-pressed="false" title="Jade Click switch">
+                  <span class="fk-switch-chip" data-switch-colour="jade" aria-hidden="true"><i></i></span>
+                  <span>Jade<small>Click</small></span>
+                </button>
+              </div>
+              <div class="fk-switch-control-row">
+                <span>Keycap</span>
+                <div class="fk-switch-segment" role="group" aria-label="Keycap material">
+                  <button type="button" data-fk-cap-material="solid" aria-pressed="true">Solid</button>
+                  <button type="button" data-fk-cap-material="clear" aria-pressed="false">Clear</button>
+                  <button type="button" data-fk-cap-material="frosted" aria-pressed="false">Frosted</button>
+                </div>
+              </div>
+              <div class="fk-switch-control-row">
+                <span>Light</span>
+                <div class="fk-switch-segment" role="group" aria-label="Switch lighting">
+                  <button type="button" data-fk-switch-light="off" aria-pressed="true">Off</button>
+                  <button type="button" data-fk-switch-light="on" aria-pressed="false">RGB</button>
+                </div>
+                <button class="fk-lift-button" type="button" data-fk-keycap-lift aria-pressed="false" title="Lift the keycaps to inspect the switches">Lift caps</button>
+              </div>
+            </div>
+          </details>
+          <div class="fk-showroom-controls-note" data-fk-showroom-controls-note>
+            <strong>Match your keyboard</strong>
+            <span>Use the controls below for layout and case finish.</span>
+          </div>
+          <p class="fk-status" data-fk-status aria-live="polite">Loading the first showroom set...</p>
+        </div>
+      </details>
+    `;
+    document.body.appendChild(panel);
+    mountShowroomPanel(panel);
+
+    panel.querySelectorAll("[data-fk-showroom-thumb]").forEach((thumbnail) => {
+      const set = showroomSets[Number(thumbnail.dataset.fkShowroomThumb)];
+      if (set?.productThumbnailUrl) thumbnail.style.backgroundImage = `url("${set.productThumbnailUrl}")`;
+    });
+
+    panel.querySelectorAll("[data-fk-showroom-set]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const set = showroomSets[Number(button.dataset.fkShowroomSet)];
+        if (set) loadShowroomSet(panel, set, button);
+      });
+    });
+    panel.querySelector("[data-fk-showroom-quote]").addEventListener("click", () => {
+      const active = panel.querySelector("[data-fk-showroom-set].is-active");
+      const set = showroomSets[Number(active?.dataset.fkShowroomSet || 0)];
+      trackDesignerEvent("showroom_quote_clicked", { referenceId: set?.id || showroomSets[0].id });
+    });
+    wireSwitchDisplayControls(panel);
+    const firstButton = panel.querySelector('[data-fk-showroom-set="0"]');
+    loadShowroomSet(panel, showroomSets[0], firstButton);
+    showroomPanelBuilding = false;
   };
 
   const buildPanel = () => {
@@ -1295,6 +2275,7 @@
         store.dispatch({ type: "case/setLayout", payload: layout });
         document.documentElement.dataset.fkLayoutBridgeLast = layout;
         window.dispatchEvent(new Event("resize"));
+        if (isShowroomMode) scheduleSwitchPresentation(480);
     };
     ["pointerdown", "mousedown", "click"].forEach((type) => {
       document.addEventListener(type, handleLayoutSelect, true);
@@ -1303,9 +2284,11 @@
 
   installLayoutSelectBridge();
 
+  const buildActivePanel = isShowroomMode ? buildShowroomPanel : buildPanel;
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", buildPanel);
+    document.addEventListener("DOMContentLoaded", buildActivePanel);
   } else {
-    buildPanel();
+    buildActivePanel();
   }
 })();

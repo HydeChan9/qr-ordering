@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="900" viewBox="0 0 1800 900" role="img" aria-label="Black green cyber keycap set artwork">
+  <defs>
+    <linearGradient id="graphite" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#24262b"/><stop offset=".52" stop-color="#111318"/><stop offset="1" stop-color="#2f3137"/></linearGradient>
+    <linearGradient id="acid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8ff55"/><stop offset=".52" stop-color="#67e55b"/><stop offset="1" stop-color="#20aa68"/></linearGradient>
+    <linearGradient id="bone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f1e6"/><stop offset="1" stop-color="#cfcabb"/></linearGradient>
+    <pattern id="grid" width="88" height="88" patternUnits="userSpaceOnUse"><path d="M88 0H0v88" fill="none" stroke="#8dff70" stroke-width="2" opacity=".13"/></pattern>
+  </defs>
+  <rect width="1800" height="900" fill="url(#graphite)"/>
+  <rect width="1800" height="900" fill="url(#grid)"/>
+  <rect x="0" y="88" width="290" height="650" fill="url(#bone)"/>
+  <rect x="1498" y="88" width="302" height="650" fill="url(#bone)"/>
+  <rect y="708" width="1800" height="192" fill="url(#bone)"/>
+  <path d="M290 266h270l108 442H290Z" fill="#2b2c32"/>
+  <path d="M1498 266h-268l-108 442h376Z" fill="#292b31"/>
+  <path d="M590 268h592l72 440H520Z" fill="url(#acid)"/>
+  <path d="M682 268h420l-24 440H706Z" fill="#91ef55" opacity=".66"/>
+  <path d="M804 268h178l-18 440H824Z" fill="#e6ff61" opacity=".44"/>
+  <g fill="none" stroke="#111318" stroke-width="11" stroke-linecap="square" opacity=".76"><path d="M630 342h158l52 48h214l66 66h146"/><path d="M584 578h216l50-54h272l62-64h164"/><path d="M744 304v88l58 58v150"/><path d="M1040 300v96l-52 50v192"/></g>
+  <g fill="#15171b"><path d="M856 380h80l40 68-40 68h-80l-40-68Z"/><circle cx="896" cy="448" r="22" fill="#baff57"/></g>
+  <g fill="none" stroke="#73df5a" stroke-width="6" opacity=".8"><path d="M88 168h106l32 34-32 34H88Z"/><path d="M1570 168h106l32 34-32 34h-106Z"/><path d="M74 792h230M1496 792h230"/></g>
+  <g fill="#202329" opacity=".82"><circle cx="138" cy="392" r="15"/><circle cx="138" cy="470" r="15"/><circle cx="138" cy="548" r="15"/><circle cx="1662" cy="392" r="15"/><circle cx="1662" cy="470" r="15"/><circle cx="1662" cy="548" r="15"/></g>
+</svg>

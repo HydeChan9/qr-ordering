@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "1.0",
+  "products": [
+    {
+      "id": "FK-KC-001",
+      "slug": "crimson-bloom",
+      "name": "Crimson Bloom",
+      "description": "A red-and-porcelain artwork direction applied directly to the interactive 3D keyboard.",
+      "studio": {
+        "name": "ForgeKeys AU",
+        "relationship": "Concept presentation"
+      },
+      "commercialStatus": "concept",
+      "rightsStatus": "owner-supplied",
+      "product": {
+        "image": "../optimized/crimson-art-keycap-close-hero-1598.webp",
+        "thumbnail": "../optimized/crimson-art-keycap-close-hero-1598.webp",
+        "alt": "Close product photograph of a red and white illustrated keycap set installed on a keyboard",
+        "width": 1598,
+        "height": 840,
+        "availability": "Reference only",
+        "priceAud": null,
+        "purchaseUrl": null
+      },
+      "preview": {
+        "defaultView": "3d",
+        "profile": "Cherry-style reference",
+        "layouts": "65% shown · other layouts checked before quoting",
+        "finish": "Matte PBT direction",
+        "preferredLayout": "65%",
+        "threeD": {
+          "mode": "per-key-atlas",
+          "accuracy": "concept",
+          "artwork": null,
+          "theme": "crimson-bloom",
+          "opacity": 0.96,
+          "transparent": false,
+          "renderLegends": false,
+          "designData": null,
+          "keyArtManifest": "../keycap-designs/crimson-bloom-68-key-art-manifest.json"
+        }
+      }
+    },
+    {
+      "id": "FK-KC-002",
+      "slug": "midnight-butterfly",
+      "name": "Midnight Butterfly",
+      "description": "Lilac, porcelain, ink, lace, and butterfly accents reconstructed as a 104-key 3D concept.",
+      "studio": {
+        "name": "ForgeKeys AU",
+        "relationship": "Photo-matched concept"
+      },
+      "commercialStatus": "concept",
+      "rightsStatus": "owner-supplied",
+      "product": {
+        "image": "../butterfly-lilac-build.jpg",
+        "thumbnail": "../butterfly-lilac-build.jpg",
+        "alt": "Product photograph of a lilac butterfly themed keycap set installed on a full-size keyboard",
+        "width": 1400,
+        "height": 842,
+        "availability": "Reference only",
+        "priceAud": null,
+        "purchaseUrl": null
+      },
+      "preview": {
+        "defaultView": "3d",
+        "profile": "Cherry-style reference",
+        "layouts": "60% · 65% · 75% · TKL · Full size",
+        "finish": "Matte PBT direction",
+        "preferredLayout": "100%",
+        "threeD": {
+          "mode": "per-key-atlas",
+          "accuracy": "concept",
+          "artwork": "../customizer-samples/midnight-butterfly-rebuilt.svg",
+          "theme": "midnight-butterfly",
+          "opacity": 0.94,
+          "transparent": true,
+          "renderLegends": false,
+          "designData": "../keycap-designs/midnight-butterfly.json",
+          "keyArtManifest": "../keycap-designs/midnight-butterfly-photo-matched-key-art-manifest.json"
+        }
+      }
+    },
+    {
+      "id": "FK-KC-003",
+      "slug": "neon-system",
+      "name": "Neon System",
+      "description": "A graphite, bone-white, and acid-green gaming direction applied directly to the interactive 3D keyboard.",
+      "studio": {
+        "name": "ForgeKeys AU",
+        "relationship": "Concept presentation"
+      },
+      "commercialStatus": "concept",
+      "rightsStatus": "owner-supplied",
+      "product": {
+        "image": "../optimized/cyber-keyboard-angle-1400.webp",
+        "thumbnail": "../optimized/cyber-keyboard-angle-1400.webp",
+        "alt": "Product photograph of a black keyboard with white and neon green keycaps",
+        "width": 1400,
+        "height": 1400,
+        "availability": "Reference only",
+        "priceAud": null,
+        "purchaseUrl": null
+      },
+      "preview": {
+        "defaultView": "3d",
+        "profile": "Cherry-style reference",
+        "layouts": "60% · 65% · 75% · TKL · Full size",
+        "finish": "Satin PBT direction",
+        "preferredLayout": "100%",
+        "threeD": {
+          "mode": "per-key-atlas",
+          "accuracy": "concept",
+          "artwork": null,
+          "theme": "neon-system",
+          "opacity": 0.96,
+          "transparent": false,
+          "renderLegends": false,
+          "designData": null,
+          "keyArtManifest": "../keycap-designs/neon-system-key-art-manifest.json"
+        }
+      }
+    }
+  ]
+}
