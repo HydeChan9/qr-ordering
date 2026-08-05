@@ -136,7 +136,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "20260805-fk2";
+  const sampleVersion = "20260805-fk4";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
@@ -173,7 +173,12 @@
     },
   ];
 
-  const resolveCatalogAsset = (relativeUrl) => relativeUrl ? new URL(relativeUrl, showroomCatalogUrl).href : null;
+  const resolveCatalogAsset = (relativeUrl) => {
+    if (!relativeUrl) return null;
+    const assetUrl = new URL(relativeUrl, showroomCatalogUrl);
+    if (assetUrl.origin === window.location.origin) assetUrl.searchParams.set("v", sampleVersion);
+    return assetUrl.href;
+  };
   const escapeMarkup = (value) => String(value || "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -1383,9 +1388,15 @@
         target: { x: 0, y: 0.3, z: 0 },
       };
     }
-    if (["FK-KC-002", "FK-KC-003"].includes(set?.id)) {
+    if (set?.id === "FK-KC-002") {
       return {
         camera: { x: 0, y: 17.2, z: 12.4 },
+        target: { x: 0, y: 0.3, z: 0 },
+      };
+    }
+    if (set?.id === "FK-KC-003") {
+      return {
+        camera: { x: 0, y: 18.4, z: 9.4 },
         target: { x: 0, y: 0.3, z: 0 },
       };
     }
