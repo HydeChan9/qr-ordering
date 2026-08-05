@@ -1,0 +1,47 @@
+.visual-reference {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  margin-top: 32px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid #ded6df;
+  border-radius: 8px;
+}
+
+.visual-reference h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.visual-reference p:not(.eyebrow) {
+  margin: 0;
+  color: #625d62;
+  line-height: 1.6;
+}
+
+.visual-reference figure {
+  margin: 0;
+}
+
+.visual-reference img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #f8f7f5;
+}
+
+.visual-reference figcaption {
+  margin-top: 10px;
+  color: #766f76;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+  .visual-reference {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+}
