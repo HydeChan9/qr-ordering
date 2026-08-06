@@ -104,11 +104,13 @@
     showroomPalette: null,
     showroomAtlasImage: null,
     showroomAtlasKeys: null,
+    showroomDesignData: null,
+    showroomMode: "set",
     showroomView: "3d",
     switchPreset: "crystal-linear",
     keycapMaterial: "solid",
     switchLighting: "off",
-    keycapLifted: false,
+    keycapDisplay: "seated",
   };
 
   const config = window.FORGEKEYS_CONFIG || {};
@@ -136,7 +138,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "20260806-fk7";
+  const sampleVersion = "fk0806fix1";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
@@ -467,21 +469,64 @@
     ctx.restore();
   };
 
+  const keyUnitMatches = (candidate, opts) => {
+    const units = candidate?.units;
+    if (!units || !Number.isFinite(opts?.w) || !Number.isFinite(opts?.h)) return false;
+    return Math.abs(Number(units.width) - Number(opts.w)) < 0.08
+      && Math.abs(Number(units.height || 1) - Number(opts.h || 1)) < 0.08;
+  };
+
+  const neonNumpadAliases = {
+    KC_0: "KC_P0",
+    KC_1: "KC_P1",
+    KC_2: "KC_P2",
+    KC_3: "KC_P3",
+    KC_4: "KC_P4",
+    KC_5: "KC_P5",
+    KC_6: "KC_P6",
+    KC_7: "KC_P7",
+    KC_8: "KC_P8",
+    KC_9: "KC_P9",
+    KC_DOT: "KC_PDOT",
+    KC_ENT: "KC_PENT",
+    KC_MINS: "KC_PMNS",
+  };
+
+  const showroomKeyCodeFor = (code, opts) => {
+    // The full-size simulator reuses KC_1..KC_9, KC_ENT, and KC_DOT for
+    // the numpad. Neon System has separate factory artwork for those keys.
+    if (state.showroomTheme !== "neon-system" || Number(opts?.x) < 16.5) return code;
+    return neonNumpadAliases[code] || code;
+  };
+
+  const showroomAtlasKeyFor = (code, opts, key) => {
+    const atlasKeys = state.showroomAtlasKeys || {};
+    const atlasCode = showroomKeyCodeFor(code, opts);
+    const atlasKey = state.showroomKeyMap?.[atlasCode] || key;
+    const direct = atlasKeys[atlasCode] || atlasKeys[code];
+    if (direct && keyUnitMatches(direct, opts)) return direct;
+
+    // A layout may reuse a code with a different physical width (for example,
+    // a 1.75u or 2.75u right Shift). Use a same-size print crop instead of
+    // stretching the wrong factory artwork across the key.
+    const sameStyle = Object.entries(atlasKeys).find(([candidateCode, candidate]) => {
+      const candidateKey = state.showroomKeyMap?.[candidateCode];
+      return keyUnitMatches(candidate, opts) && candidateKey?.style === atlasKey?.style;
+    });
+    if (sameStyle) return sameStyle[1];
+
+    const sameSize = Object.values(atlasKeys).find((candidate) => keyUnitMatches(candidate, opts));
+    return sameSize || null;
+  };
+
   const drawShowroomKeyDesign = (ctx, canvas, opts) => {
-    if (!state.showroomKeyMap || !state.showroomPalette) return false;
-    const key = state.showroomKeyMap[opts.code];
+    if (state.showroomMode !== "set" || !state.showroomKeyMap || !state.showroomPalette) return false;
+    const atlasCode = showroomKeyCodeFor(opts.code, opts);
+    const key = state.showroomKeyMap[atlasCode] || state.showroomKeyMap[opts.code];
     const style = state.showroomPalette[key?.style || "porcelain"] || state.showroomPalette.porcelain;
     if (!style) return false;
-    const atlasKey = state.showroomAtlasKeys?.[opts.code];
+    const atlasKey = showroomAtlasKeyFor(opts.code, opts, key);
     if (atlasKey && state.showroomAtlasImage?.complete && state.showroomAtlasImage.naturalWidth) {
-      ctx.save();
-      if (state.showroomTheme === "midnight-butterfly") {
-        ctx.filter = "contrast(1.08) saturate(1.08) brightness(1.01)";
-      } else if (state.showroomTheme === "neon-system") {
-        ctx.filter = "contrast(1.12) saturate(1.1) brightness(1.01)";
-      } else if (state.showroomTheme === "crimson-bloom") {
-        ctx.filter = "contrast(1.08) saturate(1.06) brightness(1.01)";
-      }
       ctx.drawImage(
         state.showroomAtlasImage,
         atlasKey.x,
@@ -493,15 +538,6 @@
         canvas.width,
         canvas.height
       );
-      ctx.restore();
-      if (state.showroomTheme === "midnight-butterfly") {
-        ctx.save();
-        ctx.globalCompositeOperation = "multiply";
-        ctx.globalAlpha = key?.style === "ink" ? 0.12 : key?.style === "lilac" ? 0.07 : 0.025;
-        ctx.fillStyle = style.background;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.restore();
-      }
       opts.color = style.legend;
       opts.background = style.background;
       return true;
@@ -600,9 +636,18 @@
         drawBaseArtwork(ctx, canvas, opts);
       }
       drawAccent(ctx, canvas, opts);
-      if (!state.keepLegends) {
+      const showroomSetActive = isShowroomMode && state.showroomMode === "set" && state.showroomKeyMap;
+      const showroomLegend = showroomSetActive && (state.showroomKeyMap?.[showroomKeyCodeFor(opts.code, opts)] || state.showroomKeyMap?.[opts.code]);
+      if (showroomLegend) {
+        const style = state.showroomPalette?.[showroomLegend.style || "porcelain"] || state.showroomPalette?.porcelain;
+        if (style?.legend) opts.color = style.legend;
+      }
+      if (showroomSetActive || !state.keepLegends) {
         opts.legend = "";
-        // The original simulator paints its legend after this hook.
+        opts.sub = "";
+        // The simulator falls back to its Cherry legend when legend is blank.
+        // Each key texture owns a fresh canvas context, so suppressing text on
+        // this context removes both primary and secondary simulator legends.
         ctx.fillText = () => {};
       }
     },
@@ -1222,7 +1267,7 @@
     if (!Number.isFinite(keyGroup.userData.forgeKeysBaseY)) {
       keyGroup.userData.forgeKeysBaseY = keyGroup.position.y;
     }
-    const target = keyGroup.userData.forgeKeysBaseY + (state.keycapLifted ? 1.55 : 0);
+    const target = keyGroup.userData.forgeKeysBaseY + (state.keycapDisplay === "lifted" ? 1.55 : 0);
     const start = keyGroup.position.y;
     if (Math.abs(target - start) < 0.005) {
       keyGroup.position.y = target;
@@ -1259,7 +1304,9 @@
     switchGroup.position.y = keyGroup.userData.forgeKeysBaseY;
     switchGroup.rotation.copy(keyGroup.rotation);
     switchGroup.scale.copy(keyGroup.scale);
-    switchGroup.visible = state.keycapMaterial !== "solid" || state.keycapLifted;
+    const keycapsHidden = state.keycapDisplay === "hidden";
+    keyMeshes.forEach((key) => { key.visible = !keycapsHidden; });
+    switchGroup.visible = keycapsHidden || state.keycapMaterial !== "solid" || state.keycapDisplay === "lifted";
     updateSwitchGroupMaterials(switchGroup);
     applyShowroomKeySides(keyGroup);
     applyKeycapMaterial(keyGroup);
@@ -1268,7 +1315,7 @@
       state.switchPreset,
       state.keycapMaterial,
       state.switchLighting,
-      state.keycapLifted ? "lifted" : "seated",
+      state.keycapDisplay,
     ].join(":" );
     return true;
   };
@@ -1302,13 +1349,16 @@
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-pressed", String(active));
     });
-    const lift = panel.querySelector("[data-fk-keycap-lift]");
-    lift?.classList.toggle("is-active", state.keycapLifted);
-    lift?.setAttribute("aria-pressed", String(state.keycapLifted));
+    panel.querySelectorAll("[data-fk-cap-display]").forEach((button) => {
+      const active = button.dataset.fkCapDisplay === state.keycapDisplay;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
     const summary = panel.querySelector("[data-fk-switch-summary]");
     if (summary) {
       const capLabel = state.keycapMaterial[0].toUpperCase() + state.keycapMaterial.slice(1);
-      summary.textContent = `${capLabel} · RGB ${state.switchLighting === "on" ? "on" : "off"}${state.keycapLifted ? " · lifted" : ""}`;
+      const displayLabel = { seated: "caps on", lifted: "caps lifted", hidden: "caps off" }[state.keycapDisplay];
+      summary.textContent = `${capLabel} · ${displayLabel} · RGB ${state.switchLighting === "on" ? "on" : "off"}`;
     }
   };
 
@@ -1338,11 +1388,13 @@
         trackDesignerEvent("showroom_switch_lighting_changed", { lighting: state.switchLighting });
       });
     });
-    panel.querySelector("[data-fk-keycap-lift]")?.addEventListener("click", () => {
-      state.keycapLifted = !state.keycapLifted;
-      updateSwitchControlState(panel);
-      scheduleSwitchPresentation(0);
-      trackDesignerEvent("showroom_keycap_lift_toggled", { lifted: state.keycapLifted });
+    panel.querySelectorAll("[data-fk-cap-display]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.keycapDisplay = button.dataset.fkCapDisplay;
+        updateSwitchControlState(panel);
+        scheduleSwitchPresentation(0);
+        trackDesignerEvent("showroom_keycap_display_changed", { display: state.keycapDisplay });
+      });
     });
     updateSwitchControlState(panel);
     scheduleSwitchPresentation(320);
@@ -1397,7 +1449,9 @@
     }
     if (set?.id === "FK-KC-003") {
       return {
-        camera: { x: 0, y: 21.2, z: 0.001 },
+        // The embedded showroom keeps the controls column visible, so the
+        // full-size board needs a wider top-down framing than the simulator default.
+        camera: { x: 0, y: 34, z: 0.001 },
         target: { x: 0, y: 0.3, z: 0 },
         up: { x: 0, y: 0, z: -1 },
       };
@@ -1690,8 +1744,8 @@
   const showThreeDSet = (panel, set) => {
     state.showroomView = "3d";
     const controlsNote = panel.querySelector("[data-fk-showroom-controls-note]");
-    controlsNote.querySelector("strong").textContent = "Match your keyboard";
-    controlsNote.querySelector("span").textContent = "Use the controls below for layout and case finish.";
+    controlsNote.querySelector("strong").textContent = "Set colours locked";
+    controlsNote.querySelector("span").textContent = "Layout and case finish remain adjustable below.";
     setStatus(`${set.label} ${set.previewAccuracy === "supplier-artwork" ? "studio-supplied" : "concept"} 3D preview shown.`, "success");
   };
 
@@ -1770,13 +1824,17 @@
       state.baseAsset = null;
       state.baseMode = set.threeDMode === "whole-board" ? "full" : "none";
       state.baseOpacity = set.opacity;
-      state.keepLegends = set.hasThreeD && (designData?.renderLegends ?? set.renderLegends);
+      // Per-key artwork already contains the finished keycap face. Keep the
+      // original simulator legends only in the unstyled/original-cap view.
+      state.keepLegends = false;
       state.stylePreset = "full";
       state.showroomTheme = set.theme || null;
       state.showroomKeyMap = designData?.keyMap || null;
       state.showroomPalette = designData?.palette || null;
       state.showroomAtlasImage = designData?.atlasImage || null;
       state.showroomAtlasKeys = designData?.atlasKeys || null;
+      state.showroomDesignData = designData;
+      state.showroomMode = "set";
       state.placements = {};
       panel.querySelectorAll("[data-fk-showroom-set]").forEach((candidate) => {
         const active = candidate === button;
@@ -1784,6 +1842,7 @@
         candidate.setAttribute("aria-pressed", String(active));
       });
       updateShowroomDetails(panel, set);
+      updateShowroomModeState(panel);
       refreshTextures();
       if (set.hasThreeD) applyPreferredLayout(set.preferredLayout);
       window.setTimeout(() => {
@@ -1796,6 +1855,38 @@
     } catch (error) {
       setStatus(error.message || "Could not load this keycap set.", "error");
     }
+  };
+
+  const updateShowroomModeState = (panel) => {
+    panel.querySelectorAll("[data-fk-showroom-mode]").forEach((button) => {
+      const active = button.dataset.fkShowroomMode === state.showroomMode;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  };
+
+  const setShowroomMode = (panel, mode) => {
+    state.showroomMode = mode;
+    if (mode === "original") {
+      state.keepLegends = true;
+      state.showroomTheme = null;
+      state.showroomKeyMap = null;
+      state.showroomPalette = null;
+      state.showroomAtlasImage = null;
+      state.showroomAtlasKeys = null;
+      restoreShowroomKeySides(keyGroupFromScene());
+      setStatus("Original keycaps shown with the simulator legends.", "success");
+    } else if (state.showroomDesignData) {
+      state.keepLegends = false;
+      state.showroomTheme = activeShowroomSet?.theme || null;
+      state.showroomKeyMap = state.showroomDesignData.keyMap || null;
+      state.showroomPalette = state.showroomDesignData.palette || null;
+      state.showroomAtlasImage = state.showroomDesignData.atlasImage || null;
+      state.showroomAtlasKeys = state.showroomDesignData.atlasKeys || null;
+      setStatus(`${activeShowroomSet?.label || "Keycap set"} shown on the keyboard.`, "success");
+    }
+    updateShowroomModeState(panel);
+    refreshTextures();
   };
 
   const buildShowroomPanel = async () => {
@@ -1842,6 +1933,10 @@
                 <span class="fk-showroom-apply">View</span>
               </button>
             `).join("")}
+          </div>
+          <div class="fk-showroom-mode" role="group" aria-label="Keycap artwork display">
+            <button type="button" data-fk-showroom-mode="set" aria-pressed="true">Set caps</button>
+            <button type="button" data-fk-showroom-mode="original" aria-pressed="false">Original caps</button>
           </div>
           <article class="fk-showroom-selection">
             <span class="fk-kicker">SELECTED KEYCAP SET</span>
@@ -1891,7 +1986,14 @@
                   <button type="button" data-fk-switch-light="off" aria-pressed="true">Off</button>
                   <button type="button" data-fk-switch-light="on" aria-pressed="false">RGB</button>
                 </div>
-                <button class="fk-lift-button" type="button" data-fk-keycap-lift aria-pressed="false" title="Lift the keycaps to inspect the switches">Lift caps</button>
+              </div>
+              <div class="fk-switch-control-row">
+                <span>Caps</span>
+                <div class="fk-switch-segment" role="group" aria-label="Keycap display">
+                  <button type="button" data-fk-cap-display="seated" aria-pressed="true">On</button>
+                  <button type="button" data-fk-cap-display="lifted" aria-pressed="false">Lift</button>
+                  <button type="button" data-fk-cap-display="hidden" aria-pressed="false">Off</button>
+                </div>
               </div>
             </div>
           </details>
@@ -1905,6 +2007,7 @@
     `;
     document.body.appendChild(panel);
     mountShowroomPanel(panel);
+    document.body.classList.add("fk-curated-set-active");
 
     panel.querySelectorAll("[data-fk-showroom-thumb]").forEach((thumbnail) => {
       const set = showroomSets[Number(thumbnail.dataset.fkShowroomThumb)];
@@ -1916,6 +2019,9 @@
         const set = showroomSets[Number(button.dataset.fkShowroomSet)];
         if (set) loadShowroomSet(panel, set, button);
       });
+    });
+    panel.querySelectorAll("[data-fk-showroom-mode]").forEach((button) => {
+      button.addEventListener("click", () => setShowroomMode(panel, button.dataset.fkShowroomMode));
     });
     panel.querySelector("[data-fk-showroom-quote]").addEventListener("click", () => {
       const active = panel.querySelector("[data-fk-showroom-set].is-active");
