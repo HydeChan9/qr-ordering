@@ -136,7 +136,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "20260805-fk6";
+  const sampleVersion = "20260806-fk7";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];

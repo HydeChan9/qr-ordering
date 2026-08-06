@@ -6,6 +6,7 @@
     "page_view",
     "reference_view",
     "quote_click",
+    "showroom_open",
     "designer_open",
     "quote_form_start",
     "artwork_selected",
@@ -104,6 +105,8 @@
 
       if (path.endsWith("/support.html") && details.url.hash === "#quote") {
         track("quote_click", metadata);
+      } else if (path.endsWith("/showroom.html")) {
+        track("showroom_open", metadata);
       } else if (path.includes("/simulator/") || path.endsWith("/preview.html")) {
         track("designer_open", metadata);
       } else if (path.endsWith("/checkout.html")) {
