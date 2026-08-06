@@ -136,7 +136,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "20260805-fk5";
+  const sampleVersion = "20260805-fk6";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
@@ -1368,7 +1368,8 @@
   const applySceneView = async (view) => {
     const manager = sceneManager();
     if (!manager?.camera || !manager?.controls || !view) return false;
-    manager.camera.up.set(0, 1, 0);
+    const up = view.up || { x: 0, y: 1, z: 0 };
+    manager.camera.up.set(up.x, up.y, up.z);
     manager.camera.position.set(view.camera.x, view.camera.y, view.camera.z);
     manager.controls.target.set(view.target.x, view.target.y, view.target.z);
     manager.controls.update();
@@ -1396,8 +1397,9 @@
     }
     if (set?.id === "FK-KC-003") {
       return {
-        camera: { x: 0, y: 18.4, z: 9.4 },
+        camera: { x: 0, y: 21.2, z: 0.001 },
         target: { x: 0, y: 0.3, z: 0 },
+        up: { x: 0, y: 0, z: -1 },
       };
     }
     return standardSceneView();
