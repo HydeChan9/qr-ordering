@@ -138,7 +138,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "fk0806fix1";
+  const sampleVersion = "20260807-swi";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
@@ -476,7 +476,7 @@
       && Math.abs(Number(units.height || 1) - Number(opts.h || 1)) < 0.08;
   };
 
-  const neonNumpadAliases = {
+  const numpadAliases = {
     KC_0: "KC_P0",
     KC_1: "KC_P1",
     KC_2: "KC_P2",
@@ -494,9 +494,28 @@
 
   const showroomKeyCodeFor = (code, opts) => {
     // The full-size simulator reuses KC_1..KC_9, KC_ENT, and KC_DOT for
-    // the numpad. Neon System has separate factory artwork for those keys.
-    if (state.showroomTheme !== "neon-system" || Number(opts?.x) < 16.5) return code;
-    return neonNumpadAliases[code] || code;
+    // the numpad. Use dedicated numpad artwork whenever the selected set
+    // provides it, while leaving compact layouts and older sets unchanged.
+    if (Number(opts?.x) < 16.5) return code;
+    const alias = numpadAliases[code];
+    return alias && state.showroomKeyMap?.[alias] ? alias : code;
+  };
+
+  const showroomKeySpecFor = (key) => {
+    if (state.showroomMode !== "set" || !state.showroomKeyMap) return null;
+    const code = typeof key === "string" ? key : key?.name;
+    return code ? state.showroomKeyMap[code] || null : null;
+  };
+
+  const showroomUsesPerKeyMaterials = () => state.showroomMode === "set"
+    && Object.values(state.showroomKeyMap || {}).some((key) => key?.material && key.material !== "solid");
+
+  const showroomMaterialModeFor = (key) => {
+    const perKeyMaterial = showroomKeySpecFor(key)?.material;
+    // Solid is the set's normal mode: it allows a catalogue to opt individual
+    // keys into clear/frosted material while Clear/Frosted remain useful as
+    // quick whole-board previews.
+    return state.keycapMaterial === "solid" ? (perKeyMaterial || "solid") : state.keycapMaterial;
   };
 
   const showroomAtlasKeyFor = (code, opts, key) => {
@@ -1049,17 +1068,21 @@
 
   const switchPresets = {
     "crystal-linear": {
-      label: "Crystal Linear",
-      housing: "#dce8eb",
-      base: "#40474d",
-      stem: "#d65f68",
-      glow: "#ff6c82",
+      label: "Crystal White",
+      housing: "#f4fbfc",
+      base: "#eef1ed",
+      stem: "#f7f8f4",
+      contact: "#c99455",
+      spring: "#cfd2cf",
+      glow: "#dff7ff",
     },
     "ice-tactile": {
       label: "Ice Tactile",
       housing: "#d8e9ee",
       base: "#35434b",
       stem: "#65b9d1",
+      contact: "#c99455",
+      spring: "#cfd2cf",
       glow: "#64e6ff",
     },
     "jade-click": {
@@ -1067,6 +1090,8 @@
       housing: "#dbeae5",
       base: "#33433d",
       stem: "#59ad7c",
+      contact: "#c99455",
+      spring: "#cfd2cf",
       glow: "#78ffc0",
     },
   };
@@ -1098,7 +1123,7 @@
   };
 
   const applyShowroomKeySides = (keyGroup) => {
-    if (!["crimson-bloom", "midnight-butterfly", "neon-system"].includes(state.showroomTheme) || !state.showroomKeyMap) return;
+    if (!["crimson-bloom", "midnight-butterfly", "neon-system", "chemical-001"].includes(state.showroomTheme) || !state.showroomKeyMap) return;
     const palette = state.showroomPalette || {};
     keyMeshesFromGroup(keyGroup).forEach((key) => {
       if (!Array.isArray(key.material) || key.material.length < 4) return;
@@ -1123,40 +1148,60 @@
     });
   };
 
-  const rememberKeycapMaterial = (material) => {
-    if (!material?.userData || material.userData.forgeKeysKeycapAppearance) return;
-    material.userData.forgeKeysKeycapAppearance = {
-      opacity: material.opacity,
-      transparent: material.transparent,
-      depthWrite: material.depthWrite,
-      roughness: material.roughness,
-      metalness: material.metalness,
-    };
+  const restoreKeycapMaterials = (keyGroup) => {
+    keyMeshesFromGroup(keyGroup).forEach((key) => {
+      const originals = key.userData?.forgeKeysOriginalKeycapMaterials;
+      if (!originals) return;
+      const current = Array.isArray(key.material) ? key.material : [key.material];
+      current.forEach((material) => {
+        if (material?.userData?.forgeKeysKeycapClone) material.dispose?.();
+      });
+      key.material = originals;
+      delete key.userData.forgeKeysOriginalKeycapMaterials;
+    });
+  };
+
+  const applyKeycapMaterialProfile = (material, mode, spec, isFace) => {
+    if (mode === "solid") return;
+    const isClear = mode === "clear";
+    const sideOpacity = isClear ? (Number(spec?.opacity) || 0.42) : 0.64;
+    const faceOpacity = isClear
+      ? (Number(spec?.printOpacity) || Math.min(0.82, sideOpacity + 0.24))
+      : 0.78;
+    material.transparent = true;
+    material.opacity = isFace ? faceOpacity : sideOpacity;
+    material.depthWrite = false;
+    if (typeof material.roughness === "number") material.roughness = isClear ? 0.2 : 0.78;
+    if (typeof material.metalness === "number") material.metalness = 0;
+    if ("transmission" in material) material.transmission = isClear ? 0.18 : 0.04;
+    if ("ior" in material) material.ior = 1.46;
+    if ("thickness" in material) material.thickness = 0.16;
+    if (!isFace && spec?.tint) material.color?.set?.(spec.tint);
+    material.needsUpdate = true;
   };
 
   const applyKeycapMaterial = (keyGroup) => {
-    const materials = new Set();
     keyMeshesFromGroup(keyGroup).forEach((key) => {
-      const keyMaterials = Array.isArray(key.material) ? key.material : [key.material];
-      keyMaterials.filter(Boolean).forEach((material) => materials.add(material));
-    });
-    const mode = state.keycapMaterial;
-    materials.forEach((material) => {
-      rememberKeycapMaterial(material);
-      const original = material.userData.forgeKeysKeycapAppearance;
-      material.opacity = original.opacity;
-      material.transparent = original.transparent;
-      material.depthWrite = original.depthWrite;
-      if (typeof original.roughness === "number") material.roughness = original.roughness;
-      if (typeof original.metalness === "number") material.metalness = original.metalness;
-      if (mode !== "solid") {
-        material.transparent = true;
-        material.opacity = mode === "clear" ? 0.38 : 0.62;
-        material.depthWrite = false;
-        if (typeof material.roughness === "number") material.roughness = mode === "clear" ? 0.18 : 0.82;
-        if (typeof material.metalness === "number") material.metalness = 0;
+      const originals = key.userData?.forgeKeysOriginalKeycapMaterials
+        || key.material;
+      if (!key.userData.forgeKeysOriginalKeycapMaterials) {
+        key.userData.forgeKeysOriginalKeycapMaterials = originals;
       }
-      material.needsUpdate = true;
+      const mode = showroomMaterialModeFor(key);
+      const spec = showroomKeySpecFor(key);
+      if (mode === "solid") {
+        key.material = originals;
+        return;
+      }
+      const sourceMaterials = Array.isArray(originals) ? originals : [originals];
+      const nextMaterials = sourceMaterials.map((source, index) => {
+        if (!source?.clone) return source;
+        const material = source.clone();
+        material.userData = { ...material.userData, forgeKeysKeycapClone: true };
+        applyKeycapMaterialProfile(material, mode, spec, index === 3);
+        return material;
+      });
+      key.material = Array.isArray(originals) ? nextMaterials : nextMaterials[0];
     });
   };
 
@@ -1192,7 +1237,7 @@
     key.rotation.y.toFixed(3),
   ].join(":" )).join("|");
 
-  const createSwitchPiece = (template, material, key, dimensions, yOffset, name) => {
+  const createSwitchPiece = (template, material, key, dimensions, yOffset, name, partType) => {
     const geometry = template.geometry;
     if (!geometry.boundingBox) geometry.computeBoundingBox?.();
     const box = geometry.boundingBox;
@@ -1210,6 +1255,8 @@
     );
     piece.castShadow = false;
     piece.receiveShadow = false;
+    piece.userData.forgeKeysSourceKeyName = key.name;
+    piece.userData.forgeKeysSwitchPart = partType || name.split("_")[1]?.toLowerCase() || "unknown";
     return piece;
   };
 
@@ -1230,18 +1277,32 @@
     group.userData.forgeKeysSignature = signature;
 
     const materials = {
-      base: cloneSwitchMaterial(sourceMaterial, { color: "#40474d", opacity: 0.96, roughness: 0.7 }),
-      housing: cloneSwitchMaterial(sourceMaterial, { color: "#dce8eb", opacity: 0.34, transparent: true, depthWrite: false, roughness: 0.16 }),
-      stem: cloneSwitchMaterial(sourceMaterial, { color: "#d65f68", opacity: 1, roughness: 0.5 }),
+      base: cloneSwitchMaterial(sourceMaterial, { color: "#eef1ed", opacity: 0.98, roughness: 0.54 }),
+      housing: cloneSwitchMaterial(sourceMaterial, { color: "#f4fbfc", opacity: 0.24, transparent: true, depthWrite: false, roughness: 0.08 }),
+      stem: cloneSwitchMaterial(sourceMaterial, { color: "#f7f8f4", opacity: 1, roughness: 0.42 }),
+      contact: cloneSwitchMaterial(sourceMaterial, { color: "#c99455", opacity: 1, roughness: 0.24, metalness: 0.72 }),
+      spring: cloneSwitchMaterial(sourceMaterial, { color: "#cfd2cf", opacity: 1, roughness: 0.2, metalness: 0.78 }),
       glow: cloneSwitchMaterial(sourceMaterial, { color: "#ff6c82", opacity: 0, transparent: true, depthWrite: false, roughness: 0.1 }),
     };
     group.userData.forgeKeysMaterials = materials;
 
     keyMeshes.forEach((key) => {
-      group.add(createSwitchPiece(template, materials.glow, key, { width: 0.84, height: 0.035, depth: 0.84 }, -0.43, `FK_GLOW_${key.name}`));
-      group.add(createSwitchPiece(template, materials.base, key, { width: 0.66, height: 0.15, depth: 0.66 }, -0.35, `FK_BASE_${key.name}`));
-      group.add(createSwitchPiece(template, materials.housing, key, { width: 0.72, height: 0.18, depth: 0.72 }, -0.17, `FK_HOUSING_${key.name}`));
-      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.23, height: 0.25, depth: 0.23 }, 0.03, `FK_STEM_${key.name}`));
+      group.add(createSwitchPiece(template, materials.glow, key, { width: 0.82, height: 0.025, depth: 0.82 }, -0.43, `FK_GLOW_${key.name}`, "glow"));
+
+      // The switch is assembled from small pieces so clear keycaps reveal a
+      // recognisable housing, MX cross stem and metal contact instead of a
+      // single coloured block.
+      group.add(createSwitchPiece(template, materials.base, key, { width: 0.7, height: 0.13, depth: 0.7 }, -0.35, `FK_BASE_${key.name}`, "base"));
+      group.add(createSwitchPiece(template, materials.base, key, { width: 0.52, height: 0.08, depth: 0.52 }, -0.245, `FK_DECK_${key.name}`, "deck"));
+      group.add(createSwitchPiece(template, materials.housing, key, { width: 0.74, height: 0.2, depth: 0.74 }, -0.155, `FK_HOUSING_${key.name}`, "housing"));
+
+      group.add(createSwitchPiece(template, materials.contact, key, { width: 0.09, height: 0.16, depth: 0.38 }, -0.11, `FK_CONTACT_${key.name}`, "contact"));
+      group.add(createSwitchPiece(template, materials.spring, key, { width: 0.22, height: 0.035, depth: 0.22 }, -0.07, `FK_SPRING_LOW_${key.name}`, "spring"));
+      group.add(createSwitchPiece(template, materials.spring, key, { width: 0.17, height: 0.035, depth: 0.17 }, -0.015, `FK_SPRING_HIGH_${key.name}`, "spring"));
+
+      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.18, height: 0.29, depth: 0.18 }, 0.015, `FK_STEM_${key.name}`, "stem"));
+      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.38, height: 0.075, depth: 0.1 }, 0.145, `FK_STEM_X_${key.name}`, "stem-cross"));
+      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.1, height: 0.075, depth: 0.38 }, 0.145, `FK_STEM_Z_${key.name}`, "stem-cross"));
     });
     keyGroup.parent?.add(group);
     return group;
@@ -1254,6 +1315,8 @@
     materials.base.color?.set?.(preset.base);
     materials.housing.color?.set?.(preset.housing);
     materials.stem.color?.set?.(preset.stem);
+    materials.contact.color?.set?.(preset.contact || "#c99455");
+    materials.spring.color?.set?.(preset.spring || "#cfd2cf");
     materials.glow.color?.set?.(preset.glow);
     materials.glow.opacity = state.switchLighting === "on" ? 0.72 : 0;
     if (materials.glow.emissive?.set) {
@@ -1305,9 +1368,28 @@
     switchGroup.rotation.copy(keyGroup.rotation);
     switchGroup.scale.copy(keyGroup.scale);
     const keycapsHidden = state.keycapDisplay === "hidden";
+    // Hide the complete keycap group. Some layouts include meshes whose names
+    // do not match the per-key texture convention, so mesh-only hiding can
+    // leave caps behind or let them reappear after a later material refresh.
+    keyGroup.visible = !keycapsHidden;
     keyMeshes.forEach((key) => { key.visible = !keycapsHidden; });
-    switchGroup.visible = keycapsHidden || state.keycapMaterial !== "solid" || state.keycapDisplay === "lifted";
+    const revealAllSwitches = keycapsHidden
+      || state.keycapMaterial !== "solid"
+      || state.keycapDisplay === "lifted";
+    const revealTransparentSwitches = showroomUsesPerKeyMaterials();
+    switchGroup.visible = keycapsHidden
+      || revealAllSwitches
+      || revealTransparentSwitches;
+    switchGroup.children.forEach((piece) => {
+      const sourceKeyName = piece.userData?.forgeKeysSourceKeyName;
+      const keyMaterial = sourceKeyName ? showroomMaterialModeFor(sourceKeyName) : "solid";
+      const switchPart = piece.userData?.forgeKeysSwitchPart;
+      const isInsetStem = ["housing", "contact", "spring", "stem", "stem-cross"].includes(switchPart);
+      const insetStemFitsCase = !["KC_LEFT", "KC_DOWN", "KC_RGHT", "KC_UP"].includes(sourceKeyName);
+      piece.visible = revealAllSwitches || (keyMaterial !== "solid" && isInsetStem && insetStemFitsCase);
+    });
     updateSwitchGroupMaterials(switchGroup);
+    restoreKeycapMaterials(keyGroup);
     applyShowroomKeySides(keyGroup);
     applyKeycapMaterial(keyGroup);
     animateKeycapLift(keyGroup);
@@ -1317,6 +1399,9 @@
       state.switchLighting,
       state.keycapDisplay,
     ].join(":" );
+    document.documentElement.dataset.fkKeycapMaterialMode = showroomUsesPerKeyMaterials() && state.keycapMaterial === "solid"
+      ? "per-key"
+      : state.keycapMaterial;
     return true;
   };
 
@@ -1356,7 +1441,9 @@
     });
     const summary = panel.querySelector("[data-fk-switch-summary]");
     if (summary) {
-      const capLabel = state.keycapMaterial[0].toUpperCase() + state.keycapMaterial.slice(1);
+      const capLabel = showroomUsesPerKeyMaterials() && state.keycapMaterial === "solid"
+        ? "Set"
+        : state.keycapMaterial[0].toUpperCase() + state.keycapMaterial.slice(1);
       const displayLabel = { seated: "caps on", lifted: "caps lifted", hidden: "caps off" }[state.keycapDisplay];
       summary.textContent = `${capLabel} · ${displayLabel} · RGB ${state.switchLighting === "on" ? "on" : "off"}`;
     }
@@ -1451,6 +1538,13 @@
       return {
         // The embedded showroom keeps the controls column visible, so the
         // full-size board needs a wider top-down framing than the simulator default.
+        camera: { x: 0, y: 34, z: 0.001 },
+        target: { x: 0, y: 0.3, z: 0 },
+        up: { x: 0, y: 0, z: -1 },
+      };
+    }
+    if (set?.id === "FK-KC-004") {
+      return {
         camera: { x: 0, y: 34, z: 0.001 },
         target: { x: 0, y: 0.3, z: 0 },
         up: { x: 0, y: 0, z: -1 },
@@ -1766,11 +1860,11 @@
     });
     if (!manifestResponse) return { keyMap, palette: design.palette, renderLegends: set.renderLegends };
     const manifest = await manifestResponse.json();
-    if (!design) {
-      Object.entries(manifest.keys || {}).forEach(([code, key]) => {
-        keyMap[code] = { code, style: key.style || "supplier" };
-      });
-    }
+    Object.entries(manifest.keys || {}).forEach(([code, key]) => {
+      // Manifest metadata such as material, tint, and print opacity applies to
+      // both atlas-only sets and sets that also have design rows.
+      keyMap[code] = { ...key, ...(keyMap[code] || {}), code };
+    });
     const manifestUrl = new URL(set.keyArtManifestUrl, window.location.href);
     const atlasUrl = new URL(manifest.atlas, manifestUrl).href;
     const atlasImage = await loadImageUrl(atlasUrl);
@@ -1817,7 +1911,9 @@
         set.threeDMode === "whole-board" ? loadSampleArtwork({ ...set, isSvg: true }) : Promise.resolve(null),
         loadShowroomDesignData(set),
       ]);
-      restoreShowroomKeySides(keyGroupFromScene());
+      const sceneKeyGroup = keyGroupFromScene();
+      restoreKeycapMaterials(sceneKeyGroup);
+      restoreShowroomKeySides(sceneKeyGroup);
       activeShowroomSet = set;
       state.baseImage = asset?.image || null;
       state.baseFile = null;
@@ -1843,6 +1939,7 @@
       });
       updateShowroomDetails(panel, set);
       updateShowroomModeState(panel);
+      updateSwitchControlState(panel);
       refreshTextures();
       if (set.hasThreeD) applyPreferredLayout(set.preferredLayout);
       window.setTimeout(() => {
@@ -1867,14 +1964,19 @@
 
   const setShowroomMode = (panel, mode) => {
     state.showroomMode = mode;
+    const controlsNote = panel.querySelector("[data-fk-showroom-controls-note]");
     if (mode === "original") {
+      const keyGroup = keyGroupFromScene();
+      restoreKeycapMaterials(keyGroup);
+      restoreShowroomKeySides(keyGroup);
       state.keepLegends = true;
       state.showroomTheme = null;
       state.showroomKeyMap = null;
       state.showroomPalette = null;
       state.showroomAtlasImage = null;
       state.showroomAtlasKeys = null;
-      restoreShowroomKeySides(keyGroupFromScene());
+      controlsNote.querySelector("strong").textContent = "Original caps editable";
+      controlsNote.querySelector("span").textContent = "Open Editor below to adjust keycap colours.";
       setStatus("Original keycaps shown with the simulator legends.", "success");
     } else if (state.showroomDesignData) {
       state.keepLegends = false;
@@ -1883,9 +1985,12 @@
       state.showroomPalette = state.showroomDesignData.palette || null;
       state.showroomAtlasImage = state.showroomDesignData.atlasImage || null;
       state.showroomAtlasKeys = state.showroomDesignData.atlasKeys || null;
+      controlsNote.querySelector("strong").textContent = "Set colours locked";
+      controlsNote.querySelector("span").textContent = "Layout and case finish remain adjustable below.";
       setStatus(`${activeShowroomSet?.label || "Keycap set"} shown on the keyboard.`, "success");
     }
     updateShowroomModeState(panel);
+    updateSwitchControlState(panel);
     refreshTextures();
   };
 
@@ -1959,9 +2064,9 @@
             </summary>
             <div class="fk-switch-lab-body">
               <div class="fk-switch-presets" role="group" aria-label="Switch style">
-                <button type="button" data-fk-switch-preset="crystal-linear" aria-pressed="true" title="Crystal Linear switch">
-                  <span class="fk-switch-chip" data-switch-colour="coral" aria-hidden="true"><i></i></span>
-                  <span>Crystal<small>Linear</small></span>
+                <button type="button" data-fk-switch-preset="crystal-linear" aria-pressed="true" title="Crystal White switch">
+                  <span class="fk-switch-chip" data-switch-colour="white" aria-hidden="true"><i></i></span>
+                  <span>Crystal<small>White</small></span>
                 </button>
                 <button type="button" data-fk-switch-preset="ice-tactile" aria-pressed="false" title="Ice Tactile switch">
                   <span class="fk-switch-chip" data-switch-colour="ice" aria-hidden="true"><i></i></span>
@@ -2023,6 +2128,12 @@
     panel.querySelectorAll("[data-fk-showroom-mode]").forEach((button) => {
       button.addEventListener("click", () => setShowroomMode(panel, button.dataset.fkShowroomMode));
     });
+    const editorTab = document.querySelector('#sidebar [role="tab"][aria-controls="react-tabs-3"]');
+    if (editorTab) {
+      editorTab.addEventListener("click", () => {
+        if (state.showroomMode !== "original") setShowroomMode(panel, "original");
+      });
+    }
     panel.querySelector("[data-fk-showroom-quote]").addEventListener("click", () => {
       const active = panel.querySelector("[data-fk-showroom-set].is-active");
       const set = showroomSets[Number(active?.dataset.fkShowroomSet || 0)];

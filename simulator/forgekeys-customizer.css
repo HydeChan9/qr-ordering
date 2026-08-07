@@ -158,10 +158,6 @@ body.fk-sim-controls-collapsed #sidebar .react-tabs {
   display: none;
 }
 
-body.fk-showroom-mode.fk-curated-set-active #sidebar [role="tab"][aria-controls="react-tabs-3"],
-body.fk-showroom-mode.fk-curated-set-active #sidebar [role="tab"][aria-controls="react-tabs-5"],
-body.fk-showroom-mode.fk-curated-set-active #sidebar #react-tabs-3,
-body.fk-showroom-mode.fk-curated-set-active #sidebar #react-tabs-5,
 body.fk-showroom-mode.fk-curated-set-active #sidebar [aria-label="Section Colorways"] {
   display: none !important;
 }
@@ -1070,6 +1066,11 @@ body.fk-showroom-mode .fk-showroom-panel {
   border-radius: 2px;
   background: #d65f68;
   transform: translateX(-50%);
+}
+
+.fk-switch-chip[data-switch-colour="white"] i {
+  border: 1px solid rgba(164, 172, 170, 0.55);
+  background: #f7f8f4;
 }
 
 .fk-switch-chip[data-switch-colour="ice"] i {

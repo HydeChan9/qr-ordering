@@ -2,6 +2,46 @@
   "schemaVersion": "1.0",
   "products": [
     {
+      "id": "FK-KC-004",
+      "slug": "chemical-001",
+      "name": "Chemical 001",
+      "description": "Graphite, bone-white, emerald, teal, and amber keycaps with a clean laboratory instrument direction.",
+      "studio": {
+        "name": "Frontier",
+        "relationship": "Supplier-approved reference"
+      },
+      "commercialStatus": "concept",
+      "rightsStatus": "supplier-approved",
+      "product": {
+        "image": "chemical-001/product.jpg",
+        "thumbnail": "chemical-001/product.jpg",
+        "alt": "Chemical 001 keycap set shown on a compact mechanical keyboard",
+        "width": 1200,
+        "height": 1200,
+        "availability": "Enquire for availability",
+        "priceAud": null,
+        "purchaseUrl": null
+      },
+      "preview": {
+        "defaultView": "3d",
+        "profile": "Cherry-style reference",
+        "layouts": "60% · 65% · 75% · TKL · Full size",
+        "finish": "PBT and clear accent direction",
+        "preferredLayout": "100%",
+        "threeD": {
+          "mode": "per-key-atlas",
+          "accuracy": "concept",
+          "artwork": null,
+          "theme": "chemical-001",
+          "opacity": 0.96,
+          "transparent": false,
+          "renderLegends": false,
+          "designData": null,
+          "keyArtManifest": "../keycap-designs/chemical-001-key-art-manifest.json"
+        }
+      }
+    },
+    {
       "id": "FK-KC-001",
       "slug": "crimson-bloom",
       "name": "Crimson Bloom",
