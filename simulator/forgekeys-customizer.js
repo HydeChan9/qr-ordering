@@ -138,7 +138,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "20260807-swi";
+  const sampleVersion = "switch-align";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
@@ -1227,6 +1227,7 @@
     const existing = manager?.scene?.getObjectByName?.("FORGEKEYS_SWITCHES");
     if (!existing) return;
     Object.values(existing.userData?.forgeKeysMaterials || {}).forEach((material) => material?.dispose?.());
+    (existing.userData?.forgeKeysGeometries || []).forEach((geometry) => geometry?.dispose?.());
     existing.parent?.remove(existing);
   };
 
@@ -1237,8 +1238,41 @@
     key.rotation.y.toFixed(3),
   ].join(":" )).join("|");
 
-  const createSwitchPiece = (template, material, key, dimensions, yOffset, name, partType) => {
-    const geometry = template.geometry;
+  const createSwitchBoxGeometry = (template, dimensions) => {
+    const GeometryConstructor = template.geometry.constructor;
+    const VectorConstructor = template.geometry.vertices?.[0]?.constructor;
+    const FaceConstructor = template.geometry.faces?.[0]?.constructor;
+    if (!GeometryConstructor || !VectorConstructor || !FaceConstructor) return template.geometry;
+    const geometry = new GeometryConstructor();
+    const halfWidth = dimensions.width / 2;
+    const halfDepth = dimensions.depth / 2;
+    const height = dimensions.height;
+    geometry.vertices.push(
+      new VectorConstructor(-halfWidth, 0, -halfDepth),
+      new VectorConstructor(halfWidth, 0, -halfDepth),
+      new VectorConstructor(halfWidth, 0, halfDepth),
+      new VectorConstructor(-halfWidth, 0, halfDepth),
+      new VectorConstructor(-halfWidth, height, -halfDepth),
+      new VectorConstructor(halfWidth, height, -halfDepth),
+      new VectorConstructor(halfWidth, height, halfDepth),
+      new VectorConstructor(-halfWidth, height, halfDepth)
+    );
+    geometry.faces.push(
+      new FaceConstructor(0, 2, 1), new FaceConstructor(0, 3, 2),
+      new FaceConstructor(4, 5, 6), new FaceConstructor(4, 6, 7),
+      new FaceConstructor(0, 1, 5), new FaceConstructor(0, 5, 4),
+      new FaceConstructor(1, 2, 6), new FaceConstructor(1, 6, 5),
+      new FaceConstructor(2, 3, 7), new FaceConstructor(2, 7, 6),
+      new FaceConstructor(3, 0, 4), new FaceConstructor(3, 4, 7)
+    );
+    geometry.computeFaceNormals?.();
+    geometry.computeVertexNormals?.();
+    geometry.computeBoundingBox?.();
+    return geometry;
+  };
+
+  const createSwitchPiece = (template, material, key, dimensions, yOffset, name, partType, options = {}) => {
+    const geometry = options.geometry || template.geometry;
     if (!geometry.boundingBox) geometry.computeBoundingBox?.();
     const box = geometry.boundingBox;
     const geometryWidth = Math.max(0.01, (box?.max.x || 0.5) - (box?.min.x || -0.5));
@@ -1246,7 +1280,11 @@
     const geometryDepth = Math.max(0.01, (box?.max.z || 0.5) - (box?.min.z || -0.5));
     const piece = new template.constructor(geometry, material);
     piece.name = name;
-    piece.position.set(key.position.x, key.position.y + yOffset, key.position.z);
+    piece.position.set(
+      key.position.x + (options.offsetX || 0),
+      key.position.y + yOffset,
+      key.position.z + (options.offsetZ || 0)
+    );
     piece.quaternion.copy(key.quaternion);
     piece.scale.set(
       dimensions.width / geometryWidth,
@@ -1258,6 +1296,24 @@
     piece.userData.forgeKeysSourceKeyName = key.name;
     piece.userData.forgeKeysSwitchPart = partType || name.split("_")[1]?.toLowerCase() || "unknown";
     return piece;
+  };
+
+  const createSwitchAssemblyGeometry = (template, specs) => {
+    const GeometryConstructor = template.geometry.constructor;
+    const MatrixConstructor = template.matrix?.constructor;
+    if (!GeometryConstructor || !MatrixConstructor) return null;
+    const assembly = new GeometryConstructor();
+    specs.forEach((spec) => {
+      const part = createSwitchBoxGeometry(template, spec.dimensions);
+      const matrix = new MatrixConstructor();
+      matrix.makeTranslation(spec.offsetX || 0, spec.yOffset, spec.offsetZ || 0);
+      assembly.merge?.(part, matrix, spec.materialIndex);
+      part.dispose?.();
+    });
+    assembly.computeFaceNormals?.();
+    assembly.computeVertexNormals?.();
+    assembly.computeBoundingBox?.();
+    return assembly;
   };
 
   const buildSwitchGroup = (manager, keyGroup, keyMeshes, signature) => {
@@ -1286,23 +1342,41 @@
     };
     group.userData.forgeKeysMaterials = materials;
 
+    const materialList = [materials.glow, materials.base, materials.housing, materials.stem, materials.contact, materials.spring];
+    const switchSpecs = [
+      { name: "FK_GLOW_", materialIndex: 0, dimensions: { width: 0.82, height: 0.025, depth: 0.82 }, yOffset: -0.43 },
+      { name: "FK_BASE_", materialIndex: 1, dimensions: { width: 0.68, height: 0.14, depth: 0.68 }, yOffset: -0.36 },
+      { name: "FK_DECK_", materialIndex: 1, dimensions: { width: 0.52, height: 0.055, depth: 0.52 }, yOffset: -0.22 },
+      { name: "FK_HOUSING_FRONT_", materialIndex: 2, dimensions: { width: 0.74, height: 0.19, depth: 0.09 }, yOffset: -0.165, offsetZ: -0.325 },
+      { name: "FK_HOUSING_BACK_", materialIndex: 2, dimensions: { width: 0.74, height: 0.19, depth: 0.09 }, yOffset: -0.165, offsetZ: 0.325 },
+      { name: "FK_HOUSING_LEFT_", materialIndex: 2, dimensions: { width: 0.09, height: 0.19, depth: 0.56 }, yOffset: -0.165, offsetX: -0.325 },
+      { name: "FK_HOUSING_RIGHT_", materialIndex: 2, dimensions: { width: 0.09, height: 0.19, depth: 0.56 }, yOffset: -0.165, offsetX: 0.325 },
+      { name: "FK_CONTACT_", materialIndex: 4, dimensions: { width: 0.08, height: 0.15, depth: 0.32 }, yOffset: -0.115, offsetX: -0.19 },
+      { name: "FK_CONTACT_BRIDGE_", materialIndex: 4, dimensions: { width: 0.28, height: 0.035, depth: 0.07 }, yOffset: 0.005, offsetZ: -0.18 },
+      { name: "FK_SPRING_LOW_", materialIndex: 5, dimensions: { width: 0.24, height: 0.03, depth: 0.24 }, yOffset: -0.07 },
+      { name: "FK_SPRING_HIGH_", materialIndex: 5, dimensions: { width: 0.18, height: 0.03, depth: 0.18 }, yOffset: -0.015 },
+      { name: "FK_STEM_", materialIndex: 3, dimensions: { width: 0.2, height: 0.29, depth: 0.2 }, yOffset: 0 },
+      { name: "FK_STEM_X_", materialIndex: 3, dimensions: { width: 0.38, height: 0.07, depth: 0.1 }, yOffset: 0.16 },
+      { name: "FK_STEM_Z_", materialIndex: 3, dimensions: { width: 0.1, height: 0.07, depth: 0.38 }, yOffset: 0.16 },
+      { name: "FK_CLIP_FRONT_", materialIndex: 1, dimensions: { width: 0.16, height: 0.1, depth: 0.07 }, yOffset: -0.275, offsetZ: -0.365 },
+      { name: "FK_CLIP_BACK_", materialIndex: 1, dimensions: { width: 0.16, height: 0.1, depth: 0.07 }, yOffset: -0.275, offsetZ: 0.365 },
+      { name: "FK_PIN_LEFT_", materialIndex: 4, dimensions: { width: 0.055, height: 0.14, depth: 0.055 }, yOffset: -0.5, offsetX: -0.14 },
+      { name: "FK_PIN_RIGHT_", materialIndex: 4, dimensions: { width: 0.055, height: 0.14, depth: 0.055 }, yOffset: -0.5, offsetX: 0.14 },
+    ];
+    const assemblyGeometry = createSwitchAssemblyGeometry(template, switchSpecs);
+    if (!assemblyGeometry) return null;
+    group.userData.forgeKeysGeometries = [assemblyGeometry];
+
     keyMeshes.forEach((key) => {
-      group.add(createSwitchPiece(template, materials.glow, key, { width: 0.82, height: 0.025, depth: 0.82 }, -0.43, `FK_GLOW_${key.name}`, "glow"));
-
-      // The switch is assembled from small pieces so clear keycaps reveal a
-      // recognisable housing, MX cross stem and metal contact instead of a
-      // single coloured block.
-      group.add(createSwitchPiece(template, materials.base, key, { width: 0.7, height: 0.13, depth: 0.7 }, -0.35, `FK_BASE_${key.name}`, "base"));
-      group.add(createSwitchPiece(template, materials.base, key, { width: 0.52, height: 0.08, depth: 0.52 }, -0.245, `FK_DECK_${key.name}`, "deck"));
-      group.add(createSwitchPiece(template, materials.housing, key, { width: 0.74, height: 0.2, depth: 0.74 }, -0.155, `FK_HOUSING_${key.name}`, "housing"));
-
-      group.add(createSwitchPiece(template, materials.contact, key, { width: 0.09, height: 0.16, depth: 0.38 }, -0.11, `FK_CONTACT_${key.name}`, "contact"));
-      group.add(createSwitchPiece(template, materials.spring, key, { width: 0.22, height: 0.035, depth: 0.22 }, -0.07, `FK_SPRING_LOW_${key.name}`, "spring"));
-      group.add(createSwitchPiece(template, materials.spring, key, { width: 0.17, height: 0.035, depth: 0.17 }, -0.015, `FK_SPRING_HIGH_${key.name}`, "spring"));
-
-      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.18, height: 0.29, depth: 0.18 }, 0.015, `FK_STEM_${key.name}`, "stem"));
-      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.38, height: 0.075, depth: 0.1 }, 0.145, `FK_STEM_X_${key.name}`, "stem-cross"));
-      group.add(createSwitchPiece(template, materials.stem, key, { width: 0.1, height: 0.075, depth: 0.38 }, 0.145, `FK_STEM_Z_${key.name}`, "stem-cross"));
+      const assembly = new template.constructor(assemblyGeometry, materialList);
+      assembly.name = `FK_SWITCH_${key.name}`;
+      assembly.position.copy(key.position);
+      assembly.quaternion.copy(key.quaternion);
+      assembly.castShadow = false;
+      assembly.receiveShadow = false;
+      assembly.userData.forgeKeysSourceKeyName = key.name;
+      assembly.userData.forgeKeysSwitchPart = "assembly";
+      group.add(assembly);
     });
     keyGroup.parent?.add(group);
     return group;
@@ -1363,6 +1437,29 @@
       switchGroup = buildSwitchGroup(manager, keyGroup, keyMeshes, signature);
     }
     if (!switchGroup) return false;
+    const keyByName = new Map(keyMeshes.map((key) => [key.name, key]));
+    let missingSwitchSources = 0;
+    let maximumSwitchOffset = 0;
+    let maximumSwitchRotationError = 0;
+    switchGroup.children.forEach((piece) => {
+      const sourceKey = keyByName.get(piece.userData?.forgeKeysSourceKeyName);
+      if (!sourceKey) {
+        missingSwitchSources += 1;
+        return;
+      }
+      maximumSwitchOffset = Math.max(maximumSwitchOffset, piece.position.distanceTo(sourceKey.position));
+      maximumSwitchRotationError = Math.max(
+        maximumSwitchRotationError,
+        1 - Math.abs(piece.quaternion.dot(sourceKey.quaternion))
+      );
+    });
+    document.documentElement.dataset.fkSwitchAlignment = [
+      keyMeshes.length,
+      switchGroup.children.length,
+      missingSwitchSources,
+      maximumSwitchOffset.toFixed(6),
+      maximumSwitchRotationError.toFixed(6),
+    ].join(":" );
     switchGroup.position.copy(keyGroup.position);
     switchGroup.position.y = keyGroup.userData.forgeKeysBaseY;
     switchGroup.rotation.copy(keyGroup.rotation);
@@ -1385,8 +1482,10 @@
       const keyMaterial = sourceKeyName ? showroomMaterialModeFor(sourceKeyName) : "solid";
       const switchPart = piece.userData?.forgeKeysSwitchPart;
       const isInsetStem = ["housing", "contact", "spring", "stem", "stem-cross"].includes(switchPart);
+      const isSwitchAssembly = switchPart === "assembly";
       const insetStemFitsCase = !["KC_LEFT", "KC_DOWN", "KC_RGHT", "KC_UP"].includes(sourceKeyName);
-      piece.visible = revealAllSwitches || (keyMaterial !== "solid" && isInsetStem && insetStemFitsCase);
+      piece.visible = revealAllSwitches
+        || (keyMaterial !== "solid" && (isSwitchAssembly || isInsetStem) && insetStemFitsCase);
     });
     updateSwitchGroupMaterials(switchGroup);
     restoreKeycapMaterials(keyGroup);
@@ -1931,6 +2030,7 @@
       state.showroomAtlasKeys = designData?.atlasKeys || null;
       state.showroomDesignData = designData;
       state.showroomMode = "set";
+      document.body.classList.add("fk-curated-set-active");
       state.placements = {};
       panel.querySelectorAll("[data-fk-showroom-set]").forEach((candidate) => {
         const active = candidate === button;
@@ -1964,6 +2064,7 @@
 
   const setShowroomMode = (panel, mode) => {
     state.showroomMode = mode;
+    document.body.classList.toggle("fk-curated-set-active", mode !== "original");
     const controlsNote = panel.querySelector("[data-fk-showroom-controls-note]");
     if (mode === "original") {
       const keyGroup = keyGroupFromScene();
