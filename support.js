@@ -161,7 +161,7 @@ function collectQuoteData(quoteId, artworkFiles) {
     submissionId: quoteId,
     quoteId,
     submittedAt: new Date().toISOString(),
-    source: "ForgeKeys AU quote form",
+    source: "ForgeKey Studio AU quote form",
     enquirySource: quoteFields.source.value.trim() || "direct",
     selectedReferenceId: quoteFields.referenceId.value.trim(),
     selectedReference: quoteFields.product.value.trim(),
@@ -353,7 +353,7 @@ async function submitQuoteRequest(event) {
 
       const json = JSON.stringify(data, null, 2);
       const readme = [
-        `ForgeKeys AU quote request: ${quoteId}`,
+        `ForgeKey Studio AU quote request: ${quoteId}`,
         "",
         `Request type: ${data.requestType}`,
         `Layout: ${data.layout}`,
@@ -406,9 +406,9 @@ async function submitQuoteRequest(event) {
     } else if (error.status === 429) {
       setStatus("Too many quote requests were sent. Please wait before trying again.", "error");
     } else if (error.status === 403) {
-      setStatus("The quote could not be saved because the site storage permission is blocked. Please contact ForgeKeys AU directly.", "error");
+      setStatus("The quote could not be saved because the site storage permission is blocked. Please contact ForgeKey Studio AU directly.", "error");
     } else if (error.code === "backend_not_configured") {
-      setStatus("The quote service is temporarily unavailable. Please contact ForgeKeys AU directly.", "error");
+      setStatus("The quote service is temporarily unavailable. Please contact ForgeKey Studio AU directly.", "error");
     } else {
       setStatus("The quote could not be submitted. Please check your connection and try again.", "error");
     }

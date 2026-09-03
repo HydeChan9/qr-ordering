@@ -8,13 +8,13 @@ window.FORGEKEYS_CONFIG = {
   supabaseFolder: "submissions",
   maxUploadBytes: 3 * 1024 * 1024,
   acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
-  paymentBusinessName: "ForgeKeys AU",
+  paymentBusinessName: "ForgeKey Studio AU",
   paymentPayId: "",
   paymentBankAccountName: "",
   paymentBankBsb: "",
   paymentBankAccountNumber: "",
   paymentCardInvoiceUrl: "",
-  contactEmail: "",
+  contactEmail: "forgekeystudio@gmail.com",
   analytics: {
     cloudflareToken: "",
     eventEndpoint: ""

@@ -1,6 +1,7 @@
 (() => {
   const config = window.FORGEKEYS_CONFIG || {};
   const links = config.socialLinks || {};
+  const contactEmail = String(config.contactEmail || "").trim().toLowerCase();
   const labels = {
     instagram: "Instagram",
     discord: "Discord",
@@ -35,4 +36,17 @@
     const visibleLinks = group.querySelectorAll("[data-social-link]:not([hidden])");
     group.hidden = visibleLinks.length === 0;
   });
+
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(contactEmail)) {
+    document.querySelectorAll(".footer-brand").forEach((brand) => {
+      if (brand.querySelector("[data-contact-email]")) return;
+      const emailLink = document.createElement("a");
+      emailLink.className = "footer-email";
+      emailLink.dataset.contactEmail = "";
+      emailLink.href = `mailto:${contactEmail}`;
+      emailLink.textContent = contactEmail;
+      emailLink.setAttribute("aria-label", `Email ForgeKey Studio AU at ${contactEmail}`);
+      brand.appendChild(emailLink);
+    });
+  }
 })();

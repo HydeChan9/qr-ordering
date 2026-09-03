@@ -2,6 +2,49 @@
   "schemaVersion": "1.0",
   "products": [
     {
+      "id": "FK-KC-005",
+      "slug": "cat-whiskers",
+      "name": "Cat Whiskers",
+      "description": "A warm ivory, charcoal, sage, and ginger cat-themed keycap direction with star, moon, paw, and sleeping-cat accents.",
+      "studio": {
+        "name": "ForgeKey Studio AU",
+        "relationship": "Project-generated concept"
+      },
+      "commercialStatus": "concept",
+      "rightsStatus": "project-generated-review",
+      "product": {
+        "image": "cat-whiskers/cat-whiskers-concept.jpg",
+        "thumbnail": "cat-whiskers/cat-whiskers-concept.jpg",
+        "alt": "Cat-themed mechanical keyboard keycap set concept in ivory, charcoal, sage, and ginger",
+        "width": 1536,
+        "height": 1024,
+        "availability": "Concept preview only",
+        "priceAud": null,
+        "purchaseUrl": null
+      },
+      "preview": {
+        "defaultView": "3d",
+        "profile": "Cherry-style reference",
+        "layouts": "60% · 65% · 75% · TKL · Full size",
+        "finish": "Matte PBT direction with sage accents",
+        "preferredLayout": "75%",
+        "threeD": {
+          "mode": "per-key-atlas",
+          "accuracy": "concept",
+          "artwork": null,
+          "theme": "cat-whiskers",
+          "opacity": 0.96,
+          "transparent": false,
+          "renderLegends": false,
+          "surface": "pbt-satin",
+          "lighting": "pbt-studio",
+          "viewPreset": "full-size-three-quarter",
+          "designData": null,
+          "keyArtManifest": "cat-whiskers/key-art-manifest.json"
+        }
+      }
+    },
+    {
       "id": "FK-KC-004",
       "slug": "chemical-001",
       "name": "Chemical 001",
@@ -36,6 +79,9 @@
           "opacity": 0.96,
           "transparent": false,
           "renderLegends": false,
+          "surface": "pbt-satin",
+          "lighting": "pbt-studio",
+          "viewPreset": "full-size-three-quarter",
           "designData": null,
           "keyArtManifest": "../keycap-designs/chemical-001-key-art-manifest.json"
         }
@@ -47,7 +93,7 @@
       "name": "Crimson Bloom",
       "description": "A red-and-porcelain artwork direction applied directly to the interactive 3D keyboard.",
       "studio": {
-        "name": "ForgeKeys AU",
+        "name": "ForgeKey Studio AU",
         "relationship": "Concept presentation"
       },
       "commercialStatus": "concept",
@@ -76,6 +122,9 @@
           "opacity": 0.96,
           "transparent": false,
           "renderLegends": false,
+          "surface": "pbt-satin",
+          "lighting": "pbt-studio",
+          "viewPreset": "artwork-inspection",
           "designData": null,
           "keyArtManifest": "../keycap-designs/crimson-bloom-68-key-art-manifest.json"
         }
@@ -87,7 +136,7 @@
       "name": "Midnight Butterfly",
       "description": "Lilac, porcelain, ink, lace, and butterfly accents reconstructed as a 104-key 3D concept.",
       "studio": {
-        "name": "ForgeKeys AU",
+        "name": "ForgeKey Studio AU",
         "relationship": "Photo-matched concept"
       },
       "commercialStatus": "concept",
@@ -116,6 +165,9 @@
           "opacity": 0.94,
           "transparent": true,
           "renderLegends": false,
+          "surface": "pbt-satin",
+          "lighting": "pbt-studio",
+          "viewPreset": "full-size-three-quarter",
           "designData": "../keycap-designs/midnight-butterfly.json",
           "keyArtManifest": "../keycap-designs/midnight-butterfly-photo-matched-key-art-manifest.json"
         }
@@ -127,7 +179,7 @@
       "name": "Neon System",
       "description": "A graphite, bone-white, and acid-green gaming direction applied directly to the interactive 3D keyboard.",
       "studio": {
-        "name": "ForgeKeys AU",
+        "name": "ForgeKey Studio AU",
         "relationship": "Concept presentation"
       },
       "commercialStatus": "concept",
@@ -145,9 +197,9 @@
       "preview": {
         "defaultView": "3d",
         "profile": "Cherry-style reference",
-        "layouts": "60% · 65% · 75% · TKL · Full size",
+        "layouts": "60% · 65% · 75% · 75% + Knob · TKL · Full size",
         "finish": "Satin PBT direction",
-        "preferredLayout": "100%",
+        "preferredLayout": "75% + Knob",
         "threeD": {
           "mode": "per-key-atlas",
           "accuracy": "concept",
@@ -156,6 +208,9 @@
           "opacity": 0.96,
           "transparent": false,
           "renderLegends": false,
+          "surface": "pbt-satin",
+          "lighting": "pbt-studio",
+          "viewPreset": "full-size-three-quarter",
           "designData": null,
           "keyArtManifest": "../keycap-designs/neon-system-key-art-manifest.json"
         }

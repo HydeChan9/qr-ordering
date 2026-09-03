@@ -79,7 +79,7 @@
     player.pause();
     player.poster = choice.dataset.filmPoster || "";
     player.src = source;
-    player.setAttribute("aria-label", choice.dataset.filmTitle || "ForgeKeys studio film");
+    player.setAttribute("aria-label", choice.dataset.filmTitle || "ForgeKey Studio AU film");
     if (caption) caption.textContent = choice.dataset.filmTitle || "";
     player.load();
     player.play().catch(() => {});

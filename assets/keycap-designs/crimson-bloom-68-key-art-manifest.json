@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "designId": "FK-CB-068",
   "source": "customer-supplied-installed-reference",
-  "atlas": "crimson-bloom-68-reference.jpg",
+  "atlas": "crimson-bloom-68-runtime-atlas.webp",
   "renderLegends": false,
   "palette": {
     "crimson": {
@@ -15,8 +15,8 @@
     }
   },
   "sourceDimensions": {
-    "width": 1500,
-    "height": 1500
+    "width": 3936,
+    "height": 1440
   },
   "keys": {
     "KC_ESC": {
@@ -636,10 +636,10 @@
       }
     },
     "KC_UP": {
-      "x": 1185,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 1440,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -702,32 +702,67 @@
       }
     },
     "KC_RALT": {
-      "x": 849,
-      "y": 475,
-      "width": 52,
-      "height": 43,
+      "x": 2464,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "crimson",
       "units": {
-        "width": 1.25,
+        "width": 1,
+        "height": 1
+      },
+      "variants": [
+        {
+          "x": 3232,
+          "y": 0,
+          "width": 320,
+          "height": 256,
+          "style": "crimson",
+          "units": {
+            "width": 1.25,
+            "height": 1
+          }
+        },
+        {
+          "x": 3552,
+          "y": 0,
+          "width": 384,
+          "height": 256,
+          "style": "crimson",
+          "units": {
+            "width": 1.5,
+            "height": 1
+          }
+        }
+      ]
+    },
+    "MO(1)": {
+      "x": 2720,
+      "y": 0,
+      "width": 256,
+      "height": 256,
+      "style": "crimson",
+      "units": {
+        "width": 1,
         "height": 1
       }
     },
-    "MO(1)": {
-      "x": 921,
-      "y": 475,
-      "width": 52,
-      "height": 43,
+    "KC_RCTL": {
+      "x": 2976,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "crimson",
       "units": {
-        "width": 1.25,
+        "width": 1,
         "height": 1
       }
     },
     "KC_LEFT": {
-      "x": 1065,
-      "y": 475,
-      "width": 52,
-      "height": 43,
+      "x": 1696,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -735,10 +770,10 @@
       }
     },
     "KC_DOWN": {
-      "x": 1137,
-      "y": 475,
-      "width": 52,
-      "height": 43,
+      "x": 1952,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -746,10 +781,10 @@
       }
     },
     "KC_RGHT": {
-      "x": 1209,
-      "y": 475,
-      "width": 101,
-      "height": 43,
+      "x": 2208,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,

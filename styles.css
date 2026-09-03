@@ -83,6 +83,53 @@ a {
   text-align: center;
 }
 
+.announcement-bar-marquee {
+  overflow: hidden;
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: left;
+}
+
+.announcement-track {
+  display: flex;
+  width: max-content;
+  animation: announcement-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+.announcement-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 26px;
+  padding: 9px 26px;
+  white-space: nowrap;
+}
+
+.announcement-group span {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.announcement-group i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  background: #d59a72;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transform: rotate(45deg);
+}
+
+.announcement-bar-marquee:hover .announcement-track {
+  animation-play-state: paused;
+}
+
+@keyframes announcement-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -968,6 +1015,23 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .announcement-track {
+    width: 100%;
+    animation: none;
+    transform: none;
+  }
+
+  .announcement-group:first-child {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .announcement-group:nth-child(2),
+  .announcement-group i,
+  .announcement-group span:not(:first-child) {
+    display: none;
+  }
+
   .skip-link {
     transition: none;
   }
@@ -2139,6 +2203,19 @@ summary {
 
 .footer-brand {
   max-width: 390px;
+}
+
+.footer-email {
+  display: inline-block;
+  margin-top: 14px;
+  color: white;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-email:hover {
+  color: #f2c999;
 }
 
 .footer-column {

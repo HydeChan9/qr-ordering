@@ -64,34 +64,34 @@
   bottom: clamp(30px, 5vw, 62px);
   left: clamp(20px, 5vw, 64px);
   z-index: 3;
-  width: min(600px, calc(100% - 40px));
-  padding: clamp(22px, 3vw, 34px);
+  width: min(470px, calc(100% - 40px));
+  padding: clamp(19px, 2.1vw, 24px);
   background: rgba(23, 25, 26, 0.72);
   border-left: 3px solid #bd7544;
   backdrop-filter: blur(2px);
 }
 
 .home-hero-copy .eyebrow {
-  margin-bottom: 11px;
+  margin-bottom: 8px;
   color: #f0c39d;
 }
 
 .home-hero-copy h1 {
-  max-width: 550px;
+  max-width: 425px;
   margin: 0;
   color: #fff;
-  font-size: clamp(38px, 4.4vw, 58px);
+  font-size: clamp(32px, 3.25vw, 44px);
   font-weight: 760;
   line-height: 1.04;
   letter-spacing: 0;
 }
 
 .home-hero-copy > p:not(.eyebrow) {
-  max-width: 520px;
-  margin: 15px 0 0;
+  max-width: 420px;
+  margin: 11px 0 0;
   color: #e3e5e3;
-  font-size: clamp(15px, 1.25vw, 17px);
-  line-height: 1.5;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.45;
 }
 
 .home-hero-actions,
@@ -99,7 +99,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .home-light-button {
@@ -767,7 +767,7 @@
     right: 20px;
     bottom: 90px;
     width: auto;
-    max-width: 660px;
+    max-width: 560px;
   }
 
   .home-hero-controls {

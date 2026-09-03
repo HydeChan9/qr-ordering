@@ -318,7 +318,7 @@
     if (!isAdmin) {
       await state.client.auth.signOut();
       showSignedOut();
-      setAuthStatus("This account is signed in but is not authorised for ForgeKeys quote administration.", "error");
+      setAuthStatus("This account is signed in but is not authorised for ForgeKey Studio AU quote administration.", "error");
       return;
     }
     showWorkspace(session.user?.email || "Authorised account");

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "designId": "FK-CE-104",
-  "source": "supplier-approved-reference-per-key-crops",
-  "reviewStatus": "user-approved-crops",
+  "source": "supplier-approved-reference-perspective-rectified-top-faces",
+  "reviewStatus": "user-approved-refined-preview",
   "atlas": "chemical-001-key-art-atlas.svg",
   "renderLegends": false,
   "palette": {

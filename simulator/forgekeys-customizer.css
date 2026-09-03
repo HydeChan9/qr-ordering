@@ -680,6 +680,47 @@ body.fk-showroom-mode.fk-curated-set-active #sidebar [aria-label="Section Colorw
   background-color: #b7d0c4 !important;
 }
 
+@media (max-width: 900px) {
+  body.fk-showroom-mode .App {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  body.fk-showroom-mode .App > #canvas-wrapper {
+    position: relative !important;
+    inset: auto !important;
+    order: -1 !important;
+    display: block !important;
+    flex: 0 0 330px !important;
+    width: 100% !important;
+    height: 330px !important;
+    min-height: 330px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+  }
+
+  body.fk-showroom-mode .App > #canvas-wrapper canvas {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  body.fk-showroom-mode .App > #sidebar {
+    position: relative !important;
+    inset: auto !important;
+    order: 0 !important;
+    flex: none !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    z-index: 2 !important;
+  }
+}
+
 .fk-customizer.fk-sidebar-module,
 body.fk-embed-mode .fk-customizer.fk-sidebar-module {
   position: static !important;
@@ -1003,6 +1044,215 @@ body.fk-showroom-mode .fk-showroom-panel {
   padding: 11px;
 }
 
+.fk-mix-lab {
+  overflow: hidden;
+  border: 1px solid rgba(240, 208, 157, 0.2);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(240, 208, 157, 0.08), rgba(255, 255, 255, 0.025));
+}
+
+.fk-mix-lab > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 12px;
+  color: #f3eee7;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fk-mix-lab > summary::-webkit-details-marker {
+  display: none;
+}
+
+.fk-mix-lab > summary::after {
+  content: "+";
+  order: 3;
+  color: #c7824e;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.fk-mix-lab[open] > summary::after {
+  content: "−";
+}
+
+.fk-mix-lab > summary small {
+  margin-left: auto;
+  color: #aaa39a;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.fk-mix-lab-body {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid rgba(246, 242, 234, 0.08);
+  padding: 11px;
+}
+
+.fk-mix-lab-body > p,
+.fk-mix-note {
+  margin: 0;
+  color: #aaa39a;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.fk-mix-selection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 3px 8px;
+  border: 1px solid rgba(246, 242, 234, 0.1);
+  border-radius: 6px;
+  padding: 8px;
+  background: rgba(17, 18, 20, 0.38);
+}
+
+.fk-mix-selection > span {
+  color: #d9d3c9;
+  font-size: 9px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.fk-mix-selection > strong {
+  color: #f0d09d;
+  font-size: 12px;
+  text-align: right;
+}
+
+.fk-mix-selection select {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid rgba(246, 242, 234, 0.13);
+  border-radius: 6px;
+  padding: 7px 9px;
+  color: #f4eee5;
+  background: #24262a;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fk-mix-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.fk-mix-source-grid > button {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 46px;
+  border: 1px solid rgba(246, 242, 234, 0.11);
+  border-radius: 6px;
+  padding: 4px;
+  color: #e8e2d9;
+  background: #2b2d31;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fk-mix-source-grid > button:hover:not(:disabled),
+.fk-mix-source-grid > button.is-active {
+  border-color: rgba(240, 208, 157, 0.64);
+  background: #35363a;
+}
+
+.fk-mix-source-grid > button.is-active {
+  box-shadow: inset 0 -2px 0 #c7824e;
+}
+
+.fk-mix-source-grid > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.fk-mix-source-grid > button.is-checking {
+  opacity: 0.5;
+}
+
+.fk-mix-source-thumb {
+  display: grid;
+  width: 38px;
+  height: 34px;
+  border-radius: 4px;
+  place-items: center;
+  color: #f0d09d;
+  background-color: #1f2023;
+  background-position: center;
+  background-size: cover;
+  font-size: 18px;
+}
+
+.fk-mix-source-base {
+  border: 1px solid rgba(240, 208, 157, 0.18);
+  background-image: none !important;
+}
+
+.fk-mix-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.fk-mix-actions .fk-button {
+  min-height: 34px;
+  padding: 7px 9px;
+  font-size: 10px;
+}
+
+.fk-mix-actions .fk-button.secondary {
+  border-color: rgba(246, 242, 234, 0.12);
+  color: #c8c0b6;
+  background: transparent;
+}
+
+.fk-mix-lab.fk-mix-active {
+  border-color: rgba(199, 130, 78, 0.58);
+}
+
+.fk-mix-key-outline {
+  position: absolute;
+  z-index: 9;
+  box-sizing: border-box;
+  border: 2px solid #efb067;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(25, 20, 15, 0.7), 0 0 14px rgba(239, 176, 103, 0.5);
+  pointer-events: none;
+}
+
+.fk-mix-key-outline > span {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 5px);
+  transform: translateX(-50%);
+  max-width: 110px;
+  border-radius: 4px;
+  padding: 3px 6px;
+  overflow: hidden;
+  color: #201b17;
+  background: #f0d09d;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fk-switch-presets {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1162,6 +1412,26 @@ body.fk-showroom-mode .fk-showroom-panel {
 
   .fk-showroom-selection {
     padding: 12px;
+  }
+
+  .fk-mix-source-grid > button {
+    grid-template-columns: 34px minmax(0, 1fr);
+    min-height: 42px;
+    font-size: 8px;
+  }
+
+  .fk-mix-source-thumb {
+    width: 34px;
+    height: 30px;
+  }
+
+  .fk-mix-actions {
+    gap: 5px;
+  }
+
+  .fk-mix-actions .fk-button {
+    padding-inline: 5px;
+    font-size: 9px;
   }
 
   .fk-switch-presets > button {
