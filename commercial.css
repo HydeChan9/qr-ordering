@@ -1,5 +1,6 @@
 .commercial-page {
-  background: #f6f4ef;
+  color: var(--ink);
+  background: var(--bg);
 }
 
 .commercial-main {
@@ -52,7 +53,7 @@
 .commercial-hero-copy h1 {
   margin: 0;
   color: #fff;
-  font-size: clamp(42px, 5.4vw, 72px);
+  font-size: 40px;
   line-height: 1.01;
   letter-spacing: 0;
 }
@@ -61,7 +62,7 @@
   max-width: 620px;
   margin: 18px 0 0;
   color: #e2e5e3;
-  font-size: clamp(16px, 1.5vw, 19px);
+  font-size: 19px;
   line-height: 1.58;
 }
 
@@ -75,14 +76,14 @@
 }
 
 .commercial-builds-hero .commercial-hero-copy h1 {
-  font-size: clamp(34px, 3.7vw, 50px);
+  font-size: 40px;
   line-height: 1.04;
 }
 
 .commercial-builds-hero .commercial-hero-copy > p:not(.eyebrow) {
   max-width: 420px;
   margin-top: 14px;
-  font-size: clamp(14px, 1.1vw, 16px);
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -96,14 +97,14 @@
 }
 
 .commercial-services-hero .commercial-hero-copy h1 {
-  font-size: clamp(34px, 3.5vw, 48px);
+  font-size: 32px;
   line-height: 1.03;
 }
 
 .commercial-services-hero .commercial-hero-copy > p:not(.eyebrow) {
   max-width: 470px;
   margin-top: 14px;
-  font-size: clamp(14px, 1.15vw, 16px);
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -113,13 +114,13 @@
 
 .commercial-hero-copy .button.primary {
   color: #fff;
-  background: #a95f33;
-  border-color: #a95f33;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
 .commercial-hero-copy .button.primary:hover {
-  background: #bd7042;
-  border-color: #bd7042;
+  background: #264b63;
+  border-color: #264b63;
 }
 
 .commercial-trust {
@@ -178,7 +179,7 @@
 .commercial-cta-band h2 {
   margin: 0;
   color: #202223;
-  font-size: clamp(34px, 4.6vw, 60px);
+  font-size: 40px;
   line-height: 1.06;
   letter-spacing: 0;
 }
@@ -241,7 +242,7 @@
 
 .commercial-build-card-copy h3 {
   margin: 0;
-  font-size: clamp(25px, 2.5vw, 38px);
+  font-size: 32px;
   line-height: 1.08;
 }
 
@@ -427,7 +428,7 @@
 }
 
 .commercial-services-section {
-  background: #f7f5f1;
+  background: var(--bg);
 }
 
 .commercial-service-list {
@@ -481,7 +482,7 @@
 
 .commercial-service-copy h3 {
   margin: 0;
-  font-size: clamp(32px, 3.5vw, 50px);
+  font-size: 40px;
   line-height: 1.06;
 }
 
@@ -557,7 +558,7 @@
 }
 
 .service-landing-intro {
-  background: #f7f5f1;
+  background: var(--bg);
 }
 
 .commercial-guide-grid {
@@ -819,7 +820,7 @@
   }
 
   .commercial-hero-copy h1 {
-    font-size: clamp(34px, 10vw, 44px);
+    font-size: 32px;
   }
 
   .commercial-hero-copy > p:not(.eyebrow) {
@@ -842,7 +843,7 @@
   }
 
   .commercial-builds-hero .commercial-hero-copy h1 {
-    font-size: clamp(30px, 8.5vw, 38px);
+    font-size: 32px;
   }
 
   .commercial-builds-hero .commercial-hero-copy > p:not(.eyebrow) {
@@ -863,7 +864,7 @@
   }
 
   .commercial-services-hero .commercial-hero-copy h1 {
-    font-size: clamp(30px, 8.5vw, 38px);
+    font-size: 32px;
   }
 
   .commercial-services-hero .commercial-hero-copy > p:not(.eyebrow) {
@@ -901,7 +902,7 @@
 
   .commercial-section-heading h2,
   .commercial-cta-band h2 {
-    font-size: clamp(32px, 9vw, 42px);
+    font-size: 32px;
   }
 
   .commercial-build-card > img,
@@ -946,7 +947,7 @@
   }
 
   .commercial-service-copy h3 {
-    font-size: clamp(30px, 9vw, 40px);
+    font-size: 32px;
   }
 
   .commercial-guide-grid,

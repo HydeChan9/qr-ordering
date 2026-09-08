@@ -1,5 +1,5 @@
 .showroom-guide-page {
-  background: #f6f3ee;
+  background: var(--bg);
 }
 
 .showroom-guide-hero {
@@ -9,6 +9,8 @@
   color: #fff;
   background: #242729;
 }
+
+.showroom-guide-hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(0,0,0,.68), rgba(0,0,0,.12) 75%); }
 
 .showroom-guide-hero img {
   position: absolute;
@@ -38,7 +40,7 @@
   max-width: 580px;
   margin: 8px 0 0;
   color: #fff;
-  font-size: clamp(40px, 4.8vw, 60px);
+  font-size: 40px;
   line-height: 1.01;
   letter-spacing: 0;
 }
@@ -47,7 +49,7 @@
   max-width: 540px;
   margin: 16px 0 0;
   color: #f1ede6;
-  font-size: clamp(15px, 1.35vw, 18px);
+  font-size: 18px;
   line-height: 1.5;
 }
 
@@ -60,9 +62,9 @@
 }
 
 .showroom-guide-hero-actions .button.primary {
-  color: #1d2021;
-  background: #f4d0a6;
-  border-color: #f4d0a6;
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
 .showroom-guide-hero-actions .button.secondary {
@@ -81,9 +83,8 @@
 
 .showroom-guide-video-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  align-items: center;
-  gap: clamp(32px, 6vw, 88px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
 }
 
 .showroom-guide-video-copy h2,
@@ -91,7 +92,7 @@
 .showroom-guide-quote h2 {
   margin: 8px 0 0;
   color: #1e2021;
-  font-size: clamp(34px, 4.5vw, 58px);
+  font-size: 40px;
   line-height: 1.02;
   letter-spacing: 0;
 }
@@ -107,11 +108,19 @@
 .showroom-guide-video {
   display: block;
   width: 100%;
-  max-height: 620px;
-  border: 1px solid #cfc8bd;
-  border-radius: 8px;
-  background: #202024;
-  box-shadow: 0 20px 55px rgba(44, 40, 34, 0.16);
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 1px solid #d6dde1;
+  border-radius: 4px;
+  background: #e8ebed;
+  object-fit: contain;
+}
+
+.showroom-guide-video-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
 }
 
 .showroom-guide-video-note {

@@ -23,632 +23,969 @@
       "legend": "#fff6e5"
     }
   },
+  "cropMode": "canonical-exact-placement",
   "sourceDimensions": {
-    "width": 1536,
-    "height": 1200
+    "width": 4096,
+    "height": 2816
   },
   "keys": {
     "KC_ESC": {
-      "x": 43,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 0,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "ginger",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 48,
+        "y": 52,
+        "width": 50,
+        "height": 53
       }
     },
     "KC_F1": {
-      "x": 183,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 256,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 188,
+        "y": 52,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_F2": {
-      "x": 257,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 512,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 257,
+        "y": 52,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_F3": {
-      "x": 331,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 768,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 326,
+        "y": 52,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_F4": {
-      "x": 405,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 1024,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 395,
+        "y": 52,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_F5": {
-      "x": 496,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 1280,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 500,
+        "y": 52,
+        "width": 47,
+        "height": 53
       }
     },
     "KC_F6": {
-      "x": 570,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 1536,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 569,
+        "y": 52,
+        "width": 47,
+        "height": 53
       }
     },
     "KC_F7": {
-      "x": 644,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 1792,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 638,
+        "y": 52,
+        "width": 47,
+        "height": 53
       }
     },
     "KC_F8": {
-      "x": 718,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 2048,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 707,
+        "y": 52,
+        "width": 47,
+        "height": 53
       }
     },
     "KC_F9": {
-      "x": 818,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 2304,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 801,
+        "y": 52,
+        "width": 48,
+        "height": 53
       }
     },
     "KC_F10": {
-      "x": 892,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 2560,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 870,
+        "y": 52,
+        "width": 48,
+        "height": 53
       }
     },
     "KC_F11": {
-      "x": 966,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 2816,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 939,
+        "y": 52,
+        "width": 48,
+        "height": 53
       }
     },
     "KC_F12": {
-      "x": 1040,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 3072,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1008,
+        "y": 52,
+        "width": 48,
+        "height": 53
       }
     },
     "KC_PSCR": {
-      "x": 1093,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 3328,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1097,
+        "y": 52,
+        "width": 45,
+        "height": 53
       }
     },
     "KC_SLCK": {
-      "x": 1167,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 3584,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1162,
+        "y": 52,
+        "width": 45,
+        "height": 53
       }
     },
     "KC_PAUS": {
-      "x": 1241,
-      "y": 49,
-      "width": 62,
-      "height": 62,
+      "x": 3840,
+      "y": 0,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1227,
+        "y": 52,
+        "width": 45,
+        "height": 53
       }
     },
     "KC_GRV": {
-      "x": 43,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 0,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 48,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_1": {
-      "x": 117,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 256,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 118,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_2": {
-      "x": 191,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 512,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 187,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_3": {
-      "x": 265,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 768,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 256,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_4": {
-      "x": 339,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 1024,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 325,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_5": {
-      "x": 413,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 1280,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 394,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_6": {
-      "x": 487,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 1536,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 463,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_7": {
-      "x": 561,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 1792,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 532,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_8": {
-      "x": 635,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2048,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 601,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_9": {
-      "x": 709,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2304,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 670,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_0": {
-      "x": 783,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2560,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 739,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_MINS": {
-      "x": 857,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2816,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 808,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_EQL": {
-      "x": 931,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 3072,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 877,
+        "y": 147,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_BSPC": {
-      "x": 939,
-      "y": 142,
-      "width": 126,
-      "height": 68,
+      "x": 3328,
+      "y": 256,
+      "width": 512,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 2,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 947,
+        "y": 149,
+        "width": 108,
+        "height": 49
       }
     },
     "KC_TAB": {
-      "x": 43,
-      "y": 216,
-      "width": 100,
-      "height": 62,
+      "x": 0,
+      "y": 512,
+      "width": 384,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.5,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 49,
+        "y": 220,
+        "width": 81,
+        "height": 49
       }
     },
     "KC_Q": {
-      "x": 153,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 384,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 151,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_W": {
-      "x": 221,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 640,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 220,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_E": {
-      "x": 289,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 896,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 289,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_R": {
-      "x": 357,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 1152,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 358,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_T": {
-      "x": 425,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 1408,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 427,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_Y": {
-      "x": 493,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 1664,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 496,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_U": {
-      "x": 561,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 1920,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 565,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_I": {
-      "x": 629,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 2176,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 634,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_O": {
-      "x": 697,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 2432,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 703,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_P": {
-      "x": 765,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 2688,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 772,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_LBRC": {
-      "x": 833,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 2944,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 841,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_RBRC": {
-      "x": 901,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 3200,
+      "y": 512,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 910,
+        "y": 219,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_BSLS": {
-      "x": 969,
-      "y": 216,
-      "width": 100,
-      "height": 62,
+      "x": 3456,
+      "y": 512,
+      "width": 384,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1.5,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 979,
+        "y": 219,
+        "width": 76,
+        "height": 51
       }
     },
     "KC_CAPS": {
-      "x": 43,
-      "y": 288,
-      "width": 118,
-      "height": 62,
+      "x": 0,
+      "y": 768,
+      "width": 448,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.75,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 49,
+        "y": 293,
+        "width": 101,
+        "height": 48
       }
     },
     "KC_A": {
-      "x": 163,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 448,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 170,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_S": {
-      "x": 231,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 704,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 239,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_D": {
-      "x": 299,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 960,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 308,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_F": {
-      "x": 367,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1216,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 377,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_G": {
-      "x": 435,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1472,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 446,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_H": {
-      "x": 503,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1728,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 515,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_J": {
-      "x": 571,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1984,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 584,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_K": {
-      "x": 639,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 2240,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 653,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_L": {
-      "x": 707,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 2496,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 722,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_SCLN": {
-      "x": 775,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 2752,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 791,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_QUOT": {
-      "x": 843,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 3008,
+      "y": 768,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 860,
+        "y": 291,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_ENT": {
-      "x": 921,
-      "y": 288,
-      "width": 139,
-      "height": 66,
+      "x": 3264,
+      "y": 768,
+      "width": 576,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 2.25,
@@ -656,23 +993,35 @@
       },
       "variants": [
         {
-          "x": 27,
-          "y": 1045,
-          "width": 81,
-          "height": 137,
+          "x": 0,
+          "y": 1024,
+          "width": 320,
+          "height": 512,
           "style": "sage",
           "units": {
             "width": 1.25,
             "height": 2
+          },
+          "normalisedFrom": {
+            "x": 27,
+            "y": 1045,
+            "width": 81,
+            "height": 137
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 930,
+        "y": 293,
+        "width": 125,
+        "height": 48
+      }
     },
     "KC_LSFT": {
-      "x": 43,
-      "y": 360,
-      "width": 156,
-      "height": 62,
+      "x": 320,
+      "y": 1024,
+      "width": 576,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 2.25,
@@ -680,133 +1029,205 @@
       },
       "variants": [
         {
-          "x": 128,
-          "y": 1045,
-          "width": 81,
-          "height": 62,
+          "x": 896,
+          "y": 1024,
+          "width": 320,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1.25,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 128,
+            "y": 1045,
+            "width": 81,
+            "height": 62
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 49,
+        "y": 366,
+        "width": 133,
+        "height": 48
+      }
     },
     "KC_Z": {
-      "x": 208,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 1216,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 205,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_X": {
-      "x": 276,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 1472,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 274,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_C": {
-      "x": 344,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 1728,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 343,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_V": {
-      "x": 412,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 1984,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 412,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_B": {
-      "x": 480,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 2240,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 481,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_N": {
-      "x": 548,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 2496,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 550,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_M": {
-      "x": 616,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 2752,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 619,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_COMM": {
-      "x": 684,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 3008,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 688,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_DOT": {
-      "x": 752,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 3264,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 757,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_SLSH": {
-      "x": 820,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 3520,
+      "y": 1024,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 826,
+        "y": 363,
+        "width": 49,
+        "height": 53
       }
     },
     "KC_RSFT": {
-      "x": 883,
-      "y": 360,
-      "width": 193,
-      "height": 62,
+      "x": 0,
+      "y": 1536,
+      "width": 704,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 2.75,
@@ -814,67 +1235,103 @@
       },
       "variants": [
         {
-          "x": 229,
-          "y": 1045,
-          "width": 118,
-          "height": 62,
+          "x": 704,
+          "y": 1536,
+          "width": 448,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1.75,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 229,
+            "y": 1045,
+            "width": 118,
+            "height": 62
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 899,
+        "y": 368,
+        "width": 154,
+        "height": 47
+      }
     },
     "KC_LCTL": {
-      "x": 43,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 1152,
+      "y": 1536,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 49,
+        "y": 439,
+        "width": 62,
+        "height": 49
       }
     },
     "KC_LGUI": {
-      "x": 125,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 1472,
+      "y": 1536,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 135,
+        "y": 439,
+        "width": 63,
+        "height": 49
       }
     },
     "KC_LALT": {
-      "x": 207,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 1792,
+      "y": 1536,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 222,
+        "y": 439,
+        "width": 59,
+        "height": 49
       }
     },
     "KC_SPC": {
-      "x": 289,
-      "y": 434,
-      "width": 456,
-      "height": 62,
+      "x": 2112,
+      "y": 1536,
+      "width": 1600,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 6.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 305,
+        "y": 439,
+        "width": 411,
+        "height": 49
       }
     },
     "KC_RALT": {
-      "x": 743,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 3712,
+      "y": 1536,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
@@ -882,56 +1339,86 @@
       },
       "variants": [
         {
-          "x": 367,
-          "y": 1045,
-          "width": 100,
-          "height": 62,
+          "x": 0,
+          "y": 1792,
+          "width": 384,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1.5,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 367,
+            "y": 1045,
+            "width": 100,
+            "height": 62
           }
         },
         {
-          "x": 487,
-          "y": 1045,
-          "width": 62,
-          "height": 62,
+          "x": 384,
+          "y": 1792,
+          "width": 256,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 487,
+            "y": 1045,
+            "width": 62,
+            "height": 62
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 746,
+        "y": 439,
+        "width": 55,
+        "height": 49
+      }
     },
     "KC_RGUI": {
-      "x": 825,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 640,
+      "y": 1792,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 827,
+        "y": 439,
+        "width": 55,
+        "height": 49
       }
     },
     "KC_APP": {
-      "x": 907,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 960,
+      "y": 1792,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 910,
+        "y": 439,
+        "width": 55,
+        "height": 49
       }
     },
     "KC_RCTL": {
-      "x": 989,
-      "y": 434,
-      "width": 81,
-      "height": 62,
+      "x": 1280,
+      "y": 1792,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
@@ -939,331 +1426,511 @@
       },
       "variants": [
         {
-          "x": 569,
-          "y": 1045,
-          "width": 100,
-          "height": 62,
+          "x": 1600,
+          "y": 1792,
+          "width": 384,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1.5,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 569,
+            "y": 1045,
+            "width": 100,
+            "height": 62
           }
         },
         {
-          "x": 689,
-          "y": 1045,
-          "width": 62,
-          "height": 62,
+          "x": 1984,
+          "y": 1792,
+          "width": 256,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 689,
+            "y": 1045,
+            "width": 62,
+            "height": 62
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 992,
+        "y": 439,
+        "width": 62,
+        "height": 49
+      }
     },
     "KC_INS": {
-      "x": 1093,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2240,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1097,
+        "y": 148,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_HOME": {
-      "x": 1167,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2496,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1162,
+        "y": 148,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_PGUP": {
-      "x": 1241,
-      "y": 144,
-      "width": 62,
-      "height": 62,
+      "x": 2752,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1227,
+        "y": 148,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_DEL": {
-      "x": 1093,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 3008,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1097,
+        "y": 220,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_END": {
-      "x": 1167,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 3264,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1162,
+        "y": 220,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_PGDN": {
-      "x": 1241,
-      "y": 216,
-      "width": 62,
-      "height": 62,
+      "x": 3520,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1227,
+        "y": 220,
+        "width": 45,
+        "height": 49
       }
     },
     "KC_UP": {
-      "x": 1113,
-      "y": 434,
-      "width": 62,
-      "height": 62,
+      "x": 3776,
+      "y": 1792,
+      "width": 256,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1116,
+        "y": 442,
+        "width": 43,
+        "height": 51
       }
     },
     "KC_LEFT": {
-      "x": 1039,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 0,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1052,
+        "y": 510,
+        "width": 43,
+        "height": 46
       }
     },
     "KC_DOWN": {
-      "x": 1113,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 256,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1116,
+        "y": 510,
+        "width": 43,
+        "height": 46
       }
     },
     "KC_RGHT": {
-      "x": 1187,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 512,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1180,
+        "y": 510,
+        "width": 43,
+        "height": 46
       }
     },
     "KC_NLCK": {
-      "x": 1247,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 768,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1255,
+        "y": 295,
+        "width": 63,
+        "height": 45
       }
     },
     "KC_PSLS": {
-      "x": 1321,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1024,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1340,
+        "y": 295,
+        "width": 36,
+        "height": 45
       }
     },
     "KC_PAST": {
-      "x": 1395,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1280,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1399,
+        "y": 295,
+        "width": 36,
+        "height": 45
       }
     },
     "KC_PMNS": {
-      "x": 1469,
-      "y": 288,
-      "width": 62,
-      "height": 62,
+      "x": 1536,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1457,
+        "y": 295,
+        "width": 36,
+        "height": 45
       }
     },
     "KC_P7": {
-      "x": 1247,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 1792,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1255,
+        "y": 363,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P8": {
-      "x": 1321,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 2048,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1322,
+        "y": 363,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P9": {
-      "x": 1395,
-      "y": 360,
-      "width": 62,
-      "height": 62,
+      "x": 2304,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1389,
+        "y": 363,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P4": {
-      "x": 1247,
-      "y": 434,
-      "width": 62,
-      "height": 62,
+      "x": 2560,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1255,
+        "y": 432,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P5": {
-      "x": 1321,
-      "y": 434,
-      "width": 62,
-      "height": 62,
+      "x": 2816,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1322,
+        "y": 432,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P6": {
-      "x": 1395,
-      "y": 434,
-      "width": 62,
-      "height": 62,
+      "x": 3072,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1389,
+        "y": 432,
+        "width": 46,
+        "height": 53
       }
     },
     "KC_P1": {
-      "x": 1247,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 3328,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1255,
+        "y": 502,
+        "width": 46,
+        "height": 45
       }
     },
     "KC_P2": {
-      "x": 1321,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 3584,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1322,
+        "y": 502,
+        "width": 46,
+        "height": 45
       }
     },
     "KC_P3": {
-      "x": 1395,
-      "y": 508,
-      "width": 62,
-      "height": 62,
+      "x": 3840,
+      "y": 2048,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1389,
+        "y": 502,
+        "width": 46,
+        "height": 45
       }
     },
     "KC_PPLS": {
-      "x": 1469,
-      "y": 360,
-      "width": 62,
-      "height": 137,
+      "x": 0,
+      "y": 2304,
+      "width": 256,
+      "height": 512,
       "style": "ginger",
       "units": {
         "width": 1,
         "height": 2
+      },
+      "normalisedFrom": {
+        "x": 1454,
+        "y": 363,
+        "width": 39,
+        "height": 117
       }
     },
     "KC_PENT": {
-      "x": 1469,
-      "y": 508,
-      "width": 62,
-      "height": 137,
+      "x": 256,
+      "y": 2304,
+      "width": 256,
+      "height": 512,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 2
+      },
+      "normalisedFrom": {
+        "x": 1454,
+        "y": 502,
+        "width": 39,
+        "height": 111
       }
     },
     "KC_P0": {
-      "x": 1247,
-      "y": 582,
-      "width": 137,
-      "height": 62,
+      "x": 512,
+      "y": 2304,
+      "width": 512,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 2,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1255,
+        "y": 567,
+        "width": 114,
+        "height": 45
       }
     },
     "KC_PDOT": {
-      "x": 1395,
-      "y": 582,
-      "width": 62,
-      "height": 62,
+      "x": 1024,
+      "y": 2304,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1390,
+        "y": 568,
+        "width": 45,
+        "height": 44
       }
     },
     "MO(1)": {
-      "x": 771,
-      "y": 1045,
-      "width": 81,
-      "height": 62,
+      "x": 1280,
+      "y": 2304,
+      "width": 320,
+      "height": 256,
       "style": "charcoal",
       "units": {
         "width": 1.25,
@@ -1271,49 +1938,79 @@
       },
       "variants": [
         {
-          "x": 872,
-          "y": 1045,
-          "width": 62,
-          "height": 62,
+          "x": 1600,
+          "y": 2304,
+          "width": 256,
+          "height": 256,
           "style": "charcoal",
           "units": {
             "width": 1,
             "height": 1
+          },
+          "normalisedFrom": {
+            "x": 872,
+            "y": 1045,
+            "width": 62,
+            "height": 62
           }
         }
-      ]
+      ],
+      "normalisedFrom": {
+        "x": 771,
+        "y": 1045,
+        "width": 81,
+        "height": 62
+      }
     },
     "KC_NO": {
-      "x": 954,
-      "y": 1045,
-      "width": 62,
-      "height": 62,
+      "x": 1856,
+      "y": 2304,
+      "width": 256,
+      "height": 256,
       "style": "sage",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 954,
+        "y": 1045,
+        "width": 62,
+        "height": 62
       }
     },
     "KC_NUHS": {
-      "x": 1036,
-      "y": 1045,
-      "width": 62,
-      "height": 62,
+      "x": 2112,
+      "y": 2304,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1036,
+        "y": 1045,
+        "width": 62,
+        "height": 62
       }
     },
     "KC_NUBS": {
-      "x": 1118,
-      "y": 1045,
-      "width": 62,
-      "height": 62,
+      "x": 2368,
+      "y": 2304,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
         "height": 1
+      },
+      "normalisedFrom": {
+        "x": 1118,
+        "y": 1045,
+        "width": 62,
+        "height": 62
       }
     }
   }

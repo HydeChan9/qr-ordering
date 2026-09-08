@@ -65,6 +65,11 @@
   const caption = section.querySelector("[data-film-caption]");
   const choices = Array.from(section.querySelectorAll("[data-film-src]"));
   if (!player || choices.length === 0) return;
+  let isVisible = false;
+
+  const playWhenVisible = () => {
+    if (isVisible) player.play().catch(() => {});
+  };
 
   const selectFilm = (choice) => {
     const source = choice.dataset.filmSrc;
@@ -82,10 +87,28 @@
     player.setAttribute("aria-label", choice.dataset.filmTitle || "ForgeKey Studio AU film");
     if (caption) caption.textContent = choice.dataset.filmTitle || "";
     player.load();
-    player.play().catch(() => {});
+    playWhenVisible();
   };
 
   choices.forEach((choice) => {
     choice.addEventListener("click", () => selectFilm(choice));
   });
+
+  if (!("IntersectionObserver" in window)) {
+    isVisible = true;
+    player.load();
+    playWhenVisible();
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    isVisible = entries.some((entry) => entry.isIntersecting);
+    if (isVisible) {
+      player.load();
+      playWhenVisible();
+    } else {
+      player.pause();
+    }
+  }, { rootMargin: "180px 0px", threshold: 0.05 });
+  observer.observe(section);
 })();

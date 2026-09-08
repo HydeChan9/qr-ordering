@@ -43,6 +43,8 @@ const emailDomainCorrections = {
 let selectedFiles = [];
 let submissionSucceeded = false;
 let quoteFormStarted = false;
+let selectedDesign = null;
+let designPreviewFile = null;
 const protectedSubmissionEnabled = supportConfig.submissionMode === "endpoint";
 
 function trackQuoteEvent(name, metadata = {}) {
@@ -157,7 +159,7 @@ function handleFileSelection() {
 function collectQuoteData(quoteId, artworkFiles) {
   return {
     schemaVersion: 3,
-    submissionKind: "quote",
+    submissionKind: selectedDesign ? "designer" : "quote",
     submissionId: quoteId,
     quoteId,
     submittedAt: new Date().toISOString(),
@@ -179,6 +181,13 @@ function collectQuoteData(quoteId, artworkFiles) {
       files: artworkFiles
     },
     artworkRoles: artworkFiles.map(() => "artwork"),
+    ...(selectedDesign ? { designer: {
+      kind: "showroom",
+      configuration: selectedDesign.design,
+      setName: selectedDesign.label,
+      mixedKeycaps: Object.entries(selectedDesign.design.mix).map(([key, sourceSetId]) => ({ key, sourceSetId })),
+      previewAccuracy: "Concept preview; confirm artwork, compatibility and availability before production."
+    } } : {}),
     consent: {
       artworkRightsConfirmed: quoteFields.rights.checked,
       quoteOnlyConfirmed: quoteFields.rights.checked,
@@ -214,6 +223,7 @@ async function submitToProtectedEndpoint(data) {
   form.append("metadata", JSON.stringify(data));
   form.append("turnstileToken", token);
   selectedFiles.forEach((file) => form.append("artwork", file, file.name));
+  if (designPreviewFile) form.append("previewCustomer", designPreviewFile, designPreviewFile.name);
 
   const response = await fetch(supportConfig.submissionEndpoint, {
     method: "POST",
@@ -326,7 +336,7 @@ async function submitQuoteRequest(event) {
   trackQuoteEvent("quote_submit_attempt", { source: "quote-form" });
   if (submissionSucceeded || !validateQuote()) return;
 
-  const quoteId = `FQ-${Date.now()}`;
+  const quoteId = `${selectedDesign ? "FK" : "FQ"}-${Date.now()}`;
   const folder = `${supportConfig.supabaseFolder || "submissions"}/${quoteId}`;
   const artworkFiles = selectedFiles.map((file, index) => ({
     originalName: file.name,
@@ -345,6 +355,11 @@ async function submitQuoteRequest(event) {
       const result = await submitToProtectedEndpoint(data);
       submittedReference = result.reference || quoteId;
     } else {
+      if (designPreviewFile) {
+        const previewPath = `${folder}/01-keyboard-image.jpg`;
+        await uploadToSupabaseStorage(previewPath, designPreviewFile, designPreviewFile.type);
+        data.designer.previewStoragePath = previewPath;
+      }
       for (let index = 0; index < selectedFiles.length; index += 1) {
         const file = selectedFiles[index];
         setStatus(`Uploading image ${index + 1} of ${selectedFiles.length}...`);
@@ -382,15 +397,15 @@ async function submitQuoteRequest(event) {
       );
     }
 
-    sessionStorage.setItem("forgekeysLastQuote", JSON.stringify({
+    submissionSucceeded = true;
+    try { sessionStorage.setItem("forgekeysLastQuote", JSON.stringify({
       quoteId: submittedReference,
       name: data.customer.name,
       email: data.customer.email,
       selectedReference: data.selectedReference,
       submittedAt: data.submittedAt
-    }));
+    })); } catch { /* Storage restrictions must not turn a successful submission into a retry. */ }
 
-    submissionSucceeded = true;
     quoteFields.form.dataset.submitted = "true";
     trackQuoteEvent("quote_submit_success", { source: "quote-form" });
     setStatus(`Quote request submitted. Your reference is ${submittedReference}. We will reply by email before any payment is needed.`, "success");
@@ -419,7 +434,9 @@ async function submitQuoteRequest(event) {
 
 function applySelectedProduct() {
   const params = new URLSearchParams(window.location.search);
-  const product = params.get("product") || sessionStorage.getItem("forgekeysSelectedReference");
+  let storedReference = "";
+  try { storedReference = sessionStorage.getItem("forgekeysSelectedReference"); } catch {}
+  const product = params.get("product") || storedReference;
   const referenceId = params.get("ref") || "";
   const enquirySource = params.get("source") || "direct";
   const requestedType = params.get("type") || "Build reference request";
@@ -444,6 +461,67 @@ function applySelectedProduct() {
   setStatus(`Selection added: ${product}${referenceLabel}. Complete the details below to request a quote.`);
 }
 
+function applyShowroomDesign() {
+  const id = new URLSearchParams(window.location.search).get("design");
+  if (!id) return;
+  try { selectedDesign = window.ForgeKeysDesign.readHandoff(sessionStorage, id); } catch {}
+  if (!selectedDesign) {
+    setStatus("The design preview has expired or is unavailable in this tab. Open the showroom and select Ask about it again.", "error");
+    return;
+  }
+  try {
+    const bytes = Uint8Array.from(atob(selectedDesign.preview.split(",")[1]), (character) => character.charCodeAt(0));
+    designPreviewFile = new File([bytes], "keyboard-concept.jpg", { type: "image/jpeg" });
+  } catch {
+    selectedDesign = null;
+    setStatus("The design preview could not be read. Please return to the showroom.", "error");
+    return;
+  }
+  const { design, label, preview } = selectedDesign;
+  const layout = window.ForgeKeysDesign.layouts[design.layout];
+  if (![...quoteFields.layout.options].some((option) => option.value === layout)) {
+    quoteFields.layout.add(new Option(layout, layout));
+  }
+  quoteFields.layout.value = layout;
+  quoteFields.layout.disabled = true;
+  quoteFields.product.value = label;
+  quoteFields.product.readOnly = true;
+  quoteFields.referenceId.value = design.set;
+  quoteFields.source.value = "3d-keycap-showroom";
+  quoteFields.type.value = "Custom keycaps";
+  quoteFields.brief.value = `Please quote this ${label} configuration (${layout}), including the mixed keycaps shown in the attached concept preview.`;
+  document.getElementById("quoteDesignImage").src = preview;
+  document.getElementById("quoteDesignTitle").textContent = label;
+  const swapCount = Object.keys(design.mix).length;
+  document.getElementById("quoteDesignSummary").textContent = `${layout} · Case ${design.case.primaryColor} · ${swapCount} swap${swapCount === 1 ? "" : "s"} · Concept preview`;
+  document.getElementById("quoteDesignEdit").href = window.ForgeKeysDesign.link(new URL("showroom.html", window.location.href), design);
+  const list = document.getElementById("quoteDesignMix");
+  for (const [key, source] of Object.entries(design.mix)) {
+    const item = document.createElement("li");
+    item.textContent = `${key} → ${source}`;
+    list.appendChild(item);
+  }
+  list.parentElement.hidden = !list.children.length;
+  document.getElementById("quoteDesign").hidden = false;
+  document.getElementById("quoteDesignRemove").addEventListener("click", () => {
+    selectedDesign = null;
+    designPreviewFile = null;
+    document.getElementById("quoteDesign").hidden = true;
+    quoteFields.layout.disabled = false;
+    quoteFields.layout.value = "Not sure yet";
+    quoteFields.product.readOnly = false;
+    quoteFields.product.value = "";
+    quoteFields.referenceId.value = "";
+    quoteFields.brief.value = "";
+    try { sessionStorage.removeItem(id); } catch {}
+    const url = new URL(window.location.href);
+    url.searchParams.delete("design");
+    history.replaceState(null, "", url.href);
+    setStatus("Design removed. Your contact details and selected images are unchanged.");
+  });
+  setStatus("Keyboard configuration and preview attached. Add your details and budget.", "success");
+}
+
 Object.values(quoteFields).forEach((field) => {
   if (field && ["INPUT", "SELECT", "TEXTAREA"].includes(field.tagName)) {
     field.addEventListener("focus", () => {
@@ -459,6 +537,7 @@ Object.values(quoteFields).forEach((field) => {
 quoteFields.files.addEventListener("change", handleFileSelection);
 quoteFields.form.addEventListener("submit", submitQuoteRequest);
 applySelectedProduct();
+applyShowroomDesign();
 
 if (protectedSubmissionEnabled) {
   window.ForgeKeysTurnstile?.mount(quoteFields.turnstile, {

@@ -1,9 +1,9 @@
 :root {
-  --bg: #f4f1ec;
-  --paper: #fffdf9;
-  --ink: #171717;
-  --muted: #66625b;
-  --line: #ded8cd;
+  --bg: #f3f5f5;
+  --paper: #ffffff;
+  --ink: #202426;
+  --muted: #626b70;
+  --line: #dce0e2;
   --blue: #315f7d;
   --green: #536f5d;
   --copper: #ad6b3b;
@@ -139,7 +139,7 @@ a {
   justify-content: space-between;
   gap: 20px;
   padding: 16px clamp(20px, 5vw, 64px);
-  background: rgba(244, 241, 236, 0.94);
+  background: #f7f8f8;
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px);
 }
@@ -198,13 +198,13 @@ section,
 .nav a,
 .quote-link {
   padding: 9px 12px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .nav a[aria-current="page"],
 .nav a:hover {
   color: var(--ink);
-  background: #e8e0d5;
+  background: #e7ecef;
 }
 
 .quote-link {
@@ -240,7 +240,7 @@ section,
 
 .hero-showcase h1 {
   max-width: 720px;
-  font-size: clamp(42px, 5vw, 68px);
+  font-size: 40px;
 }
 
 .hero-showcase .hero-actions {
@@ -366,13 +366,13 @@ p {
 h1 {
   max-width: 760px;
   margin-bottom: 20px;
-  font-size: clamp(42px, 6vw, 76px);
+  font-size: 40px;
   line-height: 1.02;
   letter-spacing: 0;
 }
 
 h2 {
-  font-size: clamp(26px, 3vw, 40px);
+  font-size: 32px;
   line-height: 1.12;
 }
 
@@ -473,7 +473,7 @@ h3 {
   justify-content: center;
   padding: 0 18px;
   border: 1px solid var(--charcoal);
-  border-radius: 8px;
+  border-radius: 4px;
   font-weight: 800;
 }
 
@@ -1103,7 +1103,7 @@ h3 {
 }
 
 .page-title h1 {
-  font-size: clamp(36px, 5vw, 62px);
+  font-size: 40px;
 }
 
 .preview-page {
@@ -1129,7 +1129,7 @@ h3 {
 .preview-title h1 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(34px, 4.2vw, 54px);
+  font-size: 40px;
   line-height: 1.02;
 }
 
@@ -2442,26 +2442,34 @@ summary {
   }
 
   .site-header {
-    gap: 14px;
-    padding: 14px 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 10px;
+    padding: 10px 16px 8px;
     width: 100%;
     max-width: 100%;
     overflow: visible;
   }
 
   .brand {
-    width: 100%;
+    width: auto;
+    min-width: 0;
+    font-size: 14px;
   }
 
   .quote-link {
-    order: 2;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    min-height: 40px;
+    padding: 9px 12px;
   }
 
   .nav {
     display: flex;
     grid-template-columns: none;
     gap: 6px;
-    order: 3;
+    grid-column: 1 / -1;
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
@@ -2547,7 +2555,7 @@ summary {
 
   .hero-showcase h1 {
     max-width: 100%;
-    font-size: clamp(34px, 10vw, 44px);
+    font-size: 32px;
     overflow-wrap: break-word;
     white-space: normal;
   }
@@ -2634,11 +2642,6 @@ summary {
     min-height: 220px;
   }
 
-  .quote-link {
-    width: 100%;
-    text-align: center;
-  }
-
   .keyboard-shell {
     border-radius: 18px;
   }
@@ -2680,7 +2683,7 @@ summary {
   .seo-landing .page-title h1,
   .page-title h1 {
     max-width: 100%;
-    font-size: clamp(32px, 9vw, 40px);
+    font-size: 32px;
     overflow-wrap: break-word;
     white-space: normal;
   }
@@ -2717,3 +2720,8 @@ summary {
     min-height: 620px;
   }
 }
+
+/* Shared action hierarchy across public pages. */
+body .button[href*="support.html"], body .quote-link { background: var(--blue); border-color: var(--blue); color: #fff; border-radius: 4px; }
+body .button[href*="support.html"]:hover, body .quote-link:hover { background: #264b63; color: #fff; }
+@media (max-width: 760px) { h1 { font-size: 32px; } h2 { font-size: 28px; } }

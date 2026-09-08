@@ -1,5 +1,5 @@
 .home-main {
-  background: #f7f5f1;
+  background: var(--bg);
 }
 
 .home-hero {
@@ -80,7 +80,7 @@
   max-width: 425px;
   margin: 0;
   color: #fff;
-  font-size: clamp(32px, 3.25vw, 44px);
+  font-size: 32px;
   font-weight: 760;
   line-height: 1.04;
   letter-spacing: 0;
@@ -90,7 +90,7 @@
   max-width: 420px;
   margin: 11px 0 0;
   color: #e3e5e3;
-  font-size: clamp(14px, 1.1vw, 16px);
+  font-size: 16px;
   line-height: 1.45;
 }
 
@@ -121,13 +121,13 @@
 
 .home-hero-actions .button.primary {
   color: #fff;
-  background: #a95f33;
-  border-color: #a95f33;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
 .home-hero-actions .button.primary:hover {
-  background: #bd7042;
-  border-color: #bd7042;
+  background: #264b63;
+  border-color: #264b63;
 }
 
 .home-hero-controls {
@@ -202,7 +202,7 @@
 .home-quote-band h2 {
   margin: 0;
   color: #202223;
-  font-size: clamp(34px, 4.5vw, 58px);
+  font-size: 40px;
   line-height: 1.06;
   letter-spacing: 0;
 }
@@ -263,7 +263,7 @@
 
 .home-service h3 {
   margin: 0;
-  font-size: clamp(23px, 2.2vw, 31px);
+  font-size: 31px;
   line-height: 1.12;
 }
 
@@ -296,7 +296,7 @@
   max-width: 760px;
   margin: 0;
   color: #fff;
-  font-size: clamp(34px, 4.5vw, 58px);
+  font-size: 40px;
   line-height: 1.06;
 }
 
@@ -381,13 +381,13 @@
 
 .home-tablet-action .button {
   color: #fff;
-  background: #a95f33;
-  border-color: #a95f33;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
 .home-tablet-action .button:hover {
-  background: #bd7042;
-  border-color: #bd7042;
+  background: #264b63;
+  border-color: #264b63;
 }
 
 .home-builds-section {
@@ -462,7 +462,7 @@
 
 .home-build-copy h3 {
   margin: 0;
-  font-size: clamp(25px, 2.6vw, 38px);
+  font-size: 32px;
   line-height: 1.08;
 }
 
@@ -513,7 +513,7 @@
 .home-film-intro h2 {
   margin: 0;
   color: #fff;
-  font-size: clamp(36px, 4.8vw, 64px);
+  font-size: 40px;
   line-height: 1.04;
 }
 
@@ -864,7 +864,7 @@
 
   .home-hero-copy h1 {
     max-width: 320px;
-    font-size: clamp(29px, 8.4vw, 36px);
+    font-size: 32px;
     line-height: 1.05;
   }
 
@@ -909,7 +909,7 @@
   .home-process-heading h2,
   .home-keycaps-copy h2,
   .home-quote-band h2 {
-    font-size: clamp(32px, 9vw, 42px);
+    font-size: 32px;
   }
 
   .home-tablet-heading {
@@ -992,7 +992,7 @@
   }
 
   .home-film-intro h2 {
-    font-size: clamp(32px, 9vw, 42px);
+    font-size: 32px;
   }
 
   .home-film-stage {

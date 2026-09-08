@@ -155,7 +155,34 @@
   }
   if (isShowroomMode) {
     document.body.classList.add("fk-showroom-mode");
+    document.documentElement.classList.add("fk-showroom-document");
   }
+
+  const publishShowroomFrameState = () => {
+    if (!isShowroomMode || window.parent === window) return;
+    window.requestAnimationFrame(() => {
+      const targetOrigin = window.location.origin === "null" ? "*" : window.location.origin;
+      window.parent.postMessage({
+        type: "forgekeys-showroom-state",
+        ready: document.body.classList.contains("fk-showroom-ready"),
+        height: Math.ceil(document.documentElement.scrollHeight),
+      }, targetOrigin);
+    });
+  };
+
+  const installShowroomFrameBridge = () => {
+    if (!isShowroomMode || window.FORGEKEYS_SHOWROOM_FRAME_BRIDGE) return;
+    window.FORGEKEYS_SHOWROOM_FRAME_BRIDGE = true;
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(publishShowroomFrameState);
+      observer.observe(document.body);
+      window.FORGEKEYS_SHOWROOM_FRAME_OBSERVER = observer;
+    }
+    window.addEventListener("message", (event) => {
+      if (event.source !== window.parent || event.data?.type !== "forgekeys-showroom-state-request") return;
+      publishShowroomFrameState();
+    });
+  };
 
   const boundsMap = {
     "60": { width: 15, height: 5 },
@@ -166,15 +193,18 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "sitepolish01";
+  const sampleVersion = "brand2";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];
   let activeShowroomSet = null;
   const showroomDesignCache = new Map();
+  const showroomDesignRequests = new Map();
+  const showroomAtlasRequests = new Map();
   let showroomPanelBuilding = false;
   let showroomMaterialSettleTimer = 0;
   let mixCompatibilityRequest = 0;
+  let mixApplyRequest = 0;
   let mixCanvasWired = false;
   let mixCanvasWireAttempts = 0;
   let mixPointerStart = null;
@@ -745,32 +775,14 @@
     const targetRatio = canvas.width / canvas.height;
     if (!Number.isFinite(sourceRatio) || !Number.isFinite(targetRatio)) return false;
 
-    // Supplier photos are often perspective crops rather than flat key-sized
-    // artwork. Preserve the print proportions and crop the excess edge before
-    // fitting it to the physical key canvas; stretching makes whole sets look
-    // skewed, especially on 1U and vertical numpad keys.
-    let sx = source.x;
-    let sy = source.y;
-    let sw = source.width;
-    let sh = source.height;
-    if (source.fitMode === "rectify") {
-      // Supplier top-face crops come from a shallow product photograph. Map
-      // the complete photographed face back to the physical key proportions;
-      // applying another cover crop here removes edge legends and large-key
-      // artwork that have already been isolated in the manifest.
-    } else if (sourceRatio > targetRatio) {
-      sw = source.height * targetRatio;
-      sx += (source.width - sw) / 2;
-    } else if (sourceRatio < targetRatio) {
-      sh = source.width / targetRatio;
-      sy += (source.height - sh) / 2;
-    }
+    // The manifest owns the complete print face. The physical top canvas can
+    // differ from the nominal U ratio; never silently trim its edge legends.
 
     if (style?.background) {
       ctx.fillStyle = style.background;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(image, source.x, source.y, source.width, source.height, 0, 0, canvas.width, canvas.height);
     return true;
   };
 
@@ -853,6 +865,7 @@
   };
 
   const refreshTextures = () => {
+    scheduleDesignSave();
     resetShowroomDiagnostics();
     syncBoundsFromOriginalLayout();
     document.dispatchEvent(new CustomEvent("force_key_material_update"));
@@ -1367,16 +1380,20 @@
     const GeometryConstructor = template?.geometry?.constructor;
     const VectorConstructor = template?.geometry?.vertices?.[0]?.constructor;
     const FaceConstructor = template?.geometry?.faces?.[0]?.constructor;
+    const UVConstructor = template?.geometry?.faceVertexUvs?.[0]?.[0]?.[0]?.constructor;
     if (!GeometryConstructor || !VectorConstructor || !FaceConstructor) return null;
 
     const geometry = new GeometryConstructor();
-    const segments = 32;
+    const segments = 48;
     const centerX = 0.475;
     const centerZ = 0.475;
     const rings = [
-      { radius: 0.43, height: 0 },
-      { radius: 0.49, height: 0.12 },
-      { radius: 0.44, height: 0.6 },
+      { radius: 0.44, height: 0 },
+      { radius: 0.54, height: 0.08 },
+      { radius: 0.54, height: 0.15 },
+      { radius: 0.49, height: 0.54 },
+      { radius: 0.43, height: 0.62 },
+      { radius: 0.32, height: 0.62 },
     ];
     rings.forEach((ring) => {
       for (let index = 0; index < segments; index += 1) {
@@ -1391,20 +1408,39 @@
     const bottomCenter = geometry.vertices.length;
     geometry.vertices.push(new VectorConstructor(centerX, 0, centerZ));
     const topCenter = geometry.vertices.length;
-    geometry.vertices.push(new VectorConstructor(centerX, 0.6, centerZ));
+    geometry.vertices.push(new VectorConstructor(centerX, 0.62, centerZ));
 
     const addFace = (a, b, c, materialIndex) => {
       const face = new FaceConstructor(a, b, c);
       face.materialIndex = materialIndex;
       geometry.faces.push(face);
+      if (UVConstructor && geometry.faceVertexUvs?.[0]) {
+        const uvFor = (vertexIndex) => {
+          const vertex = geometry.vertices[vertexIndex];
+          return new UVConstructor(
+            0.5 + (vertex.x - centerX) / 1.08,
+            0.5 + (vertex.z - centerZ) / 1.08
+          );
+        };
+        geometry.faceVertexUvs[0].push([uvFor(a), uvFor(b), uvFor(c)]);
+      }
     };
+    const bandMaterials = [0, 2, 0, 2, 3];
+    const markerSegment = Math.round(segments * 0.75);
     for (let ringIndex = 0; ringIndex < rings.length - 1; ringIndex += 1) {
       const currentOffset = ringIndex * segments;
       const nextOffset = (ringIndex + 1) * segments;
       for (let index = 0; index < segments; index += 1) {
         const next = (index + 1) % segments;
-        addFace(currentOffset + index, nextOffset + index, nextOffset + next, 0);
-        addFace(currentOffset + index, nextOffset + next, currentOffset + next, 0);
+        const distanceFromMarker = Math.min(
+          Math.abs(index - markerSegment),
+          segments - Math.abs(index - markerSegment)
+        );
+        const materialIndex = ringIndex === rings.length - 2 && distanceFromMarker <= 1
+          ? 2
+          : bandMaterials[ringIndex];
+        addFace(currentOffset + index, nextOffset + index, nextOffset + next, materialIndex);
+        addFace(currentOffset + index, nextOffset + next, currentOffset + next, materialIndex);
       }
     }
     const topOffset = (rings.length - 1) * segments;
@@ -1419,21 +1455,150 @@
     return geometry;
   };
 
-  const style75KnobMaterial = (source, index) => {
+  const create75KnobTopTexture = (sourceMaterials) => {
+    const templateTexture = sourceMaterials.find((material) => material?.map)?.map;
+    if (!templateTexture?.constructor) return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const context = canvas.getContext("2d");
+    if (!context) return null;
+
+    const finish = context.createRadialGradient(94, 74, 8, 128, 128, 116);
+    finish.addColorStop(0, "#eef2f3");
+    finish.addColorStop(0.42, "#9aa2a7");
+    finish.addColorStop(1, "#30363a");
+    context.fillStyle = finish;
+    context.beginPath();
+    context.arc(128, 128, 116, 0, Math.PI * 2);
+    context.fill();
+
+    context.save();
+    context.beginPath();
+    context.arc(128, 128, 104, 0, Math.PI * 2);
+    context.clip();
+    context.strokeStyle = "rgba(255, 255, 255, 0.045)";
+    context.lineWidth = 1;
+    for (let index = 0; index < 72; index += 1) {
+      const angle = (index / 72) * Math.PI * 2;
+      context.beginPath();
+      context.moveTo(128 + Math.cos(angle) * 32, 128 + Math.sin(angle) * 32);
+      context.lineTo(128 + Math.cos(angle) * 104, 128 + Math.sin(angle) * 104);
+      context.stroke();
+    }
+    context.restore();
+
+    context.strokeStyle = "rgba(225, 232, 236, 0.72)";
+    context.lineWidth = 5;
+    context.beginPath();
+    context.arc(128, 128, 108, 0, Math.PI * 2);
+    context.stroke();
+    context.strokeStyle = "rgba(9, 12, 14, 0.82)";
+    context.lineWidth = 7;
+    context.beginPath();
+    context.arc(128, 128, 76, 0, Math.PI * 2);
+    context.stroke();
+    context.strokeStyle = "rgba(184, 255, 103, 0.94)";
+    context.lineWidth = 9;
+    context.lineCap = "round";
+    context.beginPath();
+    context.arc(128, 128, 88, Math.PI * 0.18, Math.PI * 1.82);
+    context.stroke();
+    context.strokeStyle = "#b8ff67";
+    context.lineWidth = 11;
+    context.beginPath();
+    context.moveTo(128, 27);
+    context.lineTo(128, 58);
+    context.stroke();
+
+    const texture = new templateTexture.constructor(canvas);
+    texture.flipY = templateTexture.flipY;
+    if ("colorSpace" in texture && templateTexture.colorSpace) texture.colorSpace = templateTexture.colorSpace;
+    if ("encoding" in texture && templateTexture.encoding) texture.encoding = templateTexture.encoding;
+    texture.userData = { ...texture.userData, forgeKeys75KnobTexture: true };
+    texture.needsUpdate = true;
+    return texture;
+  };
+
+  const style75KnobMaterial = (source, index, topTexture) => {
     if (!source?.clone) return source;
     const material = source.clone();
+    material.map = index === 3 && topTexture ? topTexture : null;
+    material.alphaMap = null;
+    material.transparent = false;
+    material.opacity = 1;
+    material.depthWrite = true;
+    const colors = ["#24292d", "#b8ff67", "#eef2f3", "#d7dde0"];
+    material.color?.set?.(colors[index] || colors[0]);
+    if (typeof material.roughness === "number") material.roughness = index === 2 ? 0.32 : index === 3 ? 0.34 : 0.42;
+    if (typeof material.metalness === "number") material.metalness = index === 2 ? 0.2 : index === 3 ? 0.28 : 0.68;
+    material.emissive?.set?.("#000000");
+    material.userData = { ...material.userData, forgeKeysKnobMaterial: true };
+    material.needsUpdate = true;
+    return material;
+  };
+
+  const create75KnobAccentMesh = (knob, sourceMaterials) => {
+    const GeometryConstructor = knob?.geometry?.constructor;
+    const VectorConstructor = knob?.geometry?.vertices?.[0]?.constructor;
+    const FaceConstructor = knob?.geometry?.faces?.[0]?.constructor;
+    const MeshConstructor = knob?.constructor;
+    const materialTemplate = sourceMaterials.find((material) => material?.isMeshStandardMaterial && material?.clone)
+      || sourceMaterials.find((material) => material?.clone);
+    if (!GeometryConstructor || !VectorConstructor || !FaceConstructor || !MeshConstructor || !materialTemplate) return null;
+
+    const geometry = new GeometryConstructor();
+    const segments = 48;
+    const centerX = 0.475;
+    const centerZ = 0.475;
+    const outerRadius = 0.39;
+    const innerRadius = 0.325;
+    const markerSegment = Math.round(segments * 0.75);
+    for (let index = 0; index < segments; index += 1) {
+      const angle = (index / segments) * Math.PI * 2;
+      geometry.vertices.push(new VectorConstructor(
+        centerX + Math.cos(angle) * outerRadius,
+        0.626,
+        centerZ + Math.sin(angle) * outerRadius
+      ));
+      geometry.vertices.push(new VectorConstructor(
+        centerX + Math.cos(angle) * innerRadius,
+        0.626,
+        centerZ + Math.sin(angle) * innerRadius
+      ));
+    }
+    for (let index = 0; index < segments; index += 1) {
+      const distanceFromMarker = Math.min(
+        Math.abs(index - markerSegment),
+        segments - Math.abs(index - markerSegment)
+      );
+      if (distanceFromMarker <= 1) continue;
+      const next = (index + 1) % segments;
+      geometry.faces.push(new FaceConstructor(index * 2, index * 2 + 1, next * 2 + 1));
+      geometry.faces.push(new FaceConstructor(index * 2, next * 2 + 1, next * 2));
+    }
+    geometry.computeFaceNormals?.();
+    geometry.computeVertexNormals?.();
+    geometry.computeBoundingBox?.();
+
+    const material = materialTemplate.clone();
     material.map = null;
     material.alphaMap = null;
     material.transparent = false;
     material.opacity = 1;
     material.depthWrite = true;
-    material.color?.set?.(index === 3 ? "#26292c" : "#3b3f43");
-    if (typeof material.roughness === "number") material.roughness = index === 3 ? 0.34 : 0.46;
-    if (typeof material.metalness === "number") material.metalness = 0.52;
-    material.emissive?.set?.("#000000");
-    material.userData = { ...material.userData, forgeKeysKnobMaterial: true };
+    material.color?.set?.("#b8ff67");
+    if (typeof material.roughness === "number") material.roughness = 0.42;
+    if (typeof material.metalness === "number") material.metalness = 0.14;
+    material.emissive?.set?.("#183708");
+    if (typeof material.emissiveIntensity === "number") material.emissiveIntensity = 0.16;
+    material.userData = { ...material.userData, forgeKeysKnobAccentMaterial: true };
     material.needsUpdate = true;
-    return material;
+
+    const accent = new MeshConstructor(geometry, material);
+    accent.name = "FK_KNOB_ACCENT";
+    accent.userData.forgeKeys75KnobAccent = true;
+    return accent;
   };
 
   const sync75KnobMesh = (keyGroup) => {
@@ -1442,40 +1607,65 @@
     const existingKnob = (keyGroup.children || []).find((child) =>
       child?.userData?.forgeKeys75Knob
     );
+    const hiddenSource = existingKnob?.forgeKeysSourceMesh
+      || (keyGroup.children || []).find((child) => child?.userData?.forgeKeys75KnobSource);
 
     if (layout !== "75knob") {
-      if (!existingKnob) return;
-      existingKnob.geometry?.dispose?.();
-      const currentMaterials = Array.isArray(existingKnob.material)
-        ? existingKnob.material
-        : [existingKnob.material];
-      currentMaterials.forEach((material) => {
-        if (material?.userData?.forgeKeysKnobMaterial) material.dispose?.();
-      });
-      existingKnob.geometry = existingKnob.userData.forgeKeysOriginalGeometry;
-      existingKnob.material = existingKnob.userData.forgeKeysOriginalMaterials;
-      existingKnob.name = existingKnob.userData.forgeKeysOriginalName;
-      delete existingKnob.userData.forgeKeys75Knob;
-      delete existingKnob.userData.forgeKeysOriginalGeometry;
-      delete existingKnob.userData.forgeKeysOriginalMaterials;
-      delete existingKnob.userData.forgeKeysOriginalName;
+      if (existingKnob) {
+        const accent = existingKnob.getObjectByName?.("FK_KNOB_ACCENT");
+        if (accent) {
+          existingKnob.remove?.(accent);
+          accent.geometry?.dispose?.();
+          accent.material?.dispose?.();
+        }
+        existingKnob.geometry?.dispose?.();
+        const currentMaterials = Array.isArray(existingKnob.material)
+          ? existingKnob.material
+          : [existingKnob.material];
+        currentMaterials.forEach((material) => {
+          if (material?.map?.userData?.forgeKeys75KnobTexture) material.map.dispose?.();
+          if (material?.userData?.forgeKeysKnobMaterial) material.dispose?.();
+        });
+        existingKnob.parent?.remove?.(existingKnob);
+      }
+      if (hiddenSource?.parent === keyGroup) {
+        hiddenSource.name = hiddenSource.userData.forgeKeysKnobSourceName || "KC_PAUS";
+        hiddenSource.visible = hiddenSource.userData.forgeKeysKnobSourceVisible !== false;
+        delete hiddenSource.userData.forgeKeys75KnobSource;
+        delete hiddenSource.userData.forgeKeysKnobSourceName;
+        delete hiddenSource.userData.forgeKeysKnobSourceVisible;
+      }
       return;
     }
 
     if (existingKnob) return;
-    const knob = (keyGroup.children || []).find((child) => child?.name === "KC_PAUS");
-    if (!knob?.isMesh) return;
-    const geometry = create75KnobGeometry(knob);
+    const source = (keyGroup.children || []).find((child) => child?.name === "KC_PAUS");
+    if (!source?.isMesh || !source.constructor) return;
+    const geometry = create75KnobGeometry(source);
     if (!geometry) return;
-    knob.userData.forgeKeys75Knob = true;
-    knob.userData.forgeKeysOriginalGeometry = knob.geometry;
-    knob.userData.forgeKeysOriginalMaterials = knob.material;
-    knob.userData.forgeKeysOriginalName = knob.name;
-    knob.geometry = geometry;
-    const sourceMaterials = Array.isArray(knob.material) ? knob.material : [knob.material];
-    const knobMaterials = sourceMaterials.map(style75KnobMaterial);
-    knob.material = Array.isArray(knob.material) ? knobMaterials : knobMaterials[0];
+    const sourceMaterials = Array.isArray(source.material) ? source.material : [source.material];
+    const topTexture = create75KnobTopTexture(sourceMaterials);
+    const knobMaterials = sourceMaterials.map((material, index) => style75KnobMaterial(material, index, topTexture));
+    const knob = new source.constructor(
+      geometry,
+      Array.isArray(source.material) ? knobMaterials : knobMaterials[0]
+    );
     knob.name = "FK_KNOB";
+    knob.position.copy?.(source.position);
+    knob.quaternion.copy?.(source.quaternion);
+    knob.scale.copy?.(source.scale);
+    knob.castShadow = false;
+    knob.receiveShadow = false;
+    knob.userData.forgeKeys75Knob = true;
+    knob.forgeKeysSourceMesh = source;
+    const accent = create75KnobAccentMesh(knob, knobMaterials);
+    if (accent) knob.add(accent);
+    source.userData.forgeKeys75KnobSource = true;
+    source.userData.forgeKeysKnobSourceName = source.name;
+    source.userData.forgeKeysKnobSourceVisible = source.visible;
+    source.name = "FK_KNOB_SOURCE";
+    source.visible = false;
+    keyGroup.add(knob);
   };
 
   let knobSyncTimer = 0;
@@ -2397,6 +2587,8 @@
         }
       }
       document.body.classList.add("fk-sidebar-mounted", "fk-showroom-ready");
+      installShowroomFrameBridge();
+      publishShowroomFrameState();
       window.dispatchEvent(new Event("resize"));
       return true;
     };
@@ -2585,6 +2777,7 @@
 
   const refreshMixCompatibility = async (panel) => {
     const request = ++mixCompatibilityRequest;
+    if (!panel?.querySelector("[data-fk-mix-lab]")?.open) return;
     const liveKeys = keyMeshesFromGroup(keyGroupFromScene());
     syncMixKeyOptions(panel?.querySelector("[data-fk-mix-key]"), liveKeys);
     let code = state.showroomMixSelectedKey;
@@ -2615,7 +2808,7 @@
     }
     const results = await Promise.all(showroomSets.map(async (set) => {
       try {
-        return { set, data: await loadShowroomDesignDataCached(set) };
+        return { set, data: await loadShowroomDesignDataCached(set, { artwork: false }) };
       } catch (error) {
         return { set, data: null };
       }
@@ -2651,6 +2844,7 @@
 
   const selectMixKey = (panel, code, openPanel = false) => {
     if (!liveMixKeyForCode(code)) return false;
+    mixApplyRequest += 1;
     state.showroomMixSelectedKey = code;
     const keySelect = panel.querySelector("[data-fk-mix-key]");
     ensureMixKeyOption(keySelect, code);
@@ -2660,14 +2854,22 @@
     return true;
   };
 
+  const refreshMixTextures = () => {
+    const keyGroup = keyGroupFromScene();
+    restoreKeycapMaterials(keyGroup);
+    restoreShowroomKeySides(keyGroup);
+    refreshTextures();
+  };
+
   const resetMixKey = (panel, { record = true, announce = true } = {}) => {
+    mixApplyRequest += 1;
     const code = state.showroomMixSelectedKey;
     const previous = state.showroomMixOverrides?.[code];
     if (!previous) return false;
     if (record) pushMixHistory({ type: "key", code, previous });
     delete state.showroomMixOverrides[code];
     state.showroomMixMode = Object.keys(state.showroomMixOverrides).length > 0;
-    refreshTextures();
+    refreshMixTextures();
     updateMixControlState(panel);
     refreshMixCompatibility(panel);
     if (announce) setStatus(`${mixKeyLabelFor(code)} returned to the base set.`, "success");
@@ -2675,9 +2877,15 @@
   };
 
   const applyMixSource = async (panel, sourceId) => {
+    const request = ++mixApplyRequest;
     if (state.showroomMode !== "set") return;
     const code = state.showroomMixSelectedKey;
     const opts = mixKeyDimensionsFor(code);
+    const baseSet = activeShowroomSet;
+    const layout = activeLayoutName();
+    const isCurrentRequest = () => request === mixApplyRequest
+      && state.showroomMode === "set" && activeShowroomSet === baseSet
+      && state.showroomMixSelectedKey === code && activeLayoutName() === layout;
     if (!opts) {
       setStatus("Choose a key on the keyboard first.", "info");
       return;
@@ -2691,6 +2899,7 @@
     setStatus(`Checking ${sourceSet.label}...`, "info");
     try {
       const sourceData = await loadShowroomDesignDataCached(sourceSet);
+      if (!isCurrentRequest()) return;
       if (!mixSourceSupportsKey(sourceData, code, opts)) {
         throw new Error(`${sourceSet.label} has no exact fit for ${mixKeyLabelFor(code)}.`);
       }
@@ -2699,17 +2908,18 @@
       pushMixHistory({ type: "key", code, previous });
       state.showroomMixOverrides[code] = sourceSet.id;
       state.showroomMixMode = true;
-      refreshTextures();
+      refreshMixTextures();
       updateMixControlState(panel);
       refreshMixCompatibility(panel);
       setStatus(`${mixKeyLabelFor(code)} now uses ${sourceSet.label}.`, "success");
       trackDesignerEvent("showroom_keycap_mixed", { key: code, sourceSet: sourceSet.id });
     } catch (error) {
-      setStatus(error.message || "Could not load that keycap source.", "error");
+      if (isCurrentRequest()) setStatus(error.message || "Could not load that keycap source.", "error");
     }
   };
 
   const undoMixSelection = (panel) => {
+    mixApplyRequest += 1;
     const entry = state.showroomMixHistory.pop();
     if (!entry) return;
     if (entry.type === "all") {
@@ -2722,19 +2932,20 @@
       state.showroomMixSelectedKey = entry.code;
     }
     state.showroomMixMode = Object.keys(state.showroomMixOverrides).length > 0;
-    refreshTextures();
+    refreshMixTextures();
     updateMixControlState(panel);
     refreshMixCompatibility(panel);
     setStatus("Last keycap change undone.", "success");
   };
 
   const resetMixSelection = (panel) => {
+    mixApplyRequest += 1;
     const previous = { ...state.showroomMixOverrides };
     if (!Object.keys(previous).length) return;
     pushMixHistory({ type: "all", previous });
     state.showroomMixOverrides = {};
     state.showroomMixMode = false;
-    refreshTextures();
+    refreshMixTextures();
     updateMixControlState(panel);
     refreshMixCompatibility(panel);
     setStatus("All mixed keycaps cleared.", "success");
@@ -2794,7 +3005,10 @@
     panel.querySelector("[data-fk-mix-undo]")?.addEventListener("click", () => undoMixSelection(panel));
     panel.querySelector("[data-fk-mix-reset-key]")?.addEventListener("click", () => resetMixKey(panel));
     panel.querySelector("[data-fk-mix-reset]")?.addEventListener("click", () => resetMixSelection(panel));
-    panel.querySelector("[data-fk-mix-lab]")?.addEventListener("toggle", updateMixSelectionOutline);
+    panel.querySelector("[data-fk-mix-lab]")?.addEventListener("toggle", () => {
+      updateMixSelectionOutline();
+      refreshMixCompatibility(panel);
+    });
     updateMixControlState(panel);
     refreshMixCompatibility(panel);
     wireMixCanvasSelection(panel);
@@ -2825,21 +3039,39 @@
     const manifestUrl = new URL(set.keyArtManifestUrl, window.location.href);
     const atlasUrl = new URL(manifest.atlas, manifestUrl);
     if (atlasUrl.origin === window.location.origin) atlasUrl.searchParams.set("v", sampleVersion);
-    const atlasImage = await loadImageUrl(atlasUrl.href);
     return {
       keyMap,
       palette: design?.palette || manifest.palette,
-      atlasImage,
+      atlasUrl: atlasUrl.href,
+      atlasImage: null,
       atlasKeys: manifest.keys,
       renderLegends: set.renderLegends ?? manifest.renderLegends ?? true,
     };
   };
 
-  const loadShowroomDesignDataCached = async (set) => {
+  const loadShowroomDesignDataCached = async (set, { artwork = true } = {}) => {
     if (!set) return null;
-    if (showroomDesignCache.has(set.id)) return showroomDesignCache.get(set.id);
-    const designData = await loadShowroomDesignData(set);
-    showroomDesignCache.set(set.id, designData);
+    if (!showroomDesignCache.has(set.id)) {
+      if (!showroomDesignRequests.has(set.id)) {
+        const request = loadShowroomDesignData(set).then((data) => {
+          showroomDesignCache.set(set.id, data);
+        }).finally(() => showroomDesignRequests.delete(set.id));
+        showroomDesignRequests.set(set.id, request);
+      }
+      await showroomDesignRequests.get(set.id);
+    }
+    const designData = showroomDesignCache.get(set.id);
+    // Compatibility needs key codes and sizes, not every set's decoded atlas.
+    // Keep resolved data separate from in-flight work for synchronous rendering.
+    if (artwork && designData?.atlasUrl && !designData.atlasImage) {
+      if (!showroomAtlasRequests.has(set.id)) {
+        const request = loadImageUrl(designData.atlasUrl).then((image) => {
+          designData.atlasImage = image;
+        }).finally(() => showroomAtlasRequests.delete(set.id));
+        showroomAtlasRequests.set(set.id, request);
+      }
+      await showroomAtlasRequests.get(set.id);
+    }
     return designData;
   };
 
@@ -2868,9 +3100,126 @@
   };
 
   let showroomViewRequest = 0;
+  let showroomDesignLoading = false;
+  let designSaveTimer = 0;
+  let lastSavedDesign = "";
 
-  const loadShowroomSet = async (panel, set, button) => {
+  const captureShowroomDesign = () => window.ForgeKeysDesign?.normalize({
+    v: 1,
+    set: activeShowroomSet?.id,
+    layout: activeLayoutName(),
+    case: window.ForgeKeysStore?.getState()?.case,
+    scene: { color: window.ForgeKeysStore?.getState()?.settings?.sceneColor, auto: window.ForgeKeysStore?.getState()?.settings?.sceneAutoColor },
+    mix: state.showroomMixOverrides,
+    mode: state.showroomMode,
+    switchPreset: state.switchPreset,
+    keycapMaterial: state.keycapMaterial,
+    switchLighting: state.switchLighting,
+    keycapDisplay: state.keycapDisplay,
+  });
+
+  const showroomPageUrl = () => new URL("../showroom.html", window.location.href).href;
+  const designHost = () => {
+    try { if (window.parent.location.pathname.endsWith("/showroom.html")) return window.parent; } catch {}
+    return window;
+  };
+  const saveShowroomDesign = () => {
+    if (showroomDesignLoading) return;
+    const design = captureShowroomDesign();
+    if (!design) return;
+    const token = window.ForgeKeysDesign.encode(design);
+    if (token === lastSavedDesign) return;
+    let saved = false;
+    try { saved = window.ForgeKeysDesign.save(window.localStorage, design); } catch {}
+    const label = document.querySelector("[data-fk-design-save-state]");
+    if (label) label.textContent = saved ? "Saved on this device" : "Device storage unavailable";
+    if (saved) lastSavedDesign = token;
+    const linkField = document.querySelector("[data-fk-design-link]");
+    if (linkField && !linkField.hidden) linkField.value = window.ForgeKeysDesign.link(showroomPageUrl(), design);
+    // Keep an opened share URL in sync; reloading must not restore stale choices.
+    const host = designHost();
+    if (new URLSearchParams(host.location.hash.slice(1)).has("design")) {
+      try { host.history.replaceState(null, "", window.ForgeKeysDesign.link(host.location.href, design)); } catch {}
+    }
+  };
+  function scheduleDesignSave() {
+    if (!isShowroomMode || showroomDesignLoading) return;
+    clearTimeout(designSaveTimer);
+    designSaveTimer = setTimeout(saveShowroomDesign, 350);
+  }
+
+  const openDesignQuote = async (event, panel) => {
+    const action = event.currentTarget;
+    if (activeShowroomSet?.commercialStatus === "active-partner" && activeShowroomSet.purchaseUrl) return;
+    event.preventDefault();
+    if (action.getAttribute("aria-busy") === "true" || showroomDesignLoading) return;
+    action.setAttribute("aria-busy", "true");
+    action.textContent = "Preparing preview...";
+    try {
+      const design = captureShowroomDesign();
+      if (!design) throw new Error("Wait for the keyboard to finish loading.");
+      const token = window.ForgeKeysDesign.encode(design);
+      const bitmap = await createImageBitmap(await canvasBlob());
+      const preview = document.createElement("canvas");
+      const scale = Math.min(1, 1400 / bitmap.width, 1000 / bitmap.height);
+      preview.width = Math.round(bitmap.width * scale);
+      preview.height = Math.round(bitmap.height * scale);
+      preview.getContext("2d").drawImage(bitmap, 0, 0, preview.width, preview.height);
+      bitmap.close();
+      if (token !== window.ForgeKeysDesign.encode(captureShowroomDesign()) || showroomDesignLoading) {
+        throw new Error("The design changed. Please request the preview again.");
+      }
+      const id = window.ForgeKeysDesign.writeHandoff(window.sessionStorage, design, preview.toDataURL("image/jpeg", 0.88), activeShowroomSet.label);
+      saveShowroomDesign();
+      const url = new URL("../support.html", window.location.href);
+      url.search = new URLSearchParams({ design: id, source: "3d-keycap-showroom", type: "Custom keycaps" });
+      url.hash = "quote";
+      trackDesignerEvent("showroom_quote_clicked", { referenceId: design.set });
+      designHost().location.assign(url.href);
+    } catch (error) {
+      setStatus(error.message || "Preview could not be attached. Please try again.", "error");
+    } finally {
+      action.removeAttribute("aria-busy");
+      action.textContent = "Ask about it";
+    }
+  };
+
+  const wireDesignControls = (panel) => {
+    panel.querySelector("[data-fk-design-share]").addEventListener("click", async () => {
+      if (showroomDesignLoading) return;
+      const design = captureShowroomDesign();
+      if (!design) return;
+      saveShowroomDesign();
+      const url = window.ForgeKeysDesign.link(showroomPageUrl(), design);
+      const field = panel.querySelector("[data-fk-design-link]");
+      field.value = url;
+      field.hidden = false;
+      try {
+        await navigator.clipboard.writeText(url);
+        setStatus(/^https:/.test(url) ? "Design link copied." : "Local preview link copied. Publish the site to share publicly.", "success");
+      } catch {
+        field.focus();
+        field.select();
+        setStatus("Select and copy the design link.", "info");
+      }
+    });
+    panel.querySelector("[data-fk-design-new]").addEventListener("click", () => {
+      const host = designHost();
+      try { host.history.replaceState(null, "", host.location.pathname + host.location.search); } catch {}
+      const fresh = window.ForgeKeysDesign.normalize({ v: 1, set: showroomSets[0].id, layout: "75", mix: {} });
+      loadShowroomSet(panel, showroomSets[0], panel.querySelector('[data-fk-showroom-set="0"]'), fresh)
+        .then((loaded) => { if (loaded) setStatus("New design ready.", "success"); });
+    });
+    window.ForgeKeysStore?.subscribe(scheduleDesignSave);
+    panel.addEventListener("click", scheduleDesignSave);
+    window.addEventListener("pagehide", saveShowroomDesign);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) saveShowroomDesign(); });
+  };
+
+  const loadShowroomSet = async (panel, set, button, restoredDesign = null) => {
     const viewRequest = ++showroomViewRequest;
+    showroomDesignLoading = true;
+    mixApplyRequest += 1;
     setStatus(`Loading ${set.label}...`, "info");
     try {
       const [asset, designData] = await Promise.all([
@@ -2878,6 +3227,10 @@
         loadShowroomDesignDataCached(set),
       ]);
       if (viewRequest !== showroomViewRequest) return;
+      if (restoredDesign) {
+        await Promise.all([...new Set(Object.values(restoredDesign.mix))].map((id) => loadShowroomDesignDataCached(showroomSetForId(id))));
+        if (viewRequest !== showroomViewRequest) return;
+      }
       const sceneKeyGroup = keyGroupFromScene();
       restoreKeycapMaterials(sceneKeyGroup);
       restoreShowroomKeySides(sceneKeyGroup);
@@ -2920,7 +3273,18 @@
       refreshMixCompatibility(panel);
       updateSwitchControlState(panel);
       refreshTextures();
-      if (set.hasThreeD) applyPreferredLayout(set.preferredLayout);
+      if (restoredDesign) {
+        const store = window.ForgeKeysStore;
+        store.dispatch({ type: "settings/setSceneColor", payload: restoredDesign.scene.color });
+        store.dispatch({ type: "settings/setSceneAutoColor", payload: restoredDesign.scene.auto });
+        for (const [field, value] of Object.entries(restoredDesign.case)) {
+          store.dispatch({ type: `case/set${field[0].toUpperCase()}${field.slice(1)}`, payload: value });
+        }
+        store.dispatch({ type: "case/setLayout", payload: restoredDesign.layout });
+        state.showroomMixOverrides = { ...restoredDesign.mix };
+        for (const field of ["switchPreset", "keycapMaterial", "switchLighting", "keycapDisplay"]) state[field] = restoredDesign[field];
+        setShowroomMode(panel, restoredDesign.mode);
+      } else if (set.hasThreeD) applyPreferredLayout(set.preferredLayout);
       window.setTimeout(() => refreshMixCompatibility(panel), 420);
       window.setTimeout(() => refreshMixCompatibility(panel), 920);
       window.setTimeout(() => {
@@ -2936,10 +3300,20 @@
           applySceneView(showroomSceneView(set));
         }
       }, set.preferredLayout ? 760 : 220);
-      showThreeDSet(panel, set);
+      if (state.showroomMode !== "original") showThreeDSet(panel, set);
       trackDesignerEvent("showroom_set_previewed", { referenceId: set.id });
+      await new Promise((resolve) => setTimeout(resolve, 1250));
+      if (viewRequest === showroomViewRequest) {
+        showroomDesignLoading = false;
+        saveShowroomDesign();
+        if (restoredDesign) setStatus("Saved design restored.", "success");
+        return true;
+      }
     } catch (error) {
-      setStatus(error.message || "Could not load this keycap set.", "error");
+      if (viewRequest === showroomViewRequest) {
+        showroomDesignLoading = false;
+        setStatus(error.message || "Could not load this keycap set.", "error");
+      }
     }
   };
 
@@ -2952,13 +3326,17 @@
   };
 
   const setShowroomMode = (panel, mode) => {
+    // Remove the previous surface-profile clones before the legacy simulator
+    // regenerates its key textures. Otherwise the delayed material sync can
+    // restore stale Original-cap maps over a freshly reapplied showroom set.
+    const keyGroup = keyGroupFromScene();
+    restoreKeycapMaterials(keyGroup);
+    restoreShowroomKeySides(keyGroup);
     state.showroomMode = mode;
+    mixApplyRequest += 1;
     document.body.classList.toggle("fk-curated-set-active", mode !== "original");
     const controlsNote = panel.querySelector("[data-fk-showroom-controls-note]");
     if (mode === "original") {
-      const keyGroup = keyGroupFromScene();
-      restoreKeycapMaterials(keyGroup);
-      restoreShowroomKeySides(keyGroup);
       state.keepLegends = true;
       state.showroomTheme = null;
       state.showroomKeyMap = null;
@@ -2990,6 +3368,15 @@
     if (document.querySelector("[data-fk-customizer-root]") || showroomPanelBuilding) return;
     showroomPanelBuilding = true;
     try {
+      if (!window.ForgeKeysDesign) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = new URL(`../showroom-design.js?v=${sampleVersion}`, window.location.href).href;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error("Design tools could not load. Please reload the page."));
+          document.head.appendChild(script);
+        });
+      }
       showroomSets = await loadShowroomCatalog();
     } catch (error) {
       const errorPanel = document.createElement("section");
@@ -3009,16 +3396,8 @@
     panel.setAttribute("aria-label", "ForgeKey Studio AU 3D keycap showroom");
     panel.innerHTML = `
       <details class="fk-shell-details" open>
-        <summary>Curated keycap showroom</summary>
-        <div class="fk-panel-head fk-showroom-head">
-          <div class="fk-panel-title">
-            <span class="fk-brand-badge">ForgeKey Studio AU</span>
-            <strong>Try a keycap set</strong>
-            <span>Choose a set. See it in 3D.</span>
-          </div>
-        </div>
+        <summary>Keycap collection <span class="fk-collection-count">${String(showroomSets.length).padStart(2, "0")}</span></summary>
         <div class="fk-panel-body">
-          <p class="fk-showroom-lead">Select a keycap direction to apply it directly to the 3D keyboard.</p>
           <div class="fk-showroom-sets" aria-label="Keycap set directions">
             ${showroomSets.map((set, index) => `
               <button class="fk-showroom-set" type="button" data-fk-showroom-set="${index}" aria-pressed="false">
@@ -3027,7 +3406,7 @@
                   <strong>${escapeMarkup(set.label)}</strong>
                   <small>${escapeMarkup(set.studio?.name || "Studio")}</small>
                 </span>
-                <span class="fk-showroom-apply">View</span>
+                <span class="fk-showroom-apply" aria-hidden="true"></span>
               </button>
             `).join("")}
           </div>
@@ -3069,20 +3448,21 @@
             </div>
           </details>
           <article class="fk-showroom-selection">
-            <span class="fk-kicker">SELECTED SET</span>
             <h2 data-fk-showroom-name>${escapeMarkup(showroomSets[0].label)}</h2>
-            <p data-fk-showroom-description>${escapeMarkup(showroomSets[0].description)}</p>
-            <dl class="fk-showroom-specs">
-              <div><dt>Studio</dt><dd data-fk-showroom-studio>${escapeMarkup(showroomSets[0].studio?.name)}</dd></div>
-              <div><dt>Status</dt><dd data-fk-showroom-availability>${escapeMarkup(showroomSets[0].availability)}</dd></div>
-              <div><dt>Profile</dt><dd data-fk-showroom-profile>${escapeMarkup(showroomSets[0].profile)}</dd></div>
-              <div><dt>Layouts</dt><dd data-fk-showroom-layouts>${escapeMarkup(showroomSets[0].layouts)}</dd></div>
-              <div><dt>Finish</dt><dd data-fk-showroom-finish>${escapeMarkup(showroomSets[0].finish)}</dd></div>
-            </dl>
-            <a class="fk-button full fk-showroom-quote" data-fk-showroom-quote href="../support.html#quote" target="_parent">Ask about it</a>
-            <p class="fk-showroom-partner-note" data-fk-showroom-partner-note></p>
+            <span class="fk-selected-status" data-fk-showroom-availability>${escapeMarkup(showroomSets[0].availability)}</span>
+            <details class="fk-set-details">
+              <summary>Set details</summary>
+              <p data-fk-showroom-description>${escapeMarkup(showroomSets[0].description)}</p>
+              <dl class="fk-showroom-specs">
+                <div><dt>Studio</dt><dd data-fk-showroom-studio>${escapeMarkup(showroomSets[0].studio?.name)}</dd></div>
+                <div><dt>Profile</dt><dd data-fk-showroom-profile>${escapeMarkup(showroomSets[0].profile)}</dd></div>
+                <div><dt>Layouts</dt><dd data-fk-showroom-layouts>${escapeMarkup(showroomSets[0].layouts)}</dd></div>
+                <div><dt>Finish</dt><dd data-fk-showroom-finish>${escapeMarkup(showroomSets[0].finish)}</dd></div>
+              </dl>
+              <p class="fk-showroom-partner-note" data-fk-showroom-partner-note></p>
+            </details>
           </article>
-          <details class="fk-switch-lab" open>
+          <details class="fk-switch-lab">
             <summary>
               <span>Switch view</span>
               <small data-fk-switch-summary>Solid · RGB off</small>
@@ -3134,10 +3514,39 @@
           <p class="fk-status" data-fk-status aria-live="polite">Loading the first showroom set...</p>
         </div>
       </details>
+      <div class="fk-design-actions" aria-label="Your keyboard design">
+        <small data-fk-design-save-state aria-live="polite">Loading design...</small>
+        <button type="button" class="fk-button secondary" data-fk-design-share title="Copy a link to this design">Share design</button>
+        <button type="button" class="fk-button secondary" data-fk-design-new title="Start again with the first keycap set">Start new</button>
+        <input data-fk-design-link aria-label="Design share link" readonly hidden>
+        <a class="fk-button full fk-showroom-quote" data-fk-showroom-quote href="../support.html#quote" target="_parent">Ask about it</a>
+      </div>
     `;
     document.body.appendChild(panel);
     mountShowroomPanel(panel);
     document.body.classList.add("fk-curated-set-active");
+
+    const sceneControls = document.createElement("fieldset");
+    sceneControls.className = "fk-scene-controls";
+    sceneControls.innerHTML = `<legend>Background</legend><div class="fk-scene-swatches">${[["#b7d0c4", "Sage"], ["#e8ebed", "Silver"], ["#24282b", "Graphite"], ["#ccdce6", "Ice"], ["#ddd4e5", "Lilac"]].map(([color, name]) => `<button type="button" data-scene-color="${color}" style="background:${color}" aria-label="${name} background" title="${name}" aria-pressed="false"></button>`).join("")}<input type="color" aria-label="Custom background colour" value="#b7d0c4" title="Custom colour"></div>`;
+    panel.querySelector(".fk-panel-body").prepend(sceneControls);
+    const sceneStore = window.ForgeKeysStore;
+    const setBackground = (color) => {
+      if (!/^#[0-9a-f]{6}$/i.test(color)) return;
+      sceneStore.dispatch({ type: "settings/setSceneColor", payload: color });
+      sceneStore.dispatch({ type: "settings/setSceneAutoColor", payload: false });
+      scheduleDesignSave();
+    };
+    const syncBackground = () => {
+      const settings = sceneStore.getState().settings;
+      sceneControls.querySelector("input").value = settings.sceneColor;
+      sceneControls.querySelectorAll("button").forEach(button => button.setAttribute("aria-pressed", String(!settings.sceneAutoColor && button.dataset.sceneColor === settings.sceneColor)));
+    };
+    sceneControls.querySelectorAll("button").forEach(button => button.addEventListener("click", () => setBackground(button.dataset.sceneColor)));
+    sceneControls.querySelector("input").addEventListener("input", event => setBackground(event.target.value));
+    sceneStore.subscribe(syncBackground);
+    setBackground("#b7d0c4");
+    syncBackground();
 
     panel.querySelectorAll("[data-fk-showroom-thumb]").forEach((thumbnail) => {
       const set = showroomSets[Number(thumbnail.dataset.fkShowroomThumb)];
@@ -3163,15 +3572,20 @@
         if (state.showroomMode !== "original") setShowroomMode(panel, "original");
       });
     }
-    panel.querySelector("[data-fk-showroom-quote]").addEventListener("click", () => {
-      const active = panel.querySelector("[data-fk-showroom-set].is-active");
-      const set = showroomSets[Number(active?.dataset.fkShowroomSet || 0)];
-      trackDesignerEvent("showroom_quote_clicked", { referenceId: set?.id || showroomSets[0].id });
-    });
+    panel.querySelector("[data-fk-showroom-quote]").addEventListener("click", (event) => openDesignQuote(event, panel));
     wireSwitchDisplayControls(panel);
     wireMixControls(panel);
+    wireDesignControls(panel);
     const firstButton = panel.querySelector('[data-fk-showroom-set="0"]');
-    loadShowroomSet(panel, showroomSets[0], firstButton);
+    const ids = showroomSets.map((set) => set.id);
+    const sharedToken = new URLSearchParams(designHost().location.hash.slice(1)).get("design");
+    let saved = null;
+    if (sharedToken) saved = window.ForgeKeysDesign.decode(sharedToken, ids);
+    const invalidShare = sharedToken && !saved;
+    if (!saved) { try { saved = window.ForgeKeysDesign.read(window.localStorage, ids); } catch {} }
+    const initialIndex = saved ? showroomSets.findIndex((set) => set.id === saved.set) : 0;
+    await loadShowroomSet(panel, showroomSets[initialIndex], panel.querySelector(`[data-fk-showroom-set="${initialIndex}"]`) || firstButton, saved);
+    if (invalidShare) setStatus("This design link is invalid or outdated. Your saved design has not been discarded.", "error");
     showroomPanelBuilding = false;
   };
 
