@@ -193,7 +193,7 @@
     "100": { width: 22.5, height: 6 },
   };
 
-  const sampleVersion = "brand2";
+  const sampleVersion = "bloomtop1";
   const sampleUrl = (fileName) => `../assets/customizer-samples/${fileName}?v=${sampleVersion}`;
   const showroomCatalogUrl = new URL(`../assets/keycap-products/catalog.json?v=${sampleVersion}`, window.location.href);
   let showroomSets = [];

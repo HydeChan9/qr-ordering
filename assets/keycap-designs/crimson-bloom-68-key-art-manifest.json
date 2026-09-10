@@ -20,10 +20,10 @@
   },
   "keys": {
     "KC_ESC": {
-      "x": 170,
-      "y": 175,
-      "width": 53,
-      "height": 44,
+      "x": 164,
+      "y": 177,
+      "width": 39,
+      "height": 46,
       "style": "crimson",
       "units": {
         "width": 1,
@@ -31,9 +31,9 @@
       }
     },
     "KC_1": {
-      "x": 243,
-      "y": 175,
-      "width": 53,
+      "x": 236,
+      "y": 180,
+      "width": 38,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -42,9 +42,9 @@
       }
     },
     "KC_2": {
-      "x": 315,
-      "y": 175,
-      "width": 53,
+      "x": 309,
+      "y": 180,
+      "width": 39,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -53,9 +53,9 @@
       }
     },
     "KC_3": {
-      "x": 388,
-      "y": 175,
-      "width": 53,
+      "x": 383,
+      "y": 180,
+      "width": 40,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -64,9 +64,9 @@
       }
     },
     "KC_4": {
-      "x": 460,
-      "y": 175,
-      "width": 53,
+      "x": 459,
+      "y": 180,
+      "width": 40,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -75,9 +75,9 @@
       }
     },
     "KC_5": {
-      "x": 533,
-      "y": 175,
-      "width": 53,
+      "x": 534,
+      "y": 180,
+      "width": 38,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -86,9 +86,9 @@
       }
     },
     "KC_6": {
-      "x": 605,
-      "y": 175,
-      "width": 53,
+      "x": 607,
+      "y": 180,
+      "width": 39,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -97,9 +97,9 @@
       }
     },
     "KC_7": {
-      "x": 678,
-      "y": 175,
-      "width": 53,
+      "x": 680,
+      "y": 180,
+      "width": 39,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -108,9 +108,9 @@
       }
     },
     "KC_8": {
-      "x": 750,
-      "y": 175,
-      "width": 53,
+      "x": 755,
+      "y": 180,
+      "width": 39,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -119,9 +119,9 @@
       }
     },
     "KC_9": {
-      "x": 823,
-      "y": 175,
-      "width": 53,
+      "x": 827,
+      "y": 180,
+      "width": 39,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -130,9 +130,9 @@
       }
     },
     "KC_0": {
-      "x": 895,
-      "y": 175,
-      "width": 53,
+      "x": 901,
+      "y": 180,
+      "width": 38,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -141,9 +141,9 @@
       }
     },
     "KC_MINS": {
-      "x": 968,
-      "y": 175,
-      "width": 53,
+      "x": 977,
+      "y": 180,
+      "width": 37,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -152,9 +152,9 @@
       }
     },
     "KC_EQL": {
-      "x": 1040,
-      "y": 175,
-      "width": 53,
+      "x": 1052,
+      "y": 180,
+      "width": 37,
       "height": 44,
       "style": "crimson",
       "units": {
@@ -163,10 +163,10 @@
       }
     },
     "KC_BSPC": {
-      "x": 1113,
-      "y": 175,
-      "width": 125,
-      "height": 44,
+      "x": 1127,
+      "y": 176,
+      "width": 108,
+      "height": 47,
       "style": "crimson",
       "units": {
         "width": 2,
@@ -174,10 +174,10 @@
       }
     },
     "KC_HOME": {
-      "x": 1258,
-      "y": 175,
-      "width": 53,
-      "height": 44,
+      "x": 1270,
+      "y": 178,
+      "width": 38,
+      "height": 46,
       "style": "crimson",
       "units": {
         "width": 1,
@@ -185,10 +185,10 @@
       }
     },
     "KC_TAB": {
-      "x": 170,
-      "y": 251,
-      "width": 89,
-      "height": 42,
+      "x": 169,
+      "y": 255,
+      "width": 76,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1.5,
@@ -196,10 +196,10 @@
       }
     },
     "KC_Q": {
-      "x": 279,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 276,
+      "y": 255,
+      "width": 38,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -207,10 +207,10 @@
       }
     },
     "KC_W": {
-      "x": 351,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 348,
+      "y": 255,
+      "width": 43,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -218,10 +218,10 @@
       }
     },
     "KC_E": {
-      "x": 424,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 423,
+      "y": 255,
+      "width": 42,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -229,10 +229,10 @@
       }
     },
     "KC_R": {
-      "x": 496,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 497,
+      "y": 255,
+      "width": 42,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -240,10 +240,10 @@
       }
     },
     "KC_T": {
-      "x": 569,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 570,
+      "y": 255,
+      "width": 41,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -251,10 +251,10 @@
       }
     },
     "KC_Y": {
-      "x": 641,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 642,
+      "y": 255,
+      "width": 41,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -262,10 +262,10 @@
       }
     },
     "KC_U": {
-      "x": 714,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 716,
+      "y": 255,
+      "width": 39,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -273,10 +273,10 @@
       }
     },
     "KC_I": {
-      "x": 786,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 787,
+      "y": 255,
+      "width": 41,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -284,10 +284,10 @@
       }
     },
     "KC_O": {
-      "x": 859,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 860,
+      "y": 255,
+      "width": 41,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -295,10 +295,10 @@
       }
     },
     "KC_P": {
-      "x": 931,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 1440,
+      "y": 256,
+      "width": 256,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -306,10 +306,10 @@
       }
     },
     "KC_LBRC": {
-      "x": 1004,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 1006,
+      "y": 255,
+      "width": 41,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -317,10 +317,10 @@
       }
     },
     "KC_RBRC": {
-      "x": 1076,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 1080,
+      "y": 255,
+      "width": 44,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -328,10 +328,10 @@
       }
     },
     "KC_BSLS": {
-      "x": 1149,
-      "y": 251,
-      "width": 89,
-      "height": 42,
+      "x": 1696,
+      "y": 256,
+      "width": 384,
+      "height": 256,
       "style": "porcelain",
       "units": {
         "width": 1.5,
@@ -339,10 +339,10 @@
       }
     },
     "KC_PGUP": {
-      "x": 1258,
-      "y": 251,
-      "width": 53,
-      "height": 42,
+      "x": 1263,
+      "y": 255,
+      "width": 44,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -350,10 +350,10 @@
       }
     },
     "KC_CAPS": {
-      "x": 170,
-      "y": 326,
-      "width": 107,
-      "height": 42,
+      "x": 173,
+      "y": 330,
+      "width": 96,
+      "height": 47,
       "style": "porcelain",
       "units": {
         "width": 1.75,
@@ -361,10 +361,10 @@
       }
     },
     "KC_A": {
-      "x": 297,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 299,
+      "y": 332,
+      "width": 38,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -372,10 +372,10 @@
       }
     },
     "KC_S": {
-      "x": 369,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 367,
+      "y": 332,
+      "width": 43,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -384,9 +384,9 @@
     },
     "KC_D": {
       "x": 442,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "y": 332,
+      "width": 42,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -394,10 +394,10 @@
       }
     },
     "KC_F": {
-      "x": 514,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 516,
+      "y": 332,
+      "width": 42,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -405,10 +405,10 @@
       }
     },
     "KC_G": {
-      "x": 587,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 589,
+      "y": 332,
+      "width": 42,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -416,10 +416,10 @@
       }
     },
     "KC_H": {
-      "x": 659,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 660,
+      "y": 332,
+      "width": 43,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -427,10 +427,10 @@
       }
     },
     "KC_J": {
-      "x": 732,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 731,
+      "y": 332,
+      "width": 44,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -438,10 +438,10 @@
       }
     },
     "KC_K": {
-      "x": 804,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 802,
+      "y": 332,
+      "width": 46,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -449,10 +449,10 @@
       }
     },
     "KC_L": {
-      "x": 877,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 873,
+      "y": 332,
+      "width": 46,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -460,10 +460,10 @@
       }
     },
     "KC_SCLN": {
-      "x": 949,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 944,
+      "y": 332,
+      "width": 49,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -471,10 +471,10 @@
       }
     },
     "KC_QUOT": {
-      "x": 1022,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 1018,
+      "y": 332,
+      "width": 49,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -482,10 +482,10 @@
       }
     },
     "KC_ENT": {
-      "x": 1094,
-      "y": 326,
-      "width": 143,
-      "height": 42,
+      "x": 1086,
+      "y": 330,
+      "width": 147,
+      "height": 49,
       "style": "porcelain",
       "units": {
         "width": 2.25,
@@ -493,10 +493,10 @@
       }
     },
     "KC_END": {
-      "x": 1258,
-      "y": 326,
-      "width": 53,
-      "height": 42,
+      "x": 1260,
+      "y": 330,
+      "width": 47,
+      "height": 48,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -505,9 +505,9 @@
     },
     "KC_LSFT": {
       "x": 170,
-      "y": 401,
-      "width": 143,
-      "height": 42,
+      "y": 404,
+      "width": 132,
+      "height": 48,
       "style": "porcelain",
       "units": {
         "width": 2.25,
@@ -515,10 +515,10 @@
       }
     },
     "KC_Z": {
-      "x": 333,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 335,
+      "y": 406,
+      "width": 38,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -526,10 +526,10 @@
       }
     },
     "KC_X": {
-      "x": 406,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 405,
+      "y": 406,
+      "width": 42,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -537,10 +537,10 @@
       }
     },
     "KC_C": {
-      "x": 478,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 479,
+      "y": 406,
+      "width": 40,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -548,10 +548,10 @@
       }
     },
     "KC_V": {
-      "x": 551,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 553,
+      "y": 406,
+      "width": 41,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -559,10 +559,10 @@
       }
     },
     "KC_B": {
-      "x": 623,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 627,
+      "y": 406,
+      "width": 41,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -570,10 +570,10 @@
       }
     },
     "KC_N": {
-      "x": 696,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 698,
+      "y": 406,
+      "width": 42,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -582,9 +582,9 @@
     },
     "KC_M": {
       "x": 768,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "y": 406,
+      "width": 44,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -592,10 +592,10 @@
       }
     },
     "KC_COMM": {
-      "x": 841,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 840,
+      "y": 406,
+      "width": 47,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -603,10 +603,10 @@
       }
     },
     "KC_DOT": {
-      "x": 913,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 910,
+      "y": 406,
+      "width": 49,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -614,10 +614,10 @@
       }
     },
     "KC_SLSH": {
-      "x": 986,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 982,
+      "y": 406,
+      "width": 49,
+      "height": 44,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -625,10 +625,10 @@
       }
     },
     "KC_RSFT": {
-      "x": 1058,
-      "y": 401,
-      "width": 107,
-      "height": 42,
+      "x": 1055,
+      "y": 404,
+      "width": 106,
+      "height": 48,
       "style": "porcelain",
       "units": {
         "width": 1.75,
@@ -647,10 +647,10 @@
       }
     },
     "KC_PGDN": {
-      "x": 1258,
-      "y": 401,
-      "width": 53,
-      "height": 42,
+      "x": 1253,
+      "y": 404,
+      "width": 54,
+      "height": 48,
       "style": "porcelain",
       "units": {
         "width": 1,
@@ -658,10 +658,10 @@
       }
     },
     "KC_LCTL": {
-      "x": 170,
-      "y": 475,
-      "width": 55,
-      "height": 43,
+      "x": 169,
+      "y": 479,
+      "width": 72,
+      "height": 45,
       "style": "crimson",
       "units": {
         "width": 1.25,
@@ -669,10 +669,10 @@
       }
     },
     "KC_LGUI": {
-      "x": 245,
-      "y": 475,
-      "width": 52,
-      "height": 43,
+      "x": 257,
+      "y": 479,
+      "width": 73,
+      "height": 45,
       "style": "crimson",
       "units": {
         "width": 1.25,
@@ -680,10 +680,10 @@
       }
     },
     "KC_LALT": {
-      "x": 317,
-      "y": 475,
-      "width": 124,
-      "height": 43,
+      "x": 350,
+      "y": 479,
+      "width": 54,
+      "height": 45,
       "style": "crimson",
       "units": {
         "width": 1.25,
@@ -691,10 +691,10 @@
       }
     },
     "KC_SPC": {
-      "x": 461,
-      "y": 475,
-      "width": 368,
-      "height": 43,
+      "x": 441,
+      "y": 479,
+      "width": 428,
+      "height": 46,
       "style": "porcelain",
       "units": {
         "width": 6.25,
@@ -791,5 +791,51 @@
         "height": 1
       }
     }
+  },
+  "cropRefinement": "installed-top-faces-v3-img7985-approved",
+  "colourCorrection": {
+    "version": "porcelain-neutral-v1",
+    "method": "offline near-neutral highlight lift; saturated print and shadows protected",
+    "highlightLift": 0.62,
+    "chromaReduction": 0.8,
+    "luminanceRamp": [
+      160,
+      210
+    ],
+    "saturationFade": [
+      0.08,
+      0.18
+    ],
+    "sourcePreserved": true,
+    "status": "concept preview correction, not calibrated product colour"
+  },
+  "approvedTopFaces": {
+    "revision": "img7985-top-only-v1",
+    "status": "owner-approved-for-runtime",
+    "source": "IMG_7985.JPG",
+    "sourceSha256": "1e9626699ba2d26220cdf6c636635c3a2f6e4b5507d3d0b9c3a410ca67a86008",
+    "method": "four-corner projective rectification; top plane only",
+    "colour": "source appearance converted to sRGB; no whitening or sharpening",
+    "keys": [
+      "KC_P",
+      "KC_BSLS",
+      "KC_UP",
+      "KC_LEFT",
+      "KC_DOWN",
+      "KC_RGHT",
+      "KC_RALT",
+      "MO(1)"
+    ],
+    "assetSha256": {
+      "KC_UP": "661bf38df8fc96f3ced472a44b0257e967063b5b471af08b414338d8b08246d5",
+      "KC_LEFT": "9b817fcb924c088704d4fc7d74ec94b6c5f1f42f58689778709b460d53daed1c",
+      "KC_DOWN": "e4ac5848647ba42699f586e2dbd3b4dac1861784d789160dcdaeb0a844354b74",
+      "KC_RGHT": "44ff401e7a460ee10b2b7edf75747679f10db610d474cd0b1fc51af78c33ab06",
+      "KC_RALT": "433aaafe3cf900547c460610fbcfe2935c04637b404cc7a83bcf87894c00ca5a",
+      "MO(1)": "9b7c558481eac033c28e698d9885282bcbaf7f5fa8fdcb87973a577df1de0b08",
+      "KC_P": "0987f672ba35dc5829c4c654e98313da7f1f6b11d8b1cdd31c08aa18883e49d9",
+      "KC_BSLS": "157ce44b8d177e712d152c84e2d0276b6085a10083e7d59894febc9b76f2d224"
+    },
+    "legacySourcesPreserved": true
   }
 }
